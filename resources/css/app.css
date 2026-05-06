@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+
+/* @import 'flowbite'; */
+
+@tailwind utilities;
+
+
+@keyframes modalIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.88);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes modalOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.88);
+    }
+}
+
+@keyframes backdropIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes backdropOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* BACKDROP suave (poco blur como pediste) */
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+    /* 🔥 poco blur */
+    animation: backdropIn 0.18s ease-out;
+}
+
+/* MODAL */
+.modal-animate-in {
+    animation: modalIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal-animate-out {
+    animation: modalOut 0.18s ease-in forwards;
+}
+
+.modal-overlay-out {
+    animation: backdropOut 0.18s ease-in forwards;
+}
+
+/* ══════════════════════════════════════════════
+   ESTILOS DE SCROLLBAR GLOBAL (PRO)
+══════════════════════════════════════════════ */
+
+/* 1. Estilo para navegadores basados en Webkit (Chrome, Safari, Edge, Brave) */
+::-webkit-scrollbar {
+    width: 10px;
+    /* Ancho para scroll vertical */
+    height: 10px;
+    /* Alto para scroll horizontal */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    /* Fondo del carril invisible */
+}
+
+::-webkit-scrollbar-thumb {
+    /* Color Slate con transparencia del 40% */
+    background-color: rgba(148, 163, 184, 0.4);
+    border-radius: 20px;
+    /* Crea el efecto de píldora flotante */
+    border: 3px solid transparent;
+    background-clip: content-box;
+    transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    /* Se vuelve más sólido al pasar el mouse (70%) */
+    background-color: rgba(100, 116, 139, 0.7);
+}
+
+/* 2. Soporte para Modo Oscuro (Si usas la clase .dark en el html) */
+.dark ::-webkit-scrollbar-thumb {
+    background-color: rgba(71, 85, 105, 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(148, 163, 184, 0.6);
+}
+
+/* 3. Soporte para Firefox (Limitado, no acepta transparencias RGBA en scroll) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 transparent;
+}
