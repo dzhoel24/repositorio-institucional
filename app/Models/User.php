@@ -18,10 +18,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'full_name',        // Campo de nombre completo
-        'username',         // Campo de nombre de usuario
-        'password',         // Contraseña
-        'profile_photo', // Ruta de la foto de perfil
+        'full_name',        
+        'username',         
+        'password',       
+        'profile_photo', 
     ];
 
     /**

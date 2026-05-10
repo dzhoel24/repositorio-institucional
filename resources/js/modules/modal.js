@@ -87,7 +87,7 @@ function closeModal(modal) {
 
 /********* INIT — se ejecuta en carga normal y después de cada swap HTMX *********/
 function initModals() {
-    // Limpiar listeners previos clonando los botones de apertura
+    // Botones de apertura
     document.querySelectorAll('[data-tw-toggle="modal"]').forEach((btn) => {
         const clone = btn.cloneNode(true);
         btn.replaceWith(clone);

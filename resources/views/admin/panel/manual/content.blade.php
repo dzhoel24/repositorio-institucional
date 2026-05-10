@@ -50,63 +50,93 @@
         'indigo' => [
             'bg' => 'bg-indigo-50 dark:bg-indigo-500/10',
             'ico' => 'text-indigo-600 dark:text-indigo-400',
-            'dot' => 'bg-indigo-500'
+            'dot' => 'bg-indigo-500',
+            'border' => 'hover:border-indigo-200 dark:hover:border-indigo-500/30',
+            'ring' => 'ring-indigo-200 dark:ring-indigo-500/30'
         ],
         'blue' => [
             'bg' => 'bg-blue-50 dark:bg-blue-500/10',
             'ico' => 'text-blue-600 dark:text-blue-400',
-            'dot' => 'bg-blue-500'
+            'dot' => 'bg-blue-500',
+            'border' => 'hover:border-blue-200 dark:hover:border-blue-500/30',
+            'ring' => 'ring-blue-200 dark:ring-blue-500/30'
         ],
         'emerald' => [
             'bg' => 'bg-emerald-50 dark:bg-emerald-500/10',
             'ico' => 'text-emerald-600 dark:text-emerald-400',
-            'dot' => 'bg-emerald-500'
+            'dot' => 'bg-emerald-500',
+            'border' => 'hover:border-emerald-200 dark:hover:border-emerald-500/30',
+            'ring' => 'ring-emerald-200 dark:ring-emerald-500/30'
         ],
         'amber' => [
             'bg' => 'bg-amber-50 dark:bg-amber-500/10',
             'ico' => 'text-amber-600 dark:text-amber-400',
-            'dot' => 'bg-amber-500'
+            'dot' => 'bg-amber-500',
+            'border' => 'hover:border-amber-200 dark:hover:border-amber-500/30',
+            'ring' => 'ring-amber-200 dark:ring-amber-500/30'
         ]
     ];
 @endphp
 
-<x-header-admin titulo="MANUAL DE PROCEDIMIENTOS"
-    subtitulo="Guía técnica para la administración del repositorio institucional." />
+<x-admin.title titulo="MANUAL DE PROCEDIMIENTOS"
+    subtitulo="Guía técnica para la administración del repositorio institucional." badgeColor="indigo" />
 
-<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
     @foreach ($sections as $section)
         @php $c = $colorMap[$section['color']]; @endphp
 
         <div
-            class="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-slate-300 dark:border-white/[.08] dark:bg-[#16161d] dark:hover:border-white/20">
+            class="group flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md 
+                    dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-600 {{ $c['border'] }}">
 
-            <div class="mb-3 flex items-center gap-3">
+            {{-- Encabezado con ícono --}}
+            <div class="mb-4 flex items-center gap-3">
                 <div
-                    class="{{ $c['bg'] }} {{ $c['ico'] }} flex h-9 w-9 shrink-0 items-center justify-center rounded-lg">
-                    <x-dynamic-component :component="$section['icon']" class="w-5 h-5" />
+                    class="{{ $c['bg'] }} {{ $c['ico'] }} flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-105">
+                    <x-dynamic-component :component="$section['icon']" class="h-5 w-5" />
                 </div>
-                <h2 class="text-[16px] font-bold tracking-tight text-slate-800 dark:text-slate-200">
+                <h2 class="text-base font-bold tracking-tight text-slate-800 dark:text-white">
                     {{ $section['title'] }}
                 </h2>
             </div>
 
-            <p class="mb-4 text-[14px] leading-relaxed text-slate-500 dark:text-slate-400">
+            {{-- Descripción --}}
+            <p class="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                 {{ $section['desc'] }}
             </p>
 
-            <div class="mb-4 h-px w-full bg-slate-50 dark:bg-white/5"></div>
+            {{-- Separador --}}
+            <div
+                class="mb-4 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-slate-700">
+            </div>
 
+            {{-- Lista de items --}}
             <ul class="space-y-2.5">
                 @foreach ($section['items'] as $item)
-                    <li class="group flex items-start gap-3">
-                        <span class="{{ $c['dot'] }} mt-2 h-1.5 w-1.5 shrink-0 rounded-full"></span>
+                    <li class="flex items-start gap-3 transition-all duration-200 hover:translate-x-1">
                         <span
-                            class="text-[14px] leading-tight text-slate-600 transition-colors group-hover:text-slate-900 dark:text-slate-300 dark:group-hover:text-white">
+                            class="{{ $c['dot'] }} mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ring-1 {{ $c['ring'] }}"></span>
+                        <span
+                            class="text-sm leading-relaxed text-slate-600 transition-colors group-hover:text-slate-800 
+                                     dark:text-slate-300 dark:group-hover:text-white">
                             {{ $item }}
                         </span>
                     </li>
                 @endforeach
             </ul>
+
+            {{-- Footer sutil --}}
+            <div class="mt-5 pt-2 text-right">
+                <span class="text-[10px] font-medium uppercase tracking-wider text-slate-300 dark:text-slate-600">
+                    {{ $section['title'] }}
+                </span>
+            </div>
         </div>
     @endforeach
 </div>
+
+<script>
+    document.dispatchEvent(new CustomEvent('page:title', {
+        detail: 'Manual'
+    }));
+</script>

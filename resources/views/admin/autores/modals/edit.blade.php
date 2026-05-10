@@ -1,94 +1,60 @@
 @foreach ($autores as $autor)
-    <div class="fixed inset-0 z-[999] hidden modal" id="edit-modal{{ $autor->dni }}" role="dialog" aria-modal="true"
-        aria-labelledby="edit-title-{{ $autor->dni }}">
+    <x-admin.modal-edit id="edit-modal{{ $autor->dni }}" action="{{ route('admin.autores.update', $autor->dni) }}"
+        title="EDITAR AUTOR" subtitle="Modifica los datos del autor" size="sm">
 
-        <!-- BACKDROP -->
-        <div class="absolute inset-0 bg-black/60 modal-overlay"></div>
-
-        <!-- CENTER -->
-        <div class="relative flex items-center justify-center min-h-screen p-4 pointer-events-none">
-
-            <!-- CARD -->
-            <div
-                class="w-full max-w-md rounded-2xl bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden pointer-events-auto modal-animate">
-
-                <!-- HEADER -->
-                <div class="p-5 text-center border-b border-zinc-100 dark:border-zinc-800">
-
-                    <h2 id="edit-title-{{ $autor->dni }}" class="text-lg font-semibold text-zinc-900 dark:text-white">
-                        Editar autor
-                    </h2>
-
-                    <p class="text-sm text-zinc-500 mt-1">
-                        Autor:
-                        <span class="font-medium text-zinc-700 dark:text-zinc-300">
-                            {{ $autor->nombres }} {{ $autor->apellidos }}
-                        </span>
-                    </p>
-
-                    <p class="text-xs text-zinc-500 mt-1">
-                        DNI: {{ $autor->dni }}
-                    </p>
-
+        {{-- DNI --}}
+        <div class="space-y-1.5">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                DNI
+            </label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <x-heroicon-o-identification class="h-5 w-5 text-slate-400 dark:text-slate-500" />
                 </div>
-
-                <!-- FORM -->
-                <form action="{{ route('admin.autores.update', $autor->dni) }}" method="POST"
-                    class="px-6 py-5 space-y-4">
-
-                    @csrf
-                    @method('PUT')
-
-                    <!-- NOMBRES -->
-                    <div>
-                        <label for="nombres-{{ $autor->dni }}" class="text-xs text-zinc-500 mb-1 block">
-                            Nombres
-                        </label>
-
-                        <input id="nombres-{{ $autor->dni }}" type="text" name="nombres"
-                            value="{{ $autor->nombres }}" required
-                            class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700
-                        bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white
-                        px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500
-                        focus:outline-none transition">
-                    </div>
-
-                    <!-- APELLIDOS -->
-                    <div>
-                        <label for="apellidos-{{ $autor->dni }}" class="text-xs text-zinc-500 mb-1 block">
-                            Apellidos
-                        </label>
-
-                        <input id="apellidos-{{ $autor->dni }}" type="text" name="apellidos"
-                            value="{{ $autor->apellidos }}" required
-                            class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700
-                        bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white
-                        px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500
-                        focus:outline-none transition">
-                    </div>
-
-                    <!-- ACTIONS -->
-                    <div class="flex gap-3 pt-2">
-
-                        <button type="button" data-tw-dismiss="modal"
-                            class="flex-1 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800
-                        text-zinc-700 dark:text-white text-sm font-medium
-                        hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
-                            Cancelar
-                        </button>
-
-                        <button type="submit"
-                            class="flex-1 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-medium
-                        hover:bg-blue-500 transition shadow-md hover:shadow-lg">
-                            Guardar cambios
-                        </button>
-
-                    </div>
-
-                </form>
-
+                <input type="text" value="{{ $autor->dni }}" disabled
+                    class="w-full rounded-xl border border-slate-200 bg-slate-100 pl-10 pr-4 py-2.5 text-sm text-slate-500 
+                           dark:border-slate-700 dark:bg-slate-700 dark:text-slate-400">
             </div>
-
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
+                El DNI no puede ser modificado
+            </p>
         </div>
-    </div>
+
+        {{-- Nombres --}}
+        <div class="space-y-1.5">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                Nombres
+            </label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <x-heroicon-o-user class="h-5 w-5 text-slate-400 dark:text-slate-500" />
+                </div>
+                <input type="text" name="nombres" value="{{ $autor->nombres }}" required
+                    class="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm text-slate-700 
+                           outline-none transition-all duration-200 placeholder:text-slate-400 
+                           focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 
+                           dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 
+                           dark:placeholder:text-slate-500 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20">
+            </div>
+        </div>
+
+        {{-- Apellidos --}}
+        <div class="space-y-1.5">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                Apellidos
+            </label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <x-heroicon-o-users class="h-5 w-5 text-slate-400 dark:text-slate-500" />
+                </div>
+                <input type="text" name="apellidos" value="{{ $autor->apellidos }}" required
+                    class="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm text-slate-700 
+                           outline-none transition-all duration-200 placeholder:text-slate-400 
+                           focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 
+                           dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 
+                           dark:placeholder:text-slate-500 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20">
+            </div>
+        </div>
+
+    </x-admin.modal-edit>
 @endforeach

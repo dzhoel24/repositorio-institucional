@@ -12,17 +12,17 @@ class PanelController extends Controller
 
     public function home()
     {
-        return $this->htmxView('admin.panel.home');
+        return $this->htmxView('admin.panel.dashboard.index');
     }
 
     public function manual()
     {
-        return $this->htmxView('admin.panel.manual');
+        return $this->htmxView('admin.panel.manual.index');
     }
 
     public function perfil()
     {
-        return $this->htmxView('admin.panel.perfil', [
+        return $this->htmxView('admin.panel.perfil.index', [
             'user' => Auth::user(),
         ]);
     }

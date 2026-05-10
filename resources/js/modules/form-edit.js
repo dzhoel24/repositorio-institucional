@@ -89,9 +89,8 @@ function initFormEdit() {
             div.className = "flex justify-between border-b py-1";
             div.innerHTML = `
                 <span>${a.nombres} ${a.apellidos}</span>
-                <button type="button" class="text-red-500 btn-remove" data-id="${id}" data-index="${i}">
-                    <i class="fa fa-trash"></i>
-                </button>
+                <button type="button"  class="bg-red-600 text-white px-2 py-1 rounded btn-remove" 
+                    data-id="${id}" data-index="${i}"> X </button>
             `;
             container.appendChild(div);
         });
@@ -122,9 +121,9 @@ function initFormEdit() {
         });
     });
 
+    // ===== CORREGIDO: CONDICIONALES CON EVENTO CHANGE =====
     document.querySelectorAll(".tipo-select").forEach((select) => {
         const id = select.dataset.id;
-        const tipo = select.value;
         const cajaCarrera = document.querySelector(
             `.caja-carrera[data-id="${id}"]`,
         );
@@ -134,16 +133,24 @@ function initFormEdit() {
 
         if (!cajaCarrera || !cajaModulo) return;
 
-        if (tipo === "1") {
-            cajaCarrera.classList.remove("hidden");
-            cajaModulo.classList.remove("hidden");
-        } else if (tipo === "3" || tipo === "4") {
-            cajaCarrera.classList.remove("hidden");
-            cajaModulo.classList.add("hidden");
-        } else {
+        function actualizarCondicionales() {
+            const tipo = select.value;
+
+            // Ocultar todo
             cajaCarrera.classList.add("hidden");
             cajaModulo.classList.add("hidden");
+
+            // Mostrar según el tipo
+            if (tipo === "1") {
+                cajaCarrera.classList.remove("hidden");
+                cajaModulo.classList.remove("hidden");
+            } else if (tipo === "3" || tipo === "4") {
+                cajaCarrera.classList.remove("hidden");
+            }
         }
+
+        actualizarCondicionales();
+        select.addEventListener("change", actualizarCondicionales);
     });
 }
 

@@ -16,19 +16,15 @@ class InformeFactory extends Factory
     {
         static $i = 1;
 
-        // 1. Generamos los nombres únicos para este registro
         $nombrePdf = Str::uuid() . '.pdf';
         $nombreCaratula = Str::uuid() . '.jpg';
 
-        // 2. Rutas destino donde se guardarán las copias
         $rutaDestinoPdf = 'pdfs/' . $nombrePdf;
         $rutaDestinoCaratula = 'caratulas/' . $nombreCaratula;
 
-        // Asegurarnos de que las carpetas destino existen
         Storage::disk('public')->makeDirectory('pdfs');
         Storage::disk('public')->makeDirectory('caratulas');
 
-        // Verifica que el archivo base exista para evitar errores
         if (Storage::disk('public')->exists('default.pdf')) {
             Storage::disk('public')->copy('default.pdf', $rutaDestinoPdf);
         }
@@ -43,7 +39,6 @@ class InformeFactory extends Factory
             'resumen' => $this->faker->paragraph(),
             'anio' => Carbon::now()->subYears(rand(1, 5))->year,
 
-            // 4. Guardamos SOLO EL NOMBRE generado en la base de datos
             'ruta_pdf' => $nombrePdf,
             'ruta_caratula' => $nombreCaratula,
 

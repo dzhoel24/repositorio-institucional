@@ -8,13 +8,13 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
 
-   public function run(): void
-   {
-      User::create([
-         'full_name' => 'Joel Flores Barona',
-         'username' => 'Joel',
-         'password' => bcrypt('123456'),
-         'profile_photo' => 'foto1.jpg',
-      ]);
-   }
+    public function run(): void
+    {
+        User::create([
+            'full_name' => 'Joel Flores Barahona',
+            'username' => 'Joel',
+            'password' => bcrypt('123456'),
+            'profile_photo' => 'foto1.jpg',
+        ]);
+    }
 }

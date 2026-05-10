@@ -61,7 +61,6 @@ class PublicacionesController extends Controller
         }
 
         $informe->save();
-
         return htmxRedirect(route('admin.publicaciones.index'), $message);
     }
 }

@@ -1,6 +1,5 @@
-@extends('components.sidebar')
+@extends('layouts.admin')
 @section('title', 'Directorio de Autores')
 @section('content')
-    @include('admin.autores.show')
+    @include('admin.autores.content')
 @endsection
-

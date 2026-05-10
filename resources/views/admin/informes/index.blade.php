@@ -1,5 +1,5 @@
-@extends('components.sidebar')
+@extends('layouts.admin')
 @section('title', 'Gestión de Proyectos')
 @section('content')
-    @include('admin.panel.home-show')
+    @include('admin.informes.content')
 @endsection

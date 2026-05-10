@@ -1,0 +1,394 @@
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 68px;
+    --transition: 0.25s ease;
+    --bg-sidebar: #ffffff;
+    --bg-hover: #f1f5f9;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --accent: #0ea5e9;
+}
+
+.dark {
+    --bg-sidebar: #0f172a;
+    --bg-hover: #1e293b;
+    --border: #334155;
+    --text: #f1f5f9;
+    --text-muted: #cbd5e1;
+    --accent: #38bdf8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* ===== SIDEBAR =====
+   El posicionamiento lo maneja el flex del HTML.
+   El CSS solo define ancho, transición y scroll. */
+.sidebar-wrapper {
+    width: var(--sidebar-width);
+    transition: width var(--transition);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Scrollbar personalizado */
+.sidebar-wrapper::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-wrapper::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+/* ===== COLAPSADO ===== */
+.sidebar-collapsed .sidebar-wrapper {
+    width: var(--sidebar-collapsed-width);
+}
+
+/* Ocultar textos con transición suave */
+.sidebar-text,
+.nav-text,
+.drop-text,
+.collapse-text {
+    transition: opacity 0.15s ease;
+}
+
+.sidebar-collapsed .sidebar-text,
+.sidebar-collapsed .nav-text,
+.sidebar-collapsed .drop-text,
+.sidebar-collapsed .collapse-text {
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    overflow: hidden;
+}
+
+/* Ocultar elementos sin transición */
+.sidebar-collapsed .section-label,
+.sidebar-collapsed .sub-menu,
+.sidebar-collapsed .drop-arrow {
+    display: none;
+}
+
+.sidebar-collapsed .sidebar-header {
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.sidebar-collapsed .nav-item,
+.sidebar-collapsed .dropdown-trigger {}
+
+.sidebar-collapsed .nav-icon,
+.sidebar-collapsed .drop-icon {
+    margin: 0;
+}
+
+.sidebar-collapsed .collapse-icon-wrapper {
+    transform: rotate(180deg);
+}
+
+/* ===== TOOLTIP EN MODO COLAPSADO (CSS puro) ===== */
+.sidebar-collapsed [data-tooltip] {
+    position: relative;
+}
+
+.sidebar-collapsed [data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: fixed;
+    left: calc(var(--sidebar-collapsed-width) + 8px);
+    background: #0f172a;
+    color: #f1f5f9;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 400;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== ESTILOS BASE ===== */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.nav-item,
+.dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 16px;
+    margin-bottom: 4px;
+    border-radius: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+    position: relative;
+}
+
+.nav-item:hover,
+.dropdown-trigger:hover {
+    background: var(--bg-hover);
+}
+
+/* Estado activo con fondo complementario */
+.nav-item.active,
+.dropdown-trigger.parent-active {
+    background: var(--bg-hover);
+}
+
+.nav-icon,
+.drop-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.drop-arrow {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.drop-arrow.open {
+    transform: rotate(90deg);
+}
+
+/* Sub-menu */
+.sub-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+}
+
+.sub-menu.open {
+    max-height: 500px;
+}
+
+.sub-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px 8px 48px;
+    font-size: 13px;
+    text-decoration: none;
+    color: var(--text-muted);
+    border-radius: 8px;
+    transition: background 0.15s, color 0.15s;
+    position: relative;
+}
+
+.sub-item:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+/* Active indicator */
+.active-indicator {
+    position: absolute;
+    left: 0;
+    width: 4px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 0 3px 3px 0;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.nav-item.active .active-indicator,
+.dropdown-trigger.parent-active .active-indicator {
+    opacity: 1;
+}
+
+/* ===== SEPARADOR ===== */
+.sidebar-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 0 12px;
+}
+
+/* ===== FOOTER ===== */
+.sidebar-footer {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.collapse-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    color: var(--text-muted);
+    transition: background 0.15s;
+}
+
+.collapse-btn:hover {
+    background: var(--bg-hover);
+}
+
+.collapse-icon-wrapper {
+    transition: transform 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* ===== PROFILE DROPDOWN ===== */
+.profile-dropdown {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+}
+
+.profile-dropdown.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* ===== OVERLAY ===== */
+.sidebar-overlay {
+    display: none;
+    pointer-events: none;
+}
+
+@media (min-width: 901px) {
+    .sidebar-overlay {
+        display: none !important;
+        pointer-events: none !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        z-index: 199;
+        pointer-events: auto;
+    }
+
+    .sidebar-overlay.visible {
+        display: block !important;
+    }
+}
+
+/* ===== HAMBURGER ===== */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.hamburger span {
+    width: 20px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+    .sidebar-wrapper {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-width) !important;
+        transform: translateX(-100%);
+        transition: transform var(--transition);
+        z-index: 200;
+    }
+
+    .sidebar-wrapper.open {
+        transform: translateX(0);
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
+
+    /* En móvil el colapso NO aplica — siempre expandido */
+    .sidebar-collapsed .sidebar-wrapper {
+        width: var(--sidebar-width) !important;
+    }
+
+    .sidebar-collapsed .sidebar-text,
+    .sidebar-collapsed .nav-text,
+    .sidebar-collapsed .drop-text,
+    .sidebar-collapsed .collapse-text {
+        opacity: 1;
+        pointer-events: auto;
+        width: auto;
+        overflow: visible;
+    }
+
+    .sidebar-collapsed .section-label,
+    .sidebar-collapsed .drop-arrow {
+        display: revert;
+    }
+
+    .sidebar-collapsed .sidebar-header {
+        justify-content: flex-start;
+        padding: 20px 16px;
+    }
+
+    .sidebar-collapsed .nav-item,
+    .sidebar-collapsed .dropdown-trigger {
+        justify-content: flex-start;
+        padding: 10px 16px;
+    }
+
+    .sidebar-collapsed .collapse-icon-wrapper {
+        transform: none;
+    }
+
+    /* Tooltips deshabilitados en móvil */
+    .sidebar-collapsed [data-tooltip]:hover::after {
+        display: none;
+    }
+}

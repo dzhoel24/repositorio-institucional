@@ -1,4 +1,3 @@
-{{-- resources/views/components/alerts.blade.php --}}
 @if (session('success') || session('info') || $errors->any())
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -9,7 +8,7 @@
                 toast: true,
                 position: "top-end",
                 showConfirmButton: false,
-                timer: 3000, // 3 segundos es ideal para leer errores
+                timer: 3000,
                 timerProgressBar: true,
                 background: isDarkMode ? '#1e293b' : '#ffffff',
                 color: isDarkMode ? '#f1f5f9' : '#1e293b',

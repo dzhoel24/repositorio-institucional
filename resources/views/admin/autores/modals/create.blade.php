@@ -1,86 +1,57 @@
-<div class="fixed inset-0 z-[999] hidden modal" id="add-modal" role="dialog" aria-modal="true"
-    aria-labelledby="add-author-title">
+<x-admin.modal-create id='add-modal' title='AÑADIR AUTOR' subtitle='Registra un nuevo autor en el sistema' size="sm"
+    action="{{ route('admin.autores.store') }}">
 
-    <!-- BACKDROP -->
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm modal-overlay"></div>
-
-    <!-- CENTER -->
-    <div class="relative flex items-center justify-center min-h-screen p-4 pointer-events-none">
-
-        <!-- CARD -->
-        <div
-            class="w-full max-w-md rounded-md bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden modal-animate pointer-events-auto">
-
-            <!-- HEADER -->
-            <div class="px-6 pt-6 pb-4 text-center border-b border-zinc-100 dark:border-zinc-800">
-
-                <h2 id="add-author-title" class="text-xl font-semibold text-zinc-900 dark:text-white">
-                    Añadir autor
-                </h2>
-
-                <p class="text-sm text-zinc-500 mt-1">
-                    Registra un nuevo autor en el sistema
-                </p>
-
+    {{-- DNI --}}
+    <div class="space-y-1.5">
+        <label for="dni" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">
+            DNI
+        </label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <x-heroicon-o-identification class="h-5 w-5 text-slate-400 dark:text-zinc-500" />
             </div>
-
-            <!-- FORM -->
-            <form action="{{ route('admin.autores.store') }}" method="POST" class="px-6 py-6 space-y-4">
-                @csrf
-
-                <!-- DNI -->
-                <div>
-                    <label for="dni" class="text-xs text-zinc-500 mb-1 block">
-                        DNI
-                    </label>
-
-                    <input id="dni" type="text" name="dni" placeholder="Ej: 12345678" required
-                        class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800
-                        text-zinc-900 dark:text-white px-4 py-3 text-sm
-                        focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                </div>
-
-                <!-- NOMBRES -->
-                <div>
-                    <label for="nombres" class="text-xs text-zinc-500 mb-1 block">
-                        Nombres
-                    </label>
-
-                    <input id="nombres" type="text" name="nombres" placeholder="Ej: Juan Carlos" required
-                        class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800
-                        text-zinc-900 dark:text-white px-4 py-3 text-sm
-                        focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                </div>
-
-                <!-- APELLIDOS -->
-                <div>
-                    <label for="apellidos" class="text-xs text-zinc-500 mb-1 block">
-                        Apellidos
-                    </label>
-
-                    <input id="apellidos" type="text" name="apellidos" placeholder="Ej: Pérez García" required
-                        class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800
-                        text-zinc-900 dark:text-white px-4 py-3 text-sm
-                        focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                </div>
-
-                <!-- ACTIONS -->
-                <div class="flex gap-3 pt-2">
-
-                    <button type="button" data-tw-dismiss="modal"
-                        class="flex-1 py-2.5 rounded-md bg-zinc-100 dark:bg-zinc-800
-                        text-zinc-700 dark:text-white text-sm font-medium
-                        hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
-                        Cancelar
-                    </button>
-
-                    <button type="submit"
-                        class="flex-1 py-2.5 rounded-md bg-blue-600 text-white text-sm font-medium
-                        hover:bg-blue-500 transition shadow-md hover:shadow-lg">
-                        Guardar
-                    </button>
-                </div>
-            </form>
+            <input id="dni" type="text" name="dni" placeholder="12345678" required
+                class="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm text-slate-700 outline-none transition-all duration-200 
+                       placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 
+                       dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 
+                       dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20">
         </div>
     </div>
-</div>
+
+    {{-- NOMBRES --}}
+    <div class="space-y-1.5">
+        <label for="nombres"
+            class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">
+            Nombres
+        </label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <x-heroicon-o-user class="h-5 w-5 text-slate-400 dark:text-zinc-500" />
+            </div>
+            <input id="nombres" type="text" name="nombres" placeholder="Juan Carlos" required
+                class="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm text-slate-700 outline-none transition-all duration-200 
+                       placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 
+                       dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 
+                       dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20">
+        </div>
+    </div>
+
+    {{-- APELLIDOS --}}
+    <div class="space-y-1.5">
+        <label for="apellidos"
+            class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">
+            Apellidos
+        </label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <x-heroicon-o-users class="h-5 w-5 text-slate-400 dark:text-zinc-500" />
+            </div>
+            <input id="apellidos" type="text" name="apellidos" placeholder="Pérez García" required
+                class="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-sm text-slate-700 outline-none transition-all duration-200 
+                       placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 
+                       dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 
+                       dark:focus:border-indigo-500 dark:focus:ring-indigo-500/20">
+        </div>
+    </div>
+
+</x-admin.modal-create>

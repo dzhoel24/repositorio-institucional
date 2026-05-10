@@ -67,7 +67,7 @@
     <footer class="bg-white border-t border-slate-200 py-8 mt-5">
         <div
             class="max-w-[90rem] mx-auto px-6 text-center text-slate-400 font-bold text-[13px] uppercase tracking-widest">
-            &copy; {{ date('Y') }} I.S.T. Carlos Salazar Romero
+            &copy; {{ date('Y') }} I.E.S.T.P "Carlos Salazar Romero"
         </div>
     </footer>
     @vite(['resources/js/tabs.js'])
