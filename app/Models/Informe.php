@@ -35,7 +35,6 @@ class Informe extends Model
 
     protected $fillable = [
         'titulo',
-        // 'autores',
         'anio',
         'ruta_pdf',
         'ruta_caratula',

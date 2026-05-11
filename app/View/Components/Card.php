@@ -31,7 +31,7 @@ class Card extends Component
 
     private function formatAutores($autores)
     {
-        return $autores->map(function($autor) {
+        return $autores->map(function ($autor) {
             return "{$autor->nombre} {$autor->apellidos}";
         })->implode(', ');
     }
@@ -39,13 +39,14 @@ class Card extends Component
     public function getIcon()
     {
         return match ($this->acceso) {
-            'Publico' => 'lock-open-alt',
-            'Privado' => 'lock-alt',
-            default => 'help-circle',
+            'Publico' => 'lock-open',
+            'Privado' => 'lock-closed',
+            default => 'question-mark-circle',
         };
     }
 
-    public function getColor(){
+    public function getColor()
+    {
         return match ($this->acceso) {
             'Publico' => 'green',
             'Privado' => 'red',
@@ -65,9 +66,10 @@ class Card extends Component
         return match ($action) {
             'showInformeAutores' => route('filtros.showInformeAutores', ['informe' => $codigo]),
             'showFechaP' => route('filtros.showFechaP', ['id' => $codigo]),
+            'show' => route('repositorio.show', ['tipo' => $parametro, 'id' => $codigo]),
             default => $parametro === 'home'
-            ? route('home')
-            : route("$parametro.show", [$parametro => $codigo]),
+                ? route('home')
+                : route('repositorio.index', ['tipo' => $parametro]),
         };
     }
 }

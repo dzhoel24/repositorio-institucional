@@ -1,6 +1,6 @@
 <x-app-main title="Modulo">
     <div class="bg-black">
-        <x-breadcrumb name="item.index" :programa="$carreraN"></x-breadcrumb>
+        <x-breadcrumb name="item.index" :programa="$carrera"></x-breadcrumb>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-2 sm:gap-4">
         <div class="container hidden md:block">
@@ -9,7 +9,7 @@
         <div class="md:col-span-3 flex flex-col w-full px-4">
             <h3 class="text-3xl font-semibold py-2">Buscar</h3>
             <x-search
-                :parametro="'institucional'"
+                :parametro="'repositorio'"
                 :parametro2="'index'"
                 :descrip="'Buscar en todo el repositorio'"
             />
@@ -44,7 +44,7 @@
             <div class="py-2 gap-4 w-full ">
                 @foreach ($items as $item)
                     <a href="{{ route('carrera.show', ['id' => $item->id]) }}" class="flex items-center w-full mb-2 bg-zinc-200 border border-gray-300 rounded-lg shadow-lg md:flex-row md:w-full hover:bg-zinc-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-                        <img class="border border-black object-cover rounded-lg w-48 h-48 md:h-48 md:w-48 md:rounded-none md:rounded-s-lg" src="{{ asset($item->ruta_caratula) }}" alt="">
+                        <img class="border border-black object-cover rounded-lg w-48 h-48 md:h-48 md:w-48 md:rounded-none md:rounded-s-lg" src="{{ asset('storage/caratulas/' . $item->ruta_caratula) }}" alt="">
                         <div class="w-full flex flex-col justify-between px-4 leading-normal">
                             <h5 class="mb-1 text-2xl font-bold tracking-tight text-black dark:text-white">{{ $item->titulo }}</h5>
                             <p class="text-sm text-black">{{ $item->autores->implode(', ') }}</p>

@@ -8,14 +8,15 @@
         <div class="md:col-span-3 flex flex-col w-full px-4">
             <h3 class="text-3xl font-semibold py-2">Buscar</h3>
             <x-search
-                :parametro="'carrera'"
+                :parametro="'repositorio'"
                 :parametro2="'index'"
                 :descrip="'Buscar en todo el repositorio'"
             />
             <x-item class="col-span-2"
                 :codigo="$item->codigo"
+                :pdf="$item->ruta_pdf"
                 :image="$item->ruta_caratula"
-                :title="$item->nombre"
+                :title="$item->titulo"
                 :resumen="$item->resumen"
                 :autores="$item->autores"
                 :acceso="$item->acceso"

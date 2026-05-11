@@ -10,6 +10,7 @@
     @vite(['resources/css/app.css'])
     <script src="https://unpkg.com/flowbite@1.6.4/dist/flowbite.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         body {
             font-family: 'Nunito', sans-serif;

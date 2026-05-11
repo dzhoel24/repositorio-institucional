@@ -11,12 +11,14 @@ class AdvancedFilter extends Component
     public string $defaultSort;
     public int $defaultItemsPerPage;
     public string $route;
+    public array $params;
 
-    public function __construct(string $route, string $defaultSort = 'asc', int $defaultItemsPerPage = 10)
+    public function __construct(string $route, array $params = [], string $defaultSort = 'asc', int $defaultItemsPerPage = 10)
     {
         $this->defaultSort = $defaultSort;
         $this->defaultItemsPerPage = $defaultItemsPerPage;
         $this->route = $route;
+        $this->params = $params;
     }
 
     public function render(): View|Closure|string
@@ -25,6 +27,7 @@ class AdvancedFilter extends Component
             'defaultSort' => $this->defaultSort,
             'defaultItemsPerPage' => $this->defaultItemsPerPage,
             'route' => $this->route,
+            'params' => $this->params,
         ]);
     }
 }

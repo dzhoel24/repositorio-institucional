@@ -11,7 +11,7 @@
 
     {{-- Search --}}
     <div class="flex justify-center w-full mb-12 px-4">
-        <x-search :parametro="'institucional'" :parametro2="'index'" :descrip="'¿Qué deseas encontrar hoy?'" />
+        <x-search :parametro="'repositorio'" :parametro2="'index'" :descrip="'¿Qué deseas encontrar hoy?'" />
     </div>
 
     <div class="w-full px-6 lg:px-12">
@@ -54,46 +54,45 @@
                     @php
                         $links = [
                             [
-                                'route' => 'institucional.index',
+                                'route' => 'repositorio.index',
+                                'params' => ['tipo' => 'institucional'],
                                 'title' => 'Repositorio Institucional',
                                 'icon' => 'bx-building-house',
                                 'color' => 'from-sky-600 to-blue-800'
                             ],
                             [
-                                'route' => 'investigacion.index',
+                                'route' => 'repositorio.index',
+                                'params' => ['tipo' => 'investigacion'],
                                 'title' => 'Proyectos de Investigación',
                                 'icon' => 'bx-flask',
                                 'color' => 'from-blue-700 to-indigo-900'
                             ],
                             [
-                                'route' => 'modulo.index',
+                                'route' => 'repositorio.index',
+                                'params' => ['tipo' => 'modulo'],
                                 'title' => 'Prácticas Modulares',
                                 'icon' => 'bx-collection',
                                 'color' => 'from-sky-700 to-sky-900'
                             ],
                             [
-                                'route' => 'feria.index',
+                                'route' => 'repositorio.index',
+                                'params' => ['tipo' => 'feria'],
                                 'title' => 'Ferias Tecnológicas',
                                 'icon' => 'bx-rocket',
                                 'color' => 'from-slate-800 to-slate-950'
                             ],
                             [
                                 'route' => 'filtros.category',
+                                'params' => [],
                                 'title' => 'Programas de Estudio',
                                 'icon' => 'bx-school',
                                 'color' => 'from-blue-600 to-sky-700'
-                            ],
-                            [
-                                'route' => 'feria.index',
-                                'title' => 'Informes de Practicas',
-                                'icon' => 'bx-file-blank',
-                                'color' => 'from-sky-800 to-blue-900'
                             ]
                         ];
                     @endphp
 
                     @foreach ($links as $link)
-                        <a href="{{ route($link['route']) }}" class="group block relative">
+                        <a href="{{ route($link['route'], $link['params']) }}" class="group block relative">
                             <div
                                 class="h-40 relative flex flex-col justify-center p-8 bg-white border-2 border-slate-100 rounded-[2rem] shadow-lg transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:border-sky-200 overflow-hidden">
 

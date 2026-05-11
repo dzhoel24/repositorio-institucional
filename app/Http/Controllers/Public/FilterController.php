@@ -5,20 +5,23 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Autor;
 use App\Models\Informe;
-use App\Traits\WithFilteringAndPagination;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Illuminate\View\View;
 
 class FilterController extends Controller
 {
-    use WithFilteringAndPagination;
-
-    public function autores(Request $request)
+    /**
+     * Mostrar lista de autores
+     */
+    public function autores(Request $request): View
     {
         $search = $request->get('search', '');
         $starts_with = $request->get('starts_with', '');
 
-        $query = Autor::query();
+        // ✅ CORREGIDO: Solo contar informes publicados
+        $query = Autor::withCount(['informes' => function ($query) {
+            $query->where('estado', 'Publicado');
+        }]);
 
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
@@ -30,147 +33,167 @@ class FilterController extends Controller
         if (!empty($starts_with)) {
             $query->where('apellidos', 'LIKE', "$starts_with%");
         }
-        $autores = $this->applyFiltersAutor($request, $query->withCount('informes'));
-        $itemsPerPage = $request->input('items_per_page', 20);
-        $autores = $query->paginate($itemsPerPage);
+
+        $autores = $query->orderBy('apellidos', 'ASC')
+            ->paginate($request->input('items_per_page', 20))
+            ->appends($request->query());
+
         return view('filtros.autores', compact('autores'));
     }
 
-
-    public function searchLetter(Request $request)
+    /**
+     * Búsqueda de autores por letra
+     */
+    public function searchLetter(Request $request): View
     {
-        $search = $request->get('search', '');
         $starts_with = $request->get('starts_with', '');
 
-        $autores = Autor::query()
-            ->when(!empty($search), function ($query) use ($search) {
-                return $query->where(function ($q) use ($search) {
-                    $q->where('nombres', 'LIKE', "%$search%")
-                        ->orWhere('apellidos', 'LIKE', "%$search%");
-                });
+        // ✅ CORREGIDO: Solo contar informes publicados
+        $autores = Autor::withCount(['informes' => function ($query) {
+            $query->where('estado', 'Publicado');
+        }])
+            ->when(!empty($starts_with), function ($query) use ($starts_with) {
+                return $query->where('apellidos', 'LIKE', "$starts_with%");
             })
-            ->when(empty($search) && !empty($starts_with), function ($query) use ($starts_with) {
-                return $query->where(function ($q) use ($starts_with) {
-                    $q->where('apellidos', 'LIKE', "$starts_with%");
-                });
-            })
-            ->withCount('informes')
             ->orderBy('apellidos', 'ASC')
             ->paginate(20)
             ->appends($request->query());
 
-        return view("filtros.autores", compact("autores", "starts_with"));
+        return view('filtros.autores', compact('autores'));
     }
 
-    public function searchYear(Request $request, $year = null)
+    /**
+     * Búsqueda por año
+     */
+    public function searchYear(Request $request, $year = null): View
     {
         $year = $request->get('search', $year);
 
-        $query = Informe::query();
-        if (!empty($year)) {
-            $query->where('anio', $year);
-        }
-        $publi_fecha = $this->applyFiltersFecha($request, $query);
-        $contador = $publi_fecha->total();
-        $this->actualizarRutaInforme($publi_fecha);
-        return view('filtros.fechaP', compact('publi_fecha', 'contador'));
-    }
-
-    public function searchYearRange(Request $request, $range)
-    {
-        [$yearA, $yearB] = explode('-', $range);
-
-        $year = $request->get('search', null);
-
-        $publi_fecha = Informe::query()
+        $publi_fecha = Informe::with('autores')
+            ->where('estado', 'Publicado')
             ->when(!empty($year), function ($query) use ($year) {
                 return $query->where('anio', $year);
             })
-            ->whereBetween('anio', [$yearA, $yearB])
+            ->orderBy('anio', 'DESC')
             ->paginate(10)
             ->appends($request->query());
-
-        $this->actualizarRutaInforme($publi_fecha);
 
         $contador = $publi_fecha->total();
 
         return view('filtros.fechaP', compact('publi_fecha', 'contador'));
     }
 
-    public function listTitle(Request $request, $title = null)
+    /**
+     * Búsqueda por rango de años
+     */
+    public function searchYearRange(Request $request, string $range): View
     {
-        $title = $request->get('search', $title);
-        $query = Informe::query();
-        if (!empty($title)) {
-            $query->where('titulo', 'LIKE', "%$title%");
-        }
-        $informes = $this->applyFiltersTitle($request, $query);
-        $this->actualizarRutaInforme($informes);
-        return view('filtros.listTitulo', compact('informes'));
-    }
+        [$yearA, $yearB] = explode('-', $range);
 
-
-    public function show($item)
-    {
-        $informe = Informe::findOrFail($item);
-        $this->actualizarRuta($informe);
-        return view('filtros.showFechaP', compact('informe'));
-    }
-
-    public function showtitle($item)
-    {
-        $informe = Informe::findOrFail($item);
-        $this->actualizarRuta($informe);
-
-        return view('filtros.showTitulos', compact('informe'));
-    }
-    public function showInformeAutores($item)
-    {
-        $informe = Informe::where('id', $item)->firstOrFail();
-        $this->actualizarRuta($informe);
-        return view('filtros.showInformeAutores', compact('informe'));
-    }
-
-    public function showInformes(Autor $autor)
-    {
-        $informes = $autor->informes()->paginate(10);
-        $this->actualizarRutaInforme($informes);
-        return view('filtros.informesA', compact('autor', 'informes'));
-    }
-
-    public function searchTitle(Request $request)
-    {
-        $starts_with = $request->get('starts_with', '');
-
-        $informes = Informe::query()
-            ->when(!empty($starts_with), function ($query) use ($starts_with) {
-                return $query->where('titulo', 'LIKE', "$starts_with%");
-            })
+        $publi_fecha = Informe::with('autores')
+            ->where('estado', 'Publicado')
+            ->whereBetween('anio', [$yearA, $yearB])
+            ->orderBy('anio', 'DESC')
             ->paginate(10)
             ->appends($request->query());
 
-        $this->actualizarRutaInforme($informes);
+        $contador = $publi_fecha->total();
+
+        return view('filtros.fechaP', compact('publi_fecha', 'contador'));
+    }
+
+    /**
+     * Lista de títulos
+     */
+    public function listTitle(Request $request): View
+    {
+        $search = $request->get('search', '');
+
+        $informes = Informe::with('autores')
+            ->where('estado', 'Publicado')
+            ->when(!empty($search), function ($query) use ($search) {
+                return $query->where('titulo', 'LIKE', "%$search%");
+            })
+            ->orderBy('titulo', 'ASC')
+            ->paginate(10)
+            ->appends($request->query());
 
         return view('filtros.listTitulo', compact('informes'));
     }
 
-    public function categories()
+    /**
+     * Mostrar detalle de informe por fecha
+     */
+    public function show(int $id): View
     {
-        return view('section.index');
-    }
-    private function actualizarRutaInforme($informes)
-    {
-        foreach ($informes as $informe) {
-            if (!empty($informe->ruta_caratula) && !File::exists(public_path($informe->ruta_caratula))) {
-                $informe->ruta_caratula = 'img/default2.png';
-            }
-        }
+        $informe = Informe::with('autores')
+            ->where('estado', 'Publicado')
+            ->findOrFail($id);
+
+        return view('filtros.showFechaP', compact('informe'));
     }
 
-    private function actualizarRuta(Informe $informe)
+    /**
+     * Mostrar detalle de informe por título
+     */
+    public function showtitle(int $id): View
     {
-        if (!empty($informe->ruta_caratula) && !File::exists(public_path($informe->ruta_caratula))) {
-            $informe->ruta_caratula = 'img/default2.png';
-        }
+        $informe = Informe::with('autores')
+            ->where('estado', 'Publicado')
+            ->findOrFail($id);
+
+        return view('filtros.showTitulos', compact('informe'));
+    }
+
+    /**
+     * Mostrar informe desde autores
+     */
+    public function showInformeAutores(int $id): View
+    {
+        $informe = Informe::with('autores')
+            ->where('estado', 'Publicado')
+            ->findOrFail($id);
+
+        return view('filtros.showInformeAutores', compact('informe'));
+    }
+
+    /**
+     * Mostrar informes de un autor específico
+     */
+    public function showInformes(Autor $autor): View
+    {
+        $informes = $autor->informes()
+            ->with('autores')
+            ->where('estado', 'Publicado')
+            ->paginate(10);
+
+        return view('filtros.informesA', compact('autor', 'informes'));
+    }
+
+    /**
+     * Búsqueda de títulos por letra
+     */
+    public function searchTitle(Request $request): View
+    {
+        $starts_with = $request->get('starts_with', '');
+
+        $informes = Informe::with('autores')
+            ->where('estado', 'Publicado')
+            ->when(!empty($starts_with), function ($query) use ($starts_with) {
+                return $query->where('titulo', 'LIKE', "$starts_with%");
+            })
+            ->orderBy('titulo', 'ASC')
+            ->paginate(10)
+            ->appends($request->query());
+
+        return view('filtros.listTitulo', compact('informes'));
+    }
+
+    /**
+     * Categorías (redirige o muestra vista)
+     */
+    public function categories(): View
+    {
+        return view('public.section.index');
     }
 }

@@ -1,41 +1,50 @@
 <?php
 
 use App\Http\Controllers\Public\CategoryController;
-use App\Http\Controllers\Public\FeriaController;
+use App\Http\Controllers\Public\RepositorioController;  // ← Cambiado de InformeController
 use App\Http\Controllers\Public\FilterController;
 use App\Http\Controllers\Public\HomeController;
-use App\Http\Controllers\Public\InstitucionalController;
-use App\Http\Controllers\Public\InvestigacionController;
-use App\Http\Controllers\Public\ModuloController;
 use Illuminate\Support\Facades\Route;
-
+// Búsqueda global
+Route::get('/buscar', [RepositorioController::class, 'globalSearch'])->name('global.search');
+Route::redirect('/investigacion', '/repositorio/investigacion', 301);
+Route::redirect('/investigacion/{id}', '/repositorio/investigacion/{id}', 301);
+Route::redirect('/modulo', '/repositorio/modulo', 301);
+Route::redirect('/modulo/{id}', '/repositorio/modulo/{id}', 301);
+Route::redirect('/feria', '/repositorio/feria', 301);
+Route::redirect('/feria/{id}', '/repositorio/feria/{id}', 301);
+Route::redirect('/institucional', '/repositorio/institucional', 301);
+Route::redirect('/institucional/{id}', '/repositorio/institucional/{id}', 301);
 // Ruta principal
 Route::get('/', HomeController::class)->name('home');
 
-// Rutas para los repositorios
-Route::prefix('institucional')->group(function () {
-    Route::get('/', [InstitucionalController::class, 'index'])->name('institucional.index');
-    Route::get('/{institucional}', [InstitucionalController::class, 'show'])->name('institucional.show');
+// 🚀 Repositorio unificado
+Route::prefix('repositorio')->name('repositorio.')->group(function () {
+    // Listados por tipo
+    Route::get('/{tipo}', [RepositorioController::class, 'index'])  // ← Corregido
+        ->name('index')
+        ->where('tipo', 'institucional|investigacion|modulo|feria');
+
+    // Ver detalle
+    Route::get('/{tipo}/{id}', [RepositorioController::class, 'show'])  // ← Corregido
+        ->name('show')
+        ->where('tipo', 'institucional|investigacion|modulo|feria')
+        ->where('id', '[0-9]+');
+
+    // Descargar PDF
+    Route::get('/{tipo}/{id}/descargar', [RepositorioController::class, 'download'])  // ← Corregido
+        ->name('download')
+        ->where('tipo', 'institucional|investigacion|modulo|feria')
+        ->where('id', '[0-9]+');
 });
 
-// Rutas para el controlador Investigacion
-Route::prefix('investigacion')->group(function () {
-    Route::get('/', [InvestigacionController::class, 'index'])->name('investigacion.index');
-    Route::get('/{investigacion}', [InvestigacionController::class, 'show'])->name('investigacion.show');
-});
+// 🔄 Redirecciones de URLs antiguas (para no romper enlaces existentes)
+Route::redirect('/institucional', '/repositorio/institucional', 301);
+Route::redirect('/investigacion', '/repositorio/investigacion', 301);
+Route::redirect('/modulo', '/repositorio/modulo', 301);
+Route::redirect('/feria', '/repositorio/feria', 301);
 
-// Rutas para el controlador Modulo
-Route::prefix('modulo')->group(function () {
-    Route::get('/', [ModuloController::class, 'index'])->name('modulo.index');
-    Route::get('/{modulo}', [ModuloController::class, 'show'])->name('modulo.show');
-});
-
-// Rutas para la feria
-Route::prefix('feria')->group(function () {
-    Route::get('/', [FeriaController::class, 'index'])->name('feria.index');
-    Route::get('/{feria}', [FeriaController::class, 'show'])->name('feria.show');
-});
-
+// El resto de tus rutas se mantienen igual
 // Rutas para filtros de fechas
 Route::prefix('filtros/fecha')->group(function () {
     Route::get('/', [FilterController::class, 'searchYear'])->name('filtros.fechaP');

@@ -1,6 +1,6 @@
-<x-app-main title="Feria de Tecnologica">
+<x-app-main title="Investigacion">
     <div class="bg-black">
-        <x-breadcrumb name="feria.index"></x-breadcrumb>
+        <x-breadcrumb name="investigacion.index"></x-breadcrumb>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-2 sm:gap-4">
 
@@ -14,37 +14,41 @@
             <!-- Sección de búsqueda -->
             <h3 class="text-3xl font-semibold py-2">Buscar</h3>
             <x-search
-                :parametro="'institucional'"
+                :parametro="'repositorio'"
                 :parametro2="'index'"
                 :descrip="'Buscar en todo el repositorio'"
             />
-            <x-count :contador="$contador" :paginator="$informes" />
+            <x-count :contador="$contador" :paginator="$informes"/>
+            
             <div class="w-full flex justify-end py-2">
-                <x-advanced-filter route="feria.index" defaultSort="asc" defaultItemsPerPage="10" />
+                {{-- ✅ CORREGIDO --}}
+                <x-advanced-filter route="repositorio.index" :params="['tipo' => 'investigacion']" defaultSort="asc" defaultItemsPerPage="10" />
             </div>
+            
             <div class="py-2">
-                <x-search
-                    :parametro="'feria'"
+                {{-- ✅ CORREGIDO --}}
+                <x-search 
+                    :parametro="'repositorio'"
                     :parametro2="'index'"
-                    :descrip="'O introducir las primeras letras'"
-                    :text="'IR'"
+                    :descrip="'O introduce las primeras letras'"
+                    :text="'IR'" 
                 />
             </div>
-            <!-- Sección de cards-->
+            <!-- Sección de cards -->
             <div class="py-2 gap-4 w-full ">
                 @foreach ($informes as $informe)
                     <x-card
-                        :parametro="'feria'"
+                        :parametro="'investigacion'"
                         :codigo="$informe->id"
                         :image="$informe->ruta_caratula"
                         :title="$informe->titulo"
                         :resumen="$informe->resumen"
                         :autores="$informe->autores"
                         :acceso="$informe->acceso"
-                        :anio="$informe->anio"
                     />
                 @endforeach
             </div>
+
             <x-pagination :paginator="$informes" />
 
         </div>

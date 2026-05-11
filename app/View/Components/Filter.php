@@ -2,7 +2,7 @@
 
 namespace App\View\Components;
 
-use App\Models\Autor; 
+use App\Models\Autor;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -16,7 +16,7 @@ class Filter extends Component
     {
         $currentYear = date('Y');
         $this->yearRanges = $this->generateYearRanges($currentYear);
-        $this->topAutors = $this->getTopAuthors(); 
+        $this->topAutors = $this->getTopAuthors();
     }
 
     private function generateYearRanges(int $currentYear): array
@@ -35,22 +35,25 @@ class Filter extends Component
 
     private function getTopAuthors(): array
     {
-        return Autor::withCount('informes')
+        // ✅ SOLO contar informes publicados
+        return Autor::withCount(['informes' => function ($query) {
+            $query->where('estado', 'Publicado');
+        }])
+            ->having('informes_count', '>', 0)  // Solo autores con al menos 1 informe publicado
             ->orderByDesc('informes_count')
             ->take(10)
             ->get()
-            ->map(fn ($autor) => [
+            ->map(fn($autor) => [
                 'dni' => $autor->dni,
                 'nombre' => $autor->nombre,
-                'apellidos'=> $autor->apellidos,
+                'apellidos' => $autor->apellidos,
                 'count' => $autor->informes_count,
             ])
             ->toArray();
     }
+
     public function render(): View|Closure|string
     {
         return view('components.filter');
     }
-
-    
 }

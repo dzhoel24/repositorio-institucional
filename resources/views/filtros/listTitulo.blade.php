@@ -9,11 +9,14 @@
         <div class="md:col-span-3 flex flex-col w-full px-4">
             <!-- Sección de búsqueda -->
             <h3 class="text-3xl font-semibold py-2">Buscar</h3>
+            
+            {{-- ✅ CORREGIDO --}}
             <x-search
-                :parametro="'institucional'"
+                :parametro="'repositorio'"
                 :parametro2="'index'"
                 :descrip="'Buscar en todo el repositorio'"
             />
+            
             <h2 class="text-2xl font-semibold py-2">Listar por Titulo {{$nombre??null}}</h2>
             <div class="w-full flex py-2 ">
                 <ul id="list" class="flex gap-x-4 text-blue-500">

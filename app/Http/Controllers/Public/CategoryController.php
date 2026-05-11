@@ -7,54 +7,71 @@ use App\Models\Carrera;
 use App\Models\Informe;
 use App\Traits\WithFilteringAndPagination;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
     use WithFilteringAndPagination;
-    public function carreras($carrera, Request $request)
+
+    /**
+     * Mostrar carreras o informes por carrera
+     */
+    public function carreras(Request $request, $carrera = null): View
     {
-        $search = $request->get('search', '');
-        $starts_with = $request->get('starts_with', '');
+        if ($carrera) {
+            $carreraModel = Carrera::findOrFail($carrera);
 
-        $carreraN = Carrera::select('id', 'nombre')->where('id', $carrera)->first();
-        $query = Informe::where('carrera_id', $carrera);
-        if (!empty($search)) {
-            $query->where(function ($q) use ($search) {
-                $q->where('titulo', 'LIKE', "%$search%");
-            });
-        }
-        if (!empty($starts_with)) {
-            $query->where('titulo', 'LIKE', "$starts_with%");
-        }
+            // ✅ Obtener el término de búsqueda
+            $search = $request->input('search', '');
 
-        $items = $this->applyFilters($request, $query);
-        $contador = $items->total();
-        $this->actualizarRutaInforme($items);
+            $query = Informe::with(['autores', 'tipoInforme'])
+                ->where('carrera_id', $carrera)
+                ->where('estado', 'Publicado');
 
-        return view('section.carrera', compact('items', 'contador', 'carrera', 'carreraN'));
-    }
-
-    public function show($id)
-    {
-        $item = Informe::findOrFail($id);
-        $carreraN = Carrera::select('id', 'nombre')->where('id', $item->carrera_id)->first();
-        $this->actualizarRuta($item);
-        return view('section.showItem', compact('item', 'carreraN'));
-    }
-    private function actualizarRuta(Informe $informe)
-    {
-        if (!empty($informe->ruta_caratula) && !File::exists(public_path($informe->ruta_caratula))) {
-            $informe->ruta_caratula = 'img/default2.png';
-        }
-    }
-
-    private function actualizarRutaInforme($informes)
-    {
-        foreach ($informes as $informe) {
-            if (!empty($informe->ruta_caratula) && !File::exists(public_path($informe->ruta_caratula))) {
-                $informe->ruta_caratula = 'img/default2.png';
+            // ✅ Aplicar búsqueda si existe
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('titulo', 'LIKE', "%{$search}%")
+                        ->orWhere('resumen', 'LIKE', "%{$search}%")
+                        ->orWhereHas('autores', function ($q) use ($search) {
+                            $q->whereRaw("CONCAT(nombres, ' ', apellidos) LIKE ?", ["%{$search}%"]);
+                        });
+                });
             }
+
+            $informes = $query->orderBy('titulo', 'asc')
+                ->paginate(10)
+                ->appends($request->query());
+
+            return view('public.section.carrera', [
+                'carrera' => $carreraModel,
+                'informes' => $informes,
+                'contador' => $informes->total(),
+                'items' => $informes,
+                'search' => $search  // ← Pasar search a la vista
+            ]);
         }
+
+        $carreras = Carrera::withCount(['informes' => function ($query) {
+            $query->where('estado', 'Publicado');
+        }])->get();
+
+        return view('public.section.index', compact('carreras'));
+    }
+
+    /**
+     * Mostrar detalle de un informe
+     */
+    public function show($id): View
+    {
+        $item = Informe::with(['autores', 'carrera', 'tipoInforme'])
+            ->where('estado', 'Publicado')
+            ->findOrFail($id);
+
+        $carreraN = Carrera::select('id', 'nombre')
+            ->where('id', $item->carrera_id)
+            ->first();
+
+        return view('public.section.showItem', compact('item', 'carreraN'));
     }
 }

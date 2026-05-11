@@ -13,14 +13,14 @@
             <!-- Sección de búsqueda -->
             <h3 class="text-3xl font-semibold py-2">Buscar</h3>
             <x-search
-                :parametro="'institucional'"
+                :parametro="'repositorio'"
                 :parametro2="'index'"
                 :descrip="'Buscar en todo el repositorio'"
             />
             <x-count :contador="$contador" :paginator="$informes" />
             <div class="w-full flex justify-end py-2">
-                <x-advanced-filter route="institucional.index" defaultSort="asc" defaultItemsPerPage="10" />
-
+                {{-- ✅ LÍNEA CORREGIDA --}}
+                <x-advanced-filter route="repositorio.index" :params="['tipo' => 'institucional']" defaultSort="asc" defaultItemsPerPage="10" />
             </div>
             <!-- Sección de cards, siempre visible y adaptable -->
             <div class="py-2 gap-4 w-full">
@@ -36,9 +36,6 @@
                     />
                 @endforeach
             </div>
-
-
-
 
             <x-pagination :paginator="$informes" />
 

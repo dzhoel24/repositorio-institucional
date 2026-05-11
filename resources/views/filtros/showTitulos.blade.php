@@ -13,6 +13,7 @@
             />
             <x-item class="col-span-2"
                 :codigo="$informe->codigo"
+                :pdf="$informe->ruta_pdf"
                 :image="$informe->ruta_caratula"
                 :title="$informe->titulo"
                 :resumen="$informe->resumen"

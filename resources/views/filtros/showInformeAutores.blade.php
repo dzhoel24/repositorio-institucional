@@ -6,13 +6,17 @@
         </div>
         <div class="md:col-span-3 flex flex-col w-full px-4">
             <h3 class="text-3xl font-semibold py-2">Buscar</h3>
+            
+            {{-- ✅ CORREGIDO --}}
             <x-search
-            :parametro="'institucional'"
-            :parametro2="'index'"
-            :descrip="'Buscar en todo el repositorio'"
+                :parametro="'repositorio'"
+                :parametro2="'index'"
+                :descrip="'Buscar en todo el repositorio'"
             />
+            
             <x-item class="col-span-2"
                 :codigo="$informe->codigo"
+                :pdf="$informe->ruta_pdf"
                 :image="$informe->ruta_caratula"
                 :title="$informe->titulo"
                 :resumen="$informe->resumen"
