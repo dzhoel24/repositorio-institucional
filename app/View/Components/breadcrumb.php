@@ -12,8 +12,8 @@ class breadcrumb extends Component
 
     public function __construct($name = 'home', $programa = null)
     {
-        $this->breadcrumbs = Breadcrumbs::generate($name, $programa); // Ahora solo pasas el programa
-        $this->programa = $programa; 
+        $this->breadcrumbs = Breadcrumbs::generate($name, $programa); 
+        $this->programa = $programa;
     }
 
     public function render()
@@ -23,4 +23,3 @@ class breadcrumb extends Component
         ]);
     }
 }
-

@@ -1,42 +1,75 @@
-<x-app-main>
-    <div class="bg-black">
-        <x-breadcrumb name="filtros.autores"></x-breadcrumb>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-2 sm:gap-4">
-        <div class="container hidden md:block">
-            <x-filter></x-filter>
-        </div>
-        <div class="md:col-span-3 flex flex-col w-full px-4">
-            <h3 class="text-3xl font-semibold py-2">Buscar autores</h3>
+<x-public.app-main title="Índice de Autores">
+    <x-breadcrumb name="filtros.autores"></x-breadcrumb>
 
-            {{-- ✅ CORREGIDO: Buscador general --}}
-            <x-search :parametro="'repositorio'" :parametro2="'index'" :descrip="'Buscar en todo el repositorio'" />
+    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
-            <h2 class="text-2xl font-semibold py-2">Listar por {{ $nombre ?? 'todos los autores' }}</h2>
-            <div class="w-full flex py-2">
-                <ul id="list" class="flex gap-x-4 text-blue-500">
+        <aside class="hidden md:block md:col-span-1">
+            <div class="sticky top-6">
+                <x-filter></x-filter>
+            </div>
+        </aside>
+
+        <main class="md:col-span-3 flex flex-col w-full px-2 sm:px-4 space-y-4">
+
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-gray-800 pb-3 mb-2">
+                <div class="flex items-center gap-2.5">
+                    <div class="h-6 w-1 bg-indigo-600 dark:bg-indigo-400 rounded-full"></div>
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-wide">
+                        Listar por: {{ $nombre ?? 'Todos los autores' }}
+                    </h2>
+                </div>
+            </div>
+
+            {{-- Navegación Alfabética (A-Z) - Deslizable en Móviles --}}
+            <div class="w-full pb-1">
+                <ul id="list"
+                    class="flex items-center gap-1 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-gray-800">
                     @foreach (range('A', 'Z') as $letter)
-                        <li class="ds-simple-list-item">
-                            <a href="{{ url('filtros/autores/search?starts_with=' . $letter) }}">{{ $letter }}</a>
+                        @php
+                            $isCurrent = request('starts_with') === $letter;
+                        @endphp
+                        <li class="shrink-0">
+                            <a href="{{ url('filtros/autores/search?starts_with=' . $letter) }}"
+                                class="flex items-center justify-center min-w-[32px] h-8 px-2 text-xs font-bold uppercase rounded transition-all duration-150
+                               {{ $isCurrent
+                                   ? 'bg-indigo-600 text-white shadow-sm'
+                                   : 'bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200/40 dark:border-gray-700/50' }}">
+                                {{ $letter }}
+                            </a>
                         </li>
                     @endforeach
                 </ul>
             </div>
-            <div class="py-2">
-                {{-- ✅ CORREGIDO: Buscador específico de autores --}}
-                <x-search :parametro="'filtros'" :parametro2="'autores'" :descrip="'Introduce las primeras letras'" :text="'IR'" />
+
+            {{-- Buscador Específico --}}
+            <div class="w-full pt-1">
+                <x-search :parametro="'filtros'" :parametro2="'autores'" :descrip="'Introduce las primeras letras del autor...'" :text="'Buscar'" />
             </div>
-            <div class="w-full flex justify-end py-2">
-                {{-- ✅ CORREGIDO: Advanced filter con la ruta correcta --}}
-                <x-advanced-filter route="filtros.autores" defaultSort="asc" defaultItemsPerPage="20" />
+
+            <div class="w-full">
+                @if ($autores->isEmpty())
+                    <div
+                        class="text-center py-12 bg-slate-50/50 dark:bg-gray-900/30 rounded-lg border border-dashed border-slate-200 dark:border-gray-800">
+                        <svg class="w-8 h-8 text-slate-300 dark:text-gray-600 mx-auto mb-3" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <p class="text-sm font-medium text-slate-500 dark:text-gray-400">
+                            Lo sentimos, no se encontraron autores registrados con esos criterios.
+                        </p>
+                    </div>
+                @else
+                    <div class="overflow-hidden border border-slate-200 dark:border-gray-800 rounded-lg shadow-sm">
+                        <x-list-autores :autores="$autores" />
+                    </div>
+                @endif
             </div>
-            @if ($autores->isEmpty())
-                <p class="text-gray-500 py-4 text-center text-normal">Lo sentimos, no hay resultados para esta búsqueda.
-                </p>
-            @else
-                <x-list-table :autores="$autores" />
-            @endif
-            <x-pagination :paginator="$autores" />
-        </div>
+
+            <div class="pt-4">
+                <x-public.pagination :paginator="$autores" />
+            </div>
+
+        </main>
     </div>
-</x-app-main>
+</x-public.app-main>

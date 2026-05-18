@@ -149,9 +149,11 @@
     @endforelse
 </div>
 
-<div class="mt-6">
-    {{ $publicaciones->links() }}
-</div>
+@if ($publicaciones->hasPages())
+    <div class="px-5 py-4 dark:border-slate-700/50">
+        {{ $publicaciones->links() }}
+    </div>
+@endif
 
 <script>
     document.dispatchEvent(new CustomEvent('page:title', {

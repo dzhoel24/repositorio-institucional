@@ -60,4 +60,34 @@ class Informe extends Model
 
         return $query;
     }
+
+    // app/Models/Informe.php
+    public function getAutoresFormattedAttribute()
+    {
+        // Si es una relación
+        if ($this->relationLoaded('autores')) {
+            return $this->autores->map(function ($autor) {
+                return $autor->nombres . ' ' . $autor->apellidos;
+            })->implode(', ');
+        }
+
+        // Si es un array directo
+        if (is_array($this->autores)) {
+            return collect($this->autores)->map(function ($autor) {
+                $nombre = $autor['nombres'] ?? '';
+                $apellido = $autor['apellidos'] ?? '';
+                return trim("$nombre $apellido");
+            })->implode(', ');
+        }
+
+        // Si es JSON string
+        if (is_string($this->autores)) {
+            $autores = json_decode(html_entity_decode($this->autores), true);
+            return collect($autores)->map(function ($autor) {
+                return trim(($autor['nombres'] ?? '') . ' ' . ($autor['apellidos'] ?? ''));
+            })->implode(', ');
+        }
+
+        return 'Sin autores';
+    }
 }

@@ -1,4 +1,4 @@
-<x-app-main>
+<x-public.app-main>
     <div class="bg-black">
         <x-breadcrumb name="home"></x-breadcrumb>
     </div>
@@ -9,7 +9,6 @@
         </h1>
     </div>
 
-    {{-- Search --}}
     <div class="flex justify-center w-full mb-12 px-4">
         <x-search :parametro="'repositorio'" :parametro2="'index'" :descrip="'¿Qué deseas encontrar hoy?'" />
     </div>
@@ -125,11 +124,11 @@
             <div id="tab2" class="hidden w-full" role="tabpanel">
                 <div class="flex flex-col py-6 md:px-20 gap-8 w-full max-w-6xl mx-auto">
                     @foreach ($recientes as $reciente)
-                        <x-card :parametro="'institucional'" :codigo="$reciente->id" :image="$reciente->ruta_caratula" :title="$reciente->titulo"
-                            :resumen="$reciente->resumen" :autores="$reciente->autores" :acceso="$reciente->acceso" />
+                        <x-public.card :parametro="'institucional'" :codigo="$reciente->id" :image="$reciente->ruta_caratula" :anio="$reciente->anio"
+                            :title="$reciente->titulo" :resumen="$reciente->resumen" :autores="$reciente->autores_formatted" :acceso="$reciente->acceso" />
                     @endforeach
                 </div>
             </div>
         </div>
     </div>
-</x-app-main>
+</x-public.app-main>

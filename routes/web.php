@@ -47,7 +47,7 @@ Route::redirect('/feria', '/repositorio/feria', 301);
 // El resto de tus rutas se mantienen igual
 // Rutas para filtros de fechas
 Route::prefix('filtros/fecha')->group(function () {
-    Route::get('/', [FilterController::class, 'searchYear'])->name('filtros.fechaP');
+    Route::get('/', [FilterController::class, 'searchYear'])->name('filtros.fecha');
     Route::get('{id}', [FilterController::class, 'show'])->name('filtros.showFechaP');
     Route::get('fecharange/{range}', [FilterController::class, 'searchYearRange'])->name('filtros.rangeYear');
 });
@@ -58,7 +58,7 @@ Route::prefix('filtros/autores')->group(function () {
     Route::get('search', [FilterController::class, 'searchLetter'])->name('filtros.autores.search');
     Route::get('/informesAutor/{autor}', [FilterController::class, 'showInformes'])->name('filtros.showAutor');
     Route::get('/informes/{informe}', [FilterController::class, 'showInformeAutores'])->name('filtros.showInformeAutores');
-    Route::get('/{autor}/informes', [FilterController::class, 'showInformes'])->name('filtros.informesA');
+    Route::get('/{autor}/informes', [FilterController::class, 'showInformes'])->name('filtros.show-informe-autor');
 });
 
 // Rutas para listas de títulos

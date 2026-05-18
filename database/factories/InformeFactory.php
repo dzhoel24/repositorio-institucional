@@ -33,11 +33,15 @@ class InformeFactory extends Factory
             Storage::disk('public')->copy('default.jpg', $rutaDestinoCaratula);
         }
 
+        // Generar años desde 2000 hasta el año actual
+        $currentYear = Carbon::now()->year;
+        $years = range(2000, $currentYear);
+
         return [
             'id' => str_pad($i++, 5, '0', STR_PAD_LEFT),
             'titulo' => $this->faker->sentence(3),
             'resumen' => $this->faker->paragraph(),
-            'anio' => Carbon::now()->subYears(rand(1, 5))->year,
+            'anio' => $this->faker->randomElement($years), // 👈 Años entre 2000 y actual
 
             'ruta_pdf' => $nombrePdf,
             'ruta_caratula' => $nombreCaratula,

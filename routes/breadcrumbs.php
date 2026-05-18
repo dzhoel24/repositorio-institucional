@@ -122,9 +122,9 @@ Breadcrumbs::for('filtros.autores', function (BreadcrumbTrail $trail) {
 });
 
 // Inicio > Por Fecha de Publicación
-Breadcrumbs::for('filtros.fechaP', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('filtros.fecha', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Por Fecha de Publicación', route('filtros.fechaP'));
+    $trail->push('Por Fecha de Publicación', route('filtros.fecha'));
 });
 
 // Inicio > Por Título de Publicación

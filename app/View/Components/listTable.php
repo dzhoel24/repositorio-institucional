@@ -16,6 +16,6 @@ class listTable extends Component
 
     public function render(): View|Closure|string
     {
-        return view('components.list-table');
+        return view('components.list-autores');
     }
 }

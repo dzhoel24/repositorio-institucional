@@ -7,8 +7,8 @@
         <div class="pointer-events-none relative flex min-h-screen items-center justify-center p-4">
 
             <div
-                class="modal-animate pointer-events-auto w-full max-w-md scale-95 overflow-hidden rounded-2xl border border-slate-200 bg-white opacity-0 shadow-2xl transition-all duration-200 
-                        dark:border-slate-700 dark:bg-slate-900">
+                class="modal-animate pointer-events-auto w-full max-w-md scale-95 overflow-hidden rounded-2xl bg-white opacity-0 shadow-2xl transition-all duration-200 
+                         dark:bg-slate-900">
 
                 {{-- HEADER con botón cerrar X --}}
                 <div class="relative pt-8 text-center">

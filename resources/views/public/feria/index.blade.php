@@ -1,57 +1,45 @@
-<x-app-main title="Feria de Tecnologica">
-    <div class="bg-black">
-        <x-breadcrumb name="feria.index"></x-breadcrumb>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-2 sm:gap-4">
+<x-public.app-main title="Feria de Tecnologica">
 
-        {{-- Columna izquierda --}}
+    <x-breadcrumb name="feria.index"></x-breadcrumb>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
+
         <div class="container hidden md:block">
-           <x-filter></x-filter>
+            <x-filter></x-filter>
         </div>
-        {{-- Columna derecha --}}
+
         <div class="md:col-span-3 flex flex-col w-full px-4">
+            <div
+                class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-2 border-b border-gray-100 dark:border-gray-850">
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                    <x-count :contador="$contador" :paginator="$informes" />
+                </div>
 
-            <!-- Sección de búsqueda -->
-            <h3 class="text-3xl font-semibold py-2">Buscar</h3>
-            <x-search
-                :parametro="'repositorio'"
-                :parametro2="'index'"
-                :descrip="'Buscar en todo el repositorio'"
-            />
-            <x-count :contador="$contador" :paginator="$informes" />
-            
-            <div class="w-full flex justify-end py-2">
-                {{-- ✅ CORREGIDO --}}
-                <x-advanced-filter route="repositorio.index" :params="['tipo' => 'feria']" defaultSort="asc" defaultItemsPerPage="10" />
+                <div class="flex items-center justify-end">
+                    <x-advanced-filter route="repositorio.index" :params="['tipo' => 'feria']" defaultSort="asc"
+                        defaultItemsPerPage="10" />
+                </div>
             </div>
-            
+
             <div class="py-2">
-                {{-- ✅ CORREGIDO --}}
-                <x-search
-                    :parametro="'repositorio'"
-                    :parametro2="'index'"
-                    :descrip="'O introducir las primeras letras'"
-                    :text="'IR'"
-                />
+                <x-search :descrip="'O introduce las primeras letras'" :text="'IR'" />
             </div>
-            <!-- Sección de cards-->
-            <div class="py-2 gap-4 w-full ">
-                @foreach ($informes as $informe)
-                    <x-card
-                        :parametro="'feria'"
-                        :codigo="$informe->id"
-                        :image="$informe->ruta_caratula"
-                        :title="$informe->titulo"
-                        :resumen="$informe->resumen"
-                        :autores="$informe->autores"
-                        :acceso="$informe->acceso"
-                        :anio="$informe->anio"
-                    />
-                @endforeach
+
+            <div class="flex flex-col gap-4 w-full pt-2">
+                @forelse ($informes as $informe)
+                    <x-public.card :parametro="'feria'" :codigo="$informe->id" :image="$informe->ruta_caratula" :title="$informe->titulo"
+                        :resumen="$informe->resumen" :anio="$informe->anio" :autores="$informe->autores_formatted" :acceso="$informe->acceso" />
+                @empty
+                    <div
+                        class="text-center py-12 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">No se encontraron busquedas.
+                        </p>
+                    </div>
+                @endforelse
             </div>
-            <x-pagination :paginator="$informes" />
+
+            <x-public.pagination :paginator="$informes" />
 
         </div>
-
     </div>
-</x-app-main>
+</x-public.app-main>

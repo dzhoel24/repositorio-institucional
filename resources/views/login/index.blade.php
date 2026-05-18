@@ -48,12 +48,12 @@
 <body class="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-slate-100 to-slate-200">
 
     <div
-        class="flex w-full max-w-[920px] rounded-2xl overflow-hidden shadow-2xl animate-fade-in
+        class="flex w-full max-w-[900px] rounded-2xl overflow-hidden shadow-2xl animate-fade-in
                 flex-col sm:flex-row">
 
         {{-- ===== PANEL LATERAL (BRANDING) ===== --}}
         <div
-            class="w-full sm:w-[42%] bg-gradient-to-br from-[#1e3a5f] to-[#0c1f3a]
+            class="w-full sm:w-[45%] bg-gradient-to-br from-[#1e3a5f] to-[#0c1f3a]
                     flex flex-col items-center justify-center
                     px-6 py-8 sm:px-8 sm:py-12
                     relative overflow-hidden">
@@ -183,7 +183,6 @@
 
     <script>
         (function() {
-            // Submit con spinner
             const form = document.getElementById('login-form');
             const submitBtn = document.getElementById('btn-submit');
 

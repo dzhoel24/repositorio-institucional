@@ -139,13 +139,6 @@
     @endif
 </div>
 
-@if (!$autores->hasPages() && $autores->isNotEmpty())
-    <p class="mt-4 text-center text-xs text-slate-400 dark:text-slate-500">
-        Mostrando {{ $autores->count() }} de {{ $autores->total() }}
-        {{ $autores->total() === 1 ? 'autor' : 'autores' }}
-    </p>
-@endif
-
 <script>
     document.dispatchEvent(new CustomEvent('page:title', {
         detail: 'Autores'

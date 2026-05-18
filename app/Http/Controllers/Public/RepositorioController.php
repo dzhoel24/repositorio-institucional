@@ -91,12 +91,8 @@ class RepositorioController extends Controller  // ← Cambiado de InformeContro
 
         return view('public.' . $tipo . '.index', compact('informes', 'contador', 'search', 'sort'));
     }
-    /**
-     * Mostrar un informe específico
-     */
-    /**
-     * Mostrar un informe específico
-     */
+
+
     public function show(Request $request, string $tipo, int $id): View
     {
         // Validar tipo
@@ -117,8 +113,4 @@ class RepositorioController extends Controller  // ← Cambiado de InformeContro
         // ✅ Usa la vista específica del tipo (institucional.show, investigacion.show, etc.)
         return view('public.' . $tipo . '.show', compact('informe'));
     }
-
-    /**
-     * Búsqueda global (todos los tipos)
-     */
 }

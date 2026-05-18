@@ -1,28 +1,12 @@
-<x-app-main title="Item Institucional">
+<x-public.app-main title="Item Institucional">
     <x-breadcrumb name="institucional.index"></x-breadcrumb>
-    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-2 sm:gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-2 sm:gap-4 mt-4">
         <div class="container hidden md:block">
             <x-filter></x-filter>
         </div>
         <div class="md:col-span-3 flex flex-col w-full px-4">
-            <h3 class="text-3xl font-semibold py-2">Buscar</h3>
-            <x-search
-                :parametro="'repositorio'"
-                :parametro2="'index'"
-                :descrip="'Buscar en todo el repositorio'"
-            />
-            <x-item class="col-span-2"
-                :codigo="$informe->codigo"
-                :pdf="$informe->ruta_pdf"
-                :image="$informe->ruta_caratula"
-                :title="$informe->titulo"
-                :resumen="$informe->resumen"
-                :autores="$informe->autores"
-                :acceso="$informe->acceso"
-                :anio="$informe->anio"
-                :tipo="$informe->tipo_informe"
-            />
-
+            <x-public.item :codigo="$informe->id" :pdf="$informe->ruta_pdf" :image="$informe->ruta_caratula" :title="$informe->titulo" :resumen="$informe->resumen"
+                :autores="$informe->autores_formatted" :acceso="$informe->acceso" :anio="$informe->anio" :tipo="$informe->tipoInforme->nombre" />
         </div>
     </div>
-</x-app-main>
+</x-public.app-main>

@@ -9,12 +9,12 @@
             @foreach ($autores as $autor)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                     <td class="py-3 px-6 text-left whitespace-nowrap">
-                        <a href="{{ route('filtros.informesA', ['autor' => $autor]) }}" class="hover:underline">
-                            {{ $autor->apellidos . ' ' . $autor->nombre }} [{{ $autor->informes_count }}]
-                        </a>                                              
+                        <a href="{{ route('filtros.show-informe-autor', ['autor' => $autor]) }}" class="hover:underline">
+                            {{ $autor->apellidos . ' ' . $autor->nombres }} [{{ $autor->informes_count }}]
+                        </a>
                     </td>
                 </tr>
             @endforeach
-        </tbody>       
+        </tbody>
     </table>
 </div>
