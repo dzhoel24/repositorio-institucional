@@ -11,7 +11,6 @@ class Autor extends Model
 
     protected $table = 'autores';
     protected $primaryKey = 'dni';
-
     public $timestamps = false;
     public $incrementing = false;
     protected $keyType = 'string';
@@ -22,7 +21,6 @@ class Autor extends Model
         'apellidos'
     ];
 
-    // RELACION INFORMES 
     public function informes()
     {
         return $this->belongsToMany(
@@ -33,7 +31,6 @@ class Autor extends Model
         );
     }
 
-    // SCOPE DE BÚSQUEDA
     public function scopeFilter($query, $request)
     {
         $search = strtolower($request->input('buscador'));

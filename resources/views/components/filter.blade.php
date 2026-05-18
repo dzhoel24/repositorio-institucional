@@ -12,26 +12,25 @@
                 class="group flex items-center text-sm font-medium text-slate-700 dark:text-slate-300 p-3 pl-4 border-l-2 border-b border-transparent border-b-slate-100 dark:border-b-gray-800/70 hover:border-l-indigo-600 dark:hover:border-l-indigo-400 hover:bg-slate-50/80 dark:hover:bg-gray-800/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-150">
                 Ver todas las publicaciones
             </a>
-            <a href="{{ route('filtros.autores') }}"
+            <a href="{{ route('filtros.autores.index') }}"
                 class="group flex items-center text-sm text-slate-600 dark:text-slate-400 p-3 pl-4 border-l-2 border-b border-transparent border-b-slate-100 dark:border-b-gray-800/70 hover:border-l-indigo-600 dark:hover:border-l-indigo-400 hover:bg-slate-50/80 dark:hover:bg-gray-800/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-150">
                 Índice de autores
             </a>
-            <a href="{{ route('filtros.fecha') }}"
+            <a href="{{ route('filtros.fechas.index') }}"
                 class="group flex items-center text-sm text-slate-600 dark:text-slate-400 p-3 pl-4 border-l-2 border-b border-transparent border-b-slate-100 dark:border-b-gray-800/70 hover:border-l-indigo-600 dark:hover:border-l-indigo-400 hover:bg-slate-50/80 dark:hover:bg-gray-800/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-150">
                 Fecha de publicación
             </a>
-            <a href="{{ route('filtros.listTitle') }}"
+            <a href="{{ route('filtros.titulos.index') }}"
                 class="group flex items-center text-sm text-slate-600 dark:text-slate-400 p-3 pl-4 border-l-2 border-b border-transparent border-b-slate-100 dark:border-b-gray-800/70 hover:border-l-indigo-600 dark:hover:border-l-indigo-400 hover:bg-slate-50/80 dark:hover:bg-gray-800/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-150">
                 Títulos de documentos
             </a>
-            <a href="{{ route('filtros.category') }}"
+            <a href="{{ route('filtros.carreras.index') }}"
                 class="group flex items-center text-sm text-slate-600 dark:text-slate-400 p-3 pl-4 border-l-2 border-transparent hover:border-l-indigo-600 dark:hover:border-l-indigo-400 hover:bg-slate-50/80 dark:hover:bg-gray-800/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-150">
                 Programas de estudio
             </a>
         </nav>
     </div>
 
-    {{-- Bloque: Filtro de Autores --}}
     <div
         class="overflow-hidden rounded-lg border border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
         <div
@@ -42,7 +41,7 @@
 
         <nav class="flex flex-col">
             @foreach ($topAutors as $autor)
-                <a href="{{ route('filtros.showAutor', $autor['dni']) }}"
+                <a href="{{ route('filtros.autores.informes', ['autor' => $autor['dni']]) }}"
                     class="group flex items-center justify-between text-sm text-slate-600 dark:text-slate-400 p-3 pl-4 border-l-2 border-b border-transparent border-b-slate-100 dark:border-b-gray-800/70 hover:border-l-indigo-600 dark:hover:border-l-indigo-400 hover:bg-slate-50/80 dark:hover:bg-gray-800/40 hover:text-slate-900 dark:hover:text-white transition-all duration-150">
                     <span class="truncate pr-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
                         {{ $autor['apellidos'] }}, {{ $autor['nombre'] }}
@@ -54,7 +53,7 @@
                 </a>
             @endforeach
 
-            <a href="{{ route('filtros.autores') }}"
+            <a href="{{ route('filtros.autores.index') }}"
                 class="flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-indigo-400 p-2.5 bg-slate-50/30 dark:bg-gray-800/10 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 transition-colors duration-150 border-t border-slate-100 dark:border-gray-800/70">
                 Ver catálogo completo
             </a>

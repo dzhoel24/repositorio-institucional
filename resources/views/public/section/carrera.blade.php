@@ -1,23 +1,17 @@
 <x-public.app-main :title="$carreraModel->nombre ?? 'Programa de Estudio'">
-    {{-- Barra de Navegación / Breadcrumb --}}
-    <div class="bg-gray-900 dark:bg-black py-1">
-        <x-breadcrumb name="item.index" :programa="$carreraModel"></x-breadcrumb>
-    </div>
 
-    {{-- Layout Principal --}}
+    <x-breadcrumb name="filtros.carreras.show" :params="[$carreraModel->id]" />
+
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
-        {{-- Barra Lateral: Filtros --}}
         <aside class="hidden md:block md:col-span-1">
             <div class="sticky top-6">
                 <x-filter></x-filter>
             </div>
         </aside>
 
-        {{-- Contenido Principal --}}
         <main class="md:col-span-3 flex flex-col w-full px-2 sm:px-4 space-y-4">
 
-            {{-- Encabezado Dinámico con Nombre de la Carrera --}}
             <div class="flex items-center justify-between border-b border-slate-200 dark:border-gray-800 pb-3">
                 <div class="flex items-center gap-2.5">
                     <div class="h-6 w-1 bg-indigo-600 dark:bg-indigo-400 rounded-full"></div>
@@ -27,13 +21,11 @@
                 </div>
             </div>
 
-            {{-- Buscador Avanzado con Botón de Limpiar Automatizado --}}
+            {{-- Formulario de búsqueda --}}
             <div class="w-full pt-1">
-                <form method="GET" action="{{ route('carrera.index', ['carrera' => $carreraModel->id]) }}"
+                <form method="GET" action="{{ route('filtros.carreras.show', ['carrera' => $carreraModel->id]) }}"
                     id="searchCarreraForm" class="max-w-2xl w-full group">
                     <div class="relative flex items-center">
-
-                        {{-- Icono de Lupa --}}
                         <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                             <svg class="w-5 h-5 text-slate-400 dark:text-gray-500 transition-colors group-focus-within:text-indigo-500"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,14 +33,10 @@
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
-
-                        {{-- Input Customizado Semirrecto --}}
                         <input type="text" id="searchCarreraInput" name="search_carrera"
                             value="{{ request('search_carrera') }}"
                             class="w-full p-3.5 pl-12 pr-36 text-sm font-medium bg-white dark:bg-gray-900 text-slate-800 dark:text-slate-100 rounded-lg border border-slate-200 dark:border-gray-800 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all duration-150 shadow-sm"
                             placeholder="Buscar por palabras clave o título de documento..." autocomplete="off">
-
-                        {{-- Botón X interactivo para limpiar --}}
                         <button type="button" id="clearCarreraBtn"
                             class="absolute right-24 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded transition-colors hidden focus:outline-none"
                             title="Limpiar búsqueda">
@@ -57,8 +45,6 @@
                                     d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-
-                        {{-- Botón Enviar --}}
                         <button type="submit"
                             class="absolute right-1.5 px-5 py-2 text-xs font-bold uppercase tracking-wider text-white bg-indigo-600 dark:bg-indigo-500 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 active:scale-98 shadow-sm">
                             Buscar
@@ -67,55 +53,44 @@
                 </form>
             </div>
 
-            {{-- Fila de Utilidades (Contador y Ordenamiento alineados) --}}
+            {{-- Contador y filtro --}}
             <div
                 class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1.5 border-b border-slate-100 dark:border-gray-800/60">
                 <div class="text-sm font-medium text-slate-600 dark:text-slate-400">
                     <x-count :contador="$informes->total()" :paginator="$informes" />
                 </div>
-
                 <div class="flex items-center justify-end">
-                    <x-advanced-filter route="carrera.index" :params="['carrera' => $carreraModel->id]" defaultSort="asc"
+                    <x-advanced-filter route="filtros.carreras.show" :params="['carrera' => $carreraModel->id]" defaultSort="asc"
                         defaultItemsPerPage="10" />
                 </div>
             </div>
 
-            {{-- Listado de Publicaciones (Cards) o Estado Vacío --}}
             <div class="flex flex-col gap-4 w-full pt-1">
                 @forelse ($informes as $informe)
-                    <x-public.card :parametro="'institucional'" :codigo="$informe->id" :image="$informe->ruta_caratula" :title="$informe->titulo"
-                        :resumen="$informe->resumen" :anio="$informe->anio" :autores="$informe->autores_formatted" :acceso="$informe->acceso" />
+                    <x-public.card :parametro="$informe->tipo_slug" :action="'show'" :codigo="$informe->id" :image="$informe->ruta_caratula"
+                        :title="$informe->titulo" :resumen="$informe->resumen" :anio="$informe->anio" :autores="$informe->autores_formatted" :acceso="$informe->acceso"
+                        :origen="'carrera'" :origenId="$carreraModel->id" />
                 @empty
                     <div
                         class="text-center py-12 bg-slate-50/50 dark:bg-gray-900/30 rounded-lg border border-dashed border-slate-200 dark:border-gray-800">
-                        <svg class="w-8 h-8 text-slate-300 dark:text-gray-600 mx-auto mb-3" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
                         <p class="text-sm font-medium text-slate-500 dark:text-gray-400">
-                            No se encontraron publicaciones o investigaciones para este criterio de búsqueda.
+                            No se encontraron publicaciones para esta carrera.
                         </p>
                     </div>
                 @endforelse
             </div>
 
-            {{-- Paginación Inferior --}}
-            <div class="pt-4">
-                <x-public.pagination :paginator="$informes" />
-            </div>
+            <x-public.pagination :paginator="$informes" />
 
         </main>
     </div>
 </x-public.app-main>
 
-{{-- Script de control interactivo para el buscador del programa --}}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const input = document.getElementById("searchCarreraInput");
         const clearBtn = document.getElementById("clearCarreraBtn");
         const form = document.getElementById("searchCarreraForm");
-
         let hasSearchActive = input.value.trim().length > 0;
 
         function toggleClearButton() {

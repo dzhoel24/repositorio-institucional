@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,6 +43,20 @@ class Informe extends Model
         'tipo_informe_id',
         'carrera_id',
     ];
+
+    // 👈 Accessor para el slug del tipo
+    protected $appends = ['tipo_slug'];  // Agregar al array de appends
+
+    public function getTipoSlugAttribute(): string
+    {
+        return match ($this->tipo_informe_id) {
+            1 => 'modulo',
+            3 => 'investigacion',
+            4 => 'feria',
+            default => 'institucional'
+        };
+    }
+
     public function scopeFilter(Builder $query, Request $request)
     {
         if ($request->filled('search')) {
@@ -61,33 +74,22 @@ class Informe extends Model
         return $query;
     }
 
-    // app/Models/Informe.php
     public function getAutoresFormattedAttribute()
     {
-        // Si es una relación
-        if ($this->relationLoaded('autores')) {
-            return $this->autores->map(function ($autor) {
-                return $autor->nombres . ' ' . $autor->apellidos;
-            })->implode(', ');
-        }
+        $autores = $this->relationLoaded('autores')
+            ? $this->autores
+            : (is_string($this->autores) ? json_decode(html_entity_decode($this->autores), true) : $this->autores);
 
-        // Si es un array directo
-        if (is_array($this->autores)) {
-            return collect($this->autores)->map(function ($autor) {
-                $nombre = $autor['nombres'] ?? '';
-                $apellido = $autor['apellidos'] ?? '';
-                return trim("$nombre $apellido");
-            })->implode(', ');
-        }
 
-        // Si es JSON string
-        if (is_string($this->autores)) {
-            $autores = json_decode(html_entity_decode($this->autores), true);
-            return collect($autores)->map(function ($autor) {
-                return trim(($autor['nombres'] ?? '') . ' ' . ($autor['apellidos'] ?? ''));
-            })->implode(', ');
-        }
+        $autores = collect($autores);
 
-        return 'Sin autores';
+        $nombres = $autores->map(function ($autor) {
+            if (is_object($autor)) {
+                return trim(($autor->nombres ?? '') . ' ' . ($autor->apellidos ?? ''));
+            }
+            return trim(($autor['nombres'] ?? '') . ' ' . ($autor['apellidos'] ?? ''));
+        })->filter();
+
+        return $nombres->isNotEmpty() ? $nombres->implode(', ') : 'Sin autores';
     }
 }

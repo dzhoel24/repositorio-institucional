@@ -1,5 +1,5 @@
 <x-public.app-main title="Informes por Autor">
-    <x-breadcrumb name="filtros.autores"></x-breadcrumb>
+    <x-breadcrumb name="filtros.autores.informes" :params="[$autor]" />
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
@@ -11,10 +11,12 @@
 
         <main class="md:col-span-3 flex flex-col w-full px-2 sm:px-4 space-y-5">
 
+            {{-- Buscador --}}
             <div class="py-2">
-                <x-search :descrip="'O introduce las primeras letras'" :text="'IR'" />
+                <x-search :descrip="'O introduce las primeras letras'" :text="'IR'" :param="'search'" />
             </div>
 
+            {{-- Título del autor --}}
             <div class="flex items-center justify-between border-b border-slate-200 dark:border-gray-800 pb-3 mt-2">
                 <div class="flex items-center gap-2.5">
                     <div class="h-6 w-1 bg-indigo-600 dark:bg-indigo-400 rounded-full"></div>
@@ -24,13 +26,30 @@
                             {{ $autor->apellidos ?? '' }}</span>
                     </h2>
                 </div>
+                {{-- Contador de publicaciones --}}
+                <div class="bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1">
+                    <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                        <span class="text-indigo-600 dark:text-indigo-400">{{ $informes->total() }}</span> publicaciones
+                    </span>
+                </div>
             </div>
 
-            {{-- Listado de Publicaciones (Cards) o Estado Vacío --}}
+            {{-- Barra de utilidades con filtro avanzado --}}
+            <div class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-2">
+                <div class="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    <x-count :contador="$informes->total()" :paginator="$informes" />
+                </div>
+                <div class="flex items-center justify-end">
+                    <x-advanced-filter route="filtros.autores.informes" :params="['autor' => $autor->dni]" defaultSort="asc"
+                        defaultItemsPerPage="10" />
+                </div>
+            </div>
+
             <div class="flex flex-col gap-4 w-full pt-1">
                 @forelse ($informes as $informe)
-                    <x-public.card :parametro="'institucional'" :codigo="$informe->id" :image="$informe->ruta_caratula" :title="$informe->titulo"
-                        :resumen="$informe->resumen" :autores="$informe->autores_formatted" :acceso="$informe->acceso" />
+                    <x-public.card :parametro="$informe->tipo_slug" :action="'show'" :codigo="$informe->id" :image="$informe->ruta_caratula"
+                        :title="$informe->titulo" :resumen="$informe->resumen" :anio="$informe->anio" :autores="$informe->autores_formatted" :acceso="$informe->acceso"
+                        :origen="'autor'" :origenId="$autor->dni" />
                 @empty
                     <div
                         class="text-center py-12 bg-slate-50/50 dark:bg-gray-900/30 rounded-lg border border-dashed border-slate-200 dark:border-gray-800">
@@ -46,10 +65,7 @@
                 @endforelse
             </div>
 
-            {{-- Paginación Inferior --}}
-            <div class="pt-4">
-                <x-public.pagination :paginator="$informes" />
-            </div>
+            <x-public.pagination :paginator="$informes" />
 
         </main>
     </div>

@@ -1,3 +1,15 @@
+@props([
+    'route' => null,
+    'params' => [],
+    'defaultSort' => 'asc',
+    'defaultItemsPerPage' => 10
+])
+
+@php
+    $currentParams = request()->except(['sort', 'items_per_page', 'page']);
+    $allParams = array_merge($params, $currentParams);
+@endphp
+
 <div class="relative inline-block">
     <button id="dropdownHelperRadioButton" data-dropdown-toggle="dropdownHelperRadio"
         class="text-gray-600 bg-gray-100 border border-gray-300 shadow-md hover:bg-gray-200 p-2.5 rounded-xl flex items-center justify-center gap-2 transition-all duration-200">
@@ -18,8 +30,14 @@
             <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Ordenar por</h4>
             <ul class="space-y-1">
                 @foreach (['asc' => 'Ascendente', 'desc' => 'Descendente'] as $value => $label)
+                    @php
+                        $sortParams = array_merge($allParams, [
+                            'sort' => $value,
+                            'items_per_page' => request('items_per_page', $defaultItemsPerPage)
+                        ]);
+                    @endphp
                     <li>
-                        <a href="{{ route($route, array_merge(['sort' => $value, 'items_per_page' => request('items_per_page', $defaultItemsPerPage)], $params ?? [])) }}"
+                        <a href="{{ route($route, $sortParams) }}"
                             class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
                             <div
                                 class="w-4 h-4 rounded-full border-2 flex items-center justify-center
@@ -40,8 +58,14 @@
             <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Mostrar por página</h4>
             <ul class="space-y-1">
                 @foreach ([5, 10, 20, 40, 60, 80, 100] as $number)
+                    @php
+                        $pageParams = array_merge($allParams, [
+                            'sort' => request('sort', 'asc'),
+                            'items_per_page' => $number
+                        ]);
+                    @endphp
                     <li>
-                        <a href="{{ route($route, array_merge(['sort' => request('sort', 'asc'), 'items_per_page' => $number], $params ?? [])) }}"
+                        <a href="{{ route($route, $pageParams) }}"
                             class="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
                             <div class="flex items-center gap-2">
                                 <div

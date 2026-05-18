@@ -9,41 +9,24 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'full_name',        
-        'username',         
-        'password',       
-        'profile_photo', 
+        'full_name',
+        'username',
+        'password',
+        'profile_photo',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
-        'password',         // Ocultar contraseña
-        'remember_token',   // Ocultar token de recordatorio
+        'password',
+        'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
-            // Se eliminó 'email_verified_at' porque ya no se usa
-            'password' => 'hashed', // Mantener el hash para la contraseña
+            'password' => 'hashed',
         ];
     }
 

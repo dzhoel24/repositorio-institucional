@@ -15,33 +15,6 @@
         body {
             font-family: 'Outfit', sans-serif;
         }
-
-        .input-focus:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            background: #fff;
-            outline: none;
-        }
-
-        .input-focus::placeholder {
-            color: #cbd5e1;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-out;
-        }
     </style>
 </head>
 

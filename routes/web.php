@@ -1,76 +1,75 @@
 <?php
 
 use App\Http\Controllers\Public\CategoryController;
-use App\Http\Controllers\Public\RepositorioController;  // ← Cambiado de InformeController
+use App\Http\Controllers\Public\RepositorioController;
 use App\Http\Controllers\Public\FilterController;
 use App\Http\Controllers\Public\HomeController;
 use Illuminate\Support\Facades\Route;
-// Búsqueda global
-Route::get('/buscar', [RepositorioController::class, 'globalSearch'])->name('global.search');
-Route::redirect('/investigacion', '/repositorio/investigacion', 301);
-Route::redirect('/investigacion/{id}', '/repositorio/investigacion/{id}', 301);
-Route::redirect('/modulo', '/repositorio/modulo', 301);
-Route::redirect('/modulo/{id}', '/repositorio/modulo/{id}', 301);
-Route::redirect('/feria', '/repositorio/feria', 301);
-Route::redirect('/feria/{id}', '/repositorio/feria/{id}', 301);
-Route::redirect('/institucional', '/repositorio/institucional', 301);
-Route::redirect('/institucional/{id}', '/repositorio/institucional/{id}', 301);
-// Ruta principal
+
+// Inicio
 Route::get('/', HomeController::class)->name('home');
 
-// 🚀 Repositorio unificado
+// Búsqueda global
+Route::get('/buscar', [RepositorioController::class, 'globalSearch'])->name('global.search');
+
+// Repositorio unificado
 Route::prefix('repositorio')->name('repositorio.')->group(function () {
-    // Listados por tipo
-    Route::get('/{tipo}', [RepositorioController::class, 'index'])  // ← Corregido
+    Route::get('/{tipo}', [RepositorioController::class, 'index'])
         ->name('index')
         ->where('tipo', 'institucional|investigacion|modulo|feria');
 
-    // Ver detalle
-    Route::get('/{tipo}/{id}', [RepositorioController::class, 'show'])  // ← Corregido
+    // 👈 Ruta modificada: añadido parámetro opcional 'origen'
+    Route::get('/{tipo}/{id}/{origen?}', [RepositorioController::class, 'show'])
         ->name('show')
         ->where('tipo', 'institucional|investigacion|modulo|feria')
-        ->where('id', '[0-9]+');
+        ->where('id', '[0-9]+')
+        ->where('origen', 'autor|fecha|titulo|carrera');
 
-    // Descargar PDF
-    Route::get('/{tipo}/{id}/descargar', [RepositorioController::class, 'download'])  // ← Corregido
+    Route::get('/{tipo}/{id}/descargar', [RepositorioController::class, 'download'])
         ->name('download')
         ->where('tipo', 'institucional|investigacion|modulo|feria')
         ->where('id', '[0-9]+');
 });
 
-// 🔄 Redirecciones de URLs antiguas (para no romper enlaces existentes)
+// Redirecciones URLs antiguas
 Route::redirect('/institucional', '/repositorio/institucional', 301);
 Route::redirect('/investigacion', '/repositorio/investigacion', 301);
 Route::redirect('/modulo', '/repositorio/modulo', 301);
 Route::redirect('/feria', '/repositorio/feria', 301);
 
-// El resto de tus rutas se mantienen igual
-// Rutas para filtros de fechas
-Route::prefix('filtros/fecha')->group(function () {
-    Route::get('/', [FilterController::class, 'searchYear'])->name('filtros.fecha');
-    Route::get('{id}', [FilterController::class, 'show'])->name('filtros.showFechaP');
-    Route::get('fecharange/{range}', [FilterController::class, 'searchYearRange'])->name('filtros.rangeYear');
+// Filtros
+Route::prefix('filtros')->name('filtros.')->group(function () {
+
+    // Fechas
+    Route::prefix('fechas')->name('fechas.')->group(function () {
+        Route::get('/', [FilterController::class, 'searchYear'])->name('index');
+        Route::get('/rango/{range}', [FilterController::class, 'searchYearRange'])->name('rango');
+        Route::get('/{id}', [FilterController::class, 'showtitle'])->name('show');
+    });
+
+    // Autores
+    Route::prefix('autores')->name('autores.')->group(function () {
+        Route::get('/', [FilterController::class, 'autores'])->name('index');
+        Route::get('/{autor}/informes', [FilterController::class, 'showInformes'])->name('informes');
+        // 👈 Ruta modificada: redirige a repositorio.show con origen
+        Route::get('/informe/{id}', [FilterController::class, 'showInformeAutores'])->name('show');
+    });
+
+    // Títulos
+    Route::prefix('titulos')->name('titulos.')->group(function () {
+        Route::get('/', [FilterController::class, 'listTitle'])->name('index');
+        // 👈 Ruta modificada: redirige a repositorio.show con origen
+        Route::get('/{id}', [FilterController::class, 'showtitle'])->name('show');
+    });
+
+    // Carreras
+    Route::prefix('carreras')->name('carreras.')->group(function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::get('/{carrera}', [CategoryController::class, 'carreras'])->name('show');
+        // 👈 Ruta modificada: redirige a repositorio.show con origen
+        Route::get('/{carrera}/informe/{id}', [CategoryController::class, 'show'])->name('informe');
+    });
 });
 
-// Rutas para filtros de autores
-Route::prefix('filtros/autores')->group(function () {
-    Route::get('/', [FilterController::class, 'autores'])->name('filtros.autores');
-    Route::get('search', [FilterController::class, 'searchLetter'])->name('filtros.autores.search');
-    Route::get('/informesAutor/{autor}', [FilterController::class, 'showInformes'])->name('filtros.showAutor');
-    Route::get('/informes/{informe}', [FilterController::class, 'showInformeAutores'])->name('filtros.showInformeAutores');
-    Route::get('/{autor}/informes', [FilterController::class, 'showInformes'])->name('filtros.show-informe-autor');
-});
-
-// Rutas para listas de títulos
-Route::prefix('filtros/listTitle')->group(function () {
-    Route::get('search', [FilterController::class, 'searchTitle'])->name('filtros.listTitle.search');
-    Route::get('{filtros}', [FilterController::class, 'showtitle'])->name('filtros.show');
-    Route::get('/', [FilterController::class, 'listTitle'])->name('filtros.listTitle');
-});
-
-// Rutas para categorías
-Route::prefix('filtros/category')->group(function () {
-    Route::get('/', [FilterController::class, 'categories'])->name('filtros.category');
-    Route::get('/item/{id}', [CategoryController::class, 'show'])->name('carrera.show');
-    Route::get('/{carrera?}', [CategoryController::class, 'carreras'])->name('carrera.index');
-});
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';

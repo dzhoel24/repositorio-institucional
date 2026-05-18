@@ -13,10 +13,24 @@ class Card extends Component
     public $acceso;
     public $resumen;
     public $url;
-    public $anio;  // 👈 Añadido para mostrar año en el card
+    public $anio;
+    public $action;
+    public $origen;
+    public $origenId;
 
-    public function __construct($codigo, $image, $title, $autores, $acceso, $resumen, $anio = null, $parametro = 'institucional')
-    {
+    public function __construct(
+        $codigo,
+        $image,
+        $title,
+        $autores,
+        $acceso,
+        $resumen,
+        $anio = null,
+        $parametro = 'institucional',
+        $action = 'show',
+        $origen = null,
+        $origenId = null
+    ) {
         $this->codigo = $codigo;
         $this->image = $image;
         $this->title = $title;
@@ -24,7 +38,31 @@ class Card extends Component
         $this->acceso = $acceso;
         $this->resumen = $resumen;
         $this->anio = $anio;
-        $this->url = route('repositorio.show', ['tipo' => $parametro, 'id' => $codigo]);
+        $this->action = $action;
+        $this->origen = $origen;
+        $this->origenId = $origenId;
+
+        // Generar URL según la acción y el origen
+        $this->url = match ($action) {
+            'showInformeAutores' => route('filtros.autores.show', ['id' => $codigo]),
+            'showFechaP' => route('filtros.fechas.show', ['id' => $codigo]),
+            default => $this->buildUrl($parametro, $codigo, $origen, $origenId),
+        };
+    }
+
+    private function buildUrl($parametro, $codigo, $origen, $origenId): string
+    {
+        $params = ['tipo' => $parametro, 'id' => $codigo];
+
+        if ($origen && $origenId) {
+            $params['origen'] = $origen;
+            $params[$origen . '_id'] = $origenId;
+        } elseif ($origen) {
+            // 👈 Para orígenes como 'fecha' o 'titulo' que no tienen ID
+            $params['origen'] = $origen;
+        }
+
+        return route('repositorio.show', $params);
     }
 
     public function render()

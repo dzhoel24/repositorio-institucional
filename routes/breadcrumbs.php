@@ -1,40 +1,53 @@
 <?php
 
-// routes/breadcrumbs.php
-
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use App\Models\Informe;
+use App\Models\Carrera;
+use App\Models\Autor;
 
-// ============================================
 // INICIO
-// ============================================
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push('Inicio', route('home'));
 });
 
-// ============================================
-// REPOSITORIO UNIFICADO (NUEVO SISTEMA)
-// ============================================
-
-// Índice del repositorio por tipo
+// REPOSITORIO
 Breadcrumbs::for('repositorio.index', function (BreadcrumbTrail $trail, $tipo) {
     $trail->parent('home');
 
     $titulos = [
         'institucional' => 'Repositorio Institucional',
-        'investigacion' => 'Repositorio de Investigación',
-        'modulo' => 'Módulos Académicos',
-        'feria' => 'Proyectos de Feria Tecnológica',
+        'investigacion' => 'Proyectos de Investigación',
+        'modulo' => 'Módulos Educativos',
+        'feria' => 'Feria de Proyectos',
     ];
 
     $nombre = $titulos[$tipo] ?? 'Repositorio';
     $trail->push($nombre, route('repositorio.index', ['tipo' => $tipo]));
 });
 
-// Detalle de un informe en el repositorio
-Breadcrumbs::for('repositorio.show', function (BreadcrumbTrail $trail, $tipo, $id) {
-    $trail->parent('repositorio.index', $tipo);
+Breadcrumbs::for('repositorio.show', function (BreadcrumbTrail $trail, $tipo, $id, $origen = null, $origenData = null) {
+
+    // Si viene de autores
+    if ($origen === 'autor' && $origenData) {
+        $trail->parent('filtros.autores.informes', $origenData);
+    }
+    // Si viene de fechas
+    elseif ($origen === 'fecha') {
+        $trail->parent('filtros.fechas.index');
+    }
+    // Si viene de títulos
+    elseif ($origen === 'titulo') {
+        $trail->parent('filtros.titulos.index');
+    }
+    // Si viene de carrera
+    elseif ($origen === 'carrera' && $origenData) {
+        $trail->parent('filtros.carreras.show', $origenData);
+    }
+    // Por defecto, viene del repositorio
+    else {
+        $trail->parent('repositorio.index', $tipo);
+    }
 
     $informe = Informe::find($id);
     if ($informe) {
@@ -42,93 +55,51 @@ Breadcrumbs::for('repositorio.show', function (BreadcrumbTrail $trail, $tipo, $i
     }
 });
 
-// ============================================
-// RESPALDO PARA RUTAS ANTIGUAS (REDIRECCIONES)
-// ============================================
-
-// Redirigen a las nuevas rutas
-Breadcrumbs::for('institucional.index', function (BreadcrumbTrail $trail) {
+// FILTROS - AUTORES
+Breadcrumbs::for('filtros.autores.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Repositorio Institucional', route('repositorio.index', ['tipo' => 'institucional']));
+    $trail->push('Autores', route('filtros.autores.index'));
 });
 
-Breadcrumbs::for('investigacion.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('filtros.autores.informes', function (BreadcrumbTrail $trail, $autor) {
+    $trail->parent('filtros.autores.index');
+
+    if ($autor instanceof Autor) {
+        $trail->push($autor->nombres . ' ' . $autor->apellidos, route('filtros.autores.informes', ['autor' => $autor]));
+    }
+});
+
+// FILTROS - FECHAS
+Breadcrumbs::for('filtros.fechas.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Repositorio de Investigación', route('repositorio.index', ['tipo' => 'investigacion']));
+    $trail->push('Fecha de Publicación', route('filtros.fechas.index'));
 });
 
-Breadcrumbs::for('modulo.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('filtros.fechas.rango', function (BreadcrumbTrail $trail, $range) {
+    $trail->parent('filtros.fechas.index');
+    $trail->push($range, route('filtros.fechas.rango', ['range' => $range]));
+});
+
+// FILTROS - TÍTULOS
+Breadcrumbs::for('filtros.titulos.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Módulos Académicos', route('repositorio.index', ['tipo' => 'modulo']));
+    $trail->push('Títulos de Documentos', route('filtros.titulos.index'));
 });
 
-Breadcrumbs::for('feria.index', function (BreadcrumbTrail $trail) {
+// FILTROS - CARRERAS
+Breadcrumbs::for('filtros.carreras.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Proyectos de Feria Tecnológica', route('repositorio.index', ['tipo' => 'feria']));
+    $trail->push('Programas de Estudio', route('filtros.carreras.index'));
 });
 
-// Rutas show antiguas (por si acaso)
-Breadcrumbs::for('institucional.show', function (BreadcrumbTrail $trail, $informe) {
-    $trail->parent('repositorio.index', 'institucional');
-    $trail->push($informe->titulo, route('repositorio.show', ['tipo' => 'institucional', 'id' => $informe->id]));
-});
+Breadcrumbs::for('filtros.carreras.show', function (BreadcrumbTrail $trail, $carrera) {
+    $trail->parent('filtros.carreras.index');
 
-Breadcrumbs::for('investigacion.show', function (BreadcrumbTrail $trail, $informe) {
-    $trail->parent('repositorio.index', 'investigacion');
-    $trail->push($informe->titulo, route('repositorio.show', ['tipo' => 'investigacion', 'id' => $informe->id]));
-});
+    // Asegurar que $carrera es un ID, no una colección
+    $carreraId = is_numeric($carrera) ? $carrera : ($carrera->id ?? null);
+    $carreraModel = Carrera::find($carreraId);
 
-Breadcrumbs::for('modulo.show', function (BreadcrumbTrail $trail, $informe) {
-    $trail->parent('repositorio.index', 'modulo');
-    $trail->push($informe->titulo, route('repositorio.show', ['tipo' => 'modulo', 'id' => $informe->id]));
-});
-
-Breadcrumbs::for('feria.show', function (BreadcrumbTrail $trail, $informe) {
-    $trail->parent('repositorio.index', 'feria');
-    $trail->push($informe->titulo, route('repositorio.show', ['tipo' => 'feria', 'id' => $informe->id]));
-});
-
-// ============================================
-// CATEGORÍAS / PROGRAMAS
-// ============================================
-
-// Inicio > Categorías
-Breadcrumbs::for('section.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('home');
-    $trail->push('Programas de Estudio', route('filtros.category'));
-});
-
-// Inicio > Programas de Estudio > {Programa Correspondiente}
-Breadcrumbs::for('item.index', function (BreadcrumbTrail $trail, $programa) {
-    $trail->parent('section.index');
-    $trail->push($programa->nombre, route('carrera.index', ['carrera' => $programa->id]));
-});
-
-// Inicio > Programas de Estudio > {Programa Correspondiente} > Detalle
-Breadcrumbs::for('item.show', function (BreadcrumbTrail $trail, $programa) {
-    $trail->parent('section.index');
-    $trail->push($programa->nombre, route('carrera.index', ['carrera' => $programa->id]));
-    $trail->push("Detalle del Programa");
-});
-
-// ============================================
-// FILTROS
-// ============================================
-
-// Inicio > Autores
-Breadcrumbs::for('filtros.autores', function (BreadcrumbTrail $trail) {
-    $trail->parent('home');
-    $trail->push('Autores', route('filtros.autores'));
-});
-
-// Inicio > Por Fecha de Publicación
-Breadcrumbs::for('filtros.fecha', function (BreadcrumbTrail $trail) {
-    $trail->parent('home');
-    $trail->push('Por Fecha de Publicación', route('filtros.fecha'));
-});
-
-// Inicio > Por Título de Publicación
-Breadcrumbs::for('filtros.listTitle', function (BreadcrumbTrail $trail) {
-    $trail->parent('home');
-    $trail->push('Por Título de Publicación', route('filtros.listTitle'));
+    if ($carreraModel) {
+        $trail->push($carreraModel->nombre, route('filtros.carreras.show', ['carrera' => $carreraId]));
+    }
 });

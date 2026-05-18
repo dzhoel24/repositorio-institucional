@@ -1,8 +1,5 @@
 <x-public.app-main title="Fecha de Publicación">
-    {{-- Barra de Navegación / Breadcrumb --}}
-    <div class="bg-gray-900 dark:bg-black py-1">
-        <x-breadcrumb name="filtros.fecha"></x-breadcrumb>
-    </div>
+    <x-breadcrumb name="filtros.fechas.index"></x-breadcrumb>
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
@@ -23,7 +20,6 @@
                 </div>
             </div>
 
-            {{-- Rangos de años --}}
             <div class="w-full pt-1">
                 <div
                     class="bg-slate-50 dark:bg-gray-800/40 rounded-xl p-4 border border-slate-200 dark:border-gray-700">
@@ -34,7 +30,7 @@
                         @endphp
 
                         @foreach ($yearRanges as $range)
-                            <a href="{{ route('filtros.rangeYear', ['range' => $range]) }}"
+                            <a href="{{ route('filtros.fechas.rango', ['range' => $range]) }}"
                                 class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all
             {{ $currentRange == $range
                 ? 'bg-indigo-600 text-white shadow-md'
@@ -51,7 +47,8 @@
                             <span class="ml-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400">
                                 {{ $currentRange }}
                             </span>
-                            <a href="{{ route('filtros.fecha') }}" class="ml-3 text-xs text-red-500 hover:text-red-600">
+                            <a href="{{ route('filtros.fechas.index') }}"
+                                class="ml-3 text-xs text-red-500 hover:text-red-600">
                                 ❌ Limpiar
                             </a>
                         </div>
@@ -59,12 +56,10 @@
                 </div>
             </div>
 
-            {{-- Buscador por Año Específico --}}
             <div class="w-full pt-1">
                 <x-search :parametro="'filtros'" :parametro2="'fecha'" :descrip="'Introduce un año de publicación específico...'" :text="'Buscar'" />
             </div>
 
-            {{-- Barra de Utilidades (Contador y Ordenamiento unificados) --}}
             <div
                 class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1.5 border-b border-slate-100 dark:border-gray-800/60">
                 <div class="text-sm font-medium text-slate-600 dark:text-slate-400">
@@ -72,17 +67,16 @@
                 </div>
 
                 <div class="flex items-center justify-end">
-                    <x-advanced-filter route="filtros.fecha" defaultSort="asc" defaultItemsPerPage="10" />
+                    <x-advanced-filter route="filtros.fechas.index" defaultSort="asc" defaultItemsPerPage="10" />
                 </div>
             </div>
 
-            {{-- Listado de Publicaciones (Cards) o Estado Vacío --}}
             <div class="w-full pt-1">
                 @forelse ($publi_fecha as $informe)
                     <div class="flex flex-col gap-4 w-full">
-                        <x-public.card :parametro="'institucional'" :codigo="$informe->id" :image="$informe->ruta_caratula" :title="$informe->titulo"
-                            :anio="$informe->anio" :resumen="$informe->resumen" :autores="$informe->autores_formatted" :acceso="$informe->acceso"
-                            :action="'showFechaP'" />
+                        <x-public.card :parametro="$informe->tipo_slug ?? 'institucional'" :action="'show'" :origen="'fecha'" :codigo="$informe->id"
+                            :image="$informe->ruta_caratula" :title="$informe->titulo" :anio="$informe->anio" :resumen="$informe->resumen"
+                            :autores="$informe->autores_formatted" :acceso="$informe->acceso" />
                     </div>
                 @empty
                     <div
@@ -100,6 +94,7 @@
             </div>
 
             <x-public.pagination :paginator="$publi_fecha" />
+
         </main>
     </div>
 </x-public.app-main>

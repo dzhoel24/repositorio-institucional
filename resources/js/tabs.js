@@ -1,21 +1,36 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('a[data-tab]').forEach(tab => {
-        tab.addEventListener('click', function(event) {
-            event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+    const tabs = document.querySelectorAll("[data-tab]");
 
-            document.querySelectorAll('[role="tabpanel"]').forEach(content => {
-                content.classList.add('hidden');
-            });
+    function switchTab(tabId, activeTab) {
+        // Ocultar todos los contenidos
+        document.querySelectorAll(".tab-content").forEach((content) => {
+            content.classList.add("hidden");
+        });
 
-            // Remover clase 'active' de todas las pestañas
-            document.querySelectorAll('a[data-tab]').forEach(t => {
-                t.classList.remove('text-blue-600', 'border-blue-600', 'active');
-            });
+        // Mostrar el contenido seleccionado
+        const selectedContent = document.getElementById(tabId);
+        if (selectedContent) {
+            selectedContent.classList.remove("hidden");
+        }
 
-            const tabId = this.getAttribute('data-tab');
-            document.getElementById(tabId).classList.remove('hidden');
+        // Actualizar estilos de los tabs
+        tabs.forEach((tab) => {
+            tab.classList.remove("text-sky-600", "border-sky-600");
+            tab.classList.add("text-slate-500", "border-transparent");
+        });
 
-            this.classList.add('text-blue-600', 'border-blue-600', 'active');
+        activeTab.classList.remove("text-slate-500", "border-transparent");
+        activeTab.classList.add("text-sky-600", "border-sky-600");
+    }
+
+    // Agregar event listeners
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", function (e) {
+            e.preventDefault();
+            const tabId = this.getAttribute("data-tab");
+            if (tabId) {
+                switchTab(tabId, this);
+            }
         });
     });
 });

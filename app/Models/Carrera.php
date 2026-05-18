@@ -10,4 +10,9 @@ class Carrera extends Model
     use HasFactory;
     protected $table = 'carrera';
     public $timestamps = false;
+
+    public function informes()
+    {
+        return $this->hasMany(Informe::class, 'carrera_id');
+    }
 }

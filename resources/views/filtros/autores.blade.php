@@ -1,5 +1,5 @@
 <x-public.app-main title="Índice de Autores">
-    <x-breadcrumb name="filtros.autores"></x-breadcrumb>
+    <x-breadcrumb name="filtros.autores.index" />
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
@@ -18,18 +18,36 @@
                         Listar por: {{ $nombre ?? 'Todos los autores' }}
                     </h2>
                 </div>
+                <div class="bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1">
+                    <span class="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                        <span class="text-indigo-600 dark:text-indigo-400">{{ $autores->total() }}</span> autores
+                    </span>
+                </div>
             </div>
 
-            {{-- Navegación Alfabética (A-Z) - Deslizable en Móviles --}}
             <div class="w-full pb-1">
                 <ul id="list"
                     class="flex items-center gap-1 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-gray-800">
+
+                    @php
+                        $isAll = !request('starts_with');
+                    @endphp
+                    <li class="shrink-0">
+                        <a href="{{ url('filtros/autores') }}"
+                            class="flex items-center justify-center min-w-[48px] h-8 px-3 text-xs font-bold uppercase rounded transition-all duration-150
+                           {{ $isAll
+                               ? 'bg-indigo-600 text-white shadow-sm'
+                               : 'bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200/40 dark:border-gray-700/50' }}">
+                            Todos
+                        </a>
+                    </li>
+
                     @foreach (range('A', 'Z') as $letter)
                         @php
                             $isCurrent = request('starts_with') === $letter;
                         @endphp
                         <li class="shrink-0">
-                            <a href="{{ url('filtros/autores/search?starts_with=' . $letter) }}"
+                            <a href="{{ url('filtros/autores?starts_with=' . $letter) }}"
                                 class="flex items-center justify-center min-w-[32px] h-8 px-2 text-xs font-bold uppercase rounded transition-all duration-150
                                {{ $isCurrent
                                    ? 'bg-indigo-600 text-white shadow-sm'
@@ -41,7 +59,6 @@
                 </ul>
             </div>
 
-            {{-- Buscador Específico --}}
             <div class="w-full pt-1">
                 <x-search :parametro="'filtros'" :parametro2="'autores'" :descrip="'Introduce las primeras letras del autor...'" :text="'Buscar'" />
             </div>
@@ -66,9 +83,7 @@
                 @endif
             </div>
 
-            <div class="pt-4">
-                <x-public.pagination :paginator="$autores" />
-            </div>
+            <x-public.pagination :paginator="$autores" />
 
         </main>
     </div>
