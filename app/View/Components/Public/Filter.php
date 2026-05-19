@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Public;
 
 use App\Models\Autor;
 use Closure;
@@ -36,6 +36,6 @@ class Filter extends Component
 
     public function render(): View|Closure|string
     {
-        return view('components.filter');
+        return view('components.public.filter');
     }
 }

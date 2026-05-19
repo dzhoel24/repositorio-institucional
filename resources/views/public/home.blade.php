@@ -1,5 +1,5 @@
 <x-public.app-main>
-    <x-breadcrumb name="home"></x-breadcrumb>
+    <x-public.breadcrumb name="home"></x-public.breadcrumb>
 
     <div class="w-full text-center mt-12 mb-8 px-4">
         <h1 class="text-3xl md:text-5xl font-black tracking-tight text-slate-900 uppercase">
@@ -8,7 +8,7 @@
     </div>
 
     <div class="flex justify-center w-full mb-12 px-4">
-        <x-search route="repositorio.index" :params="['tipo' => 'institucional']" descrip="¿Qué deseas encontrar hoy?" />
+        <x-public.search route="repositorio.index" :params="['tipo' => 'institucional']" descrip="¿Qué deseas encontrar hoy?" />
     </div>
 
     <div class="w-full px-6 lg:px-12">

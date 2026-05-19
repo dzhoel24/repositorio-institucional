@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Traits\HtmxResponse;
 use App\Models\Autor;
-use App\Models\AutorInforme;
 use App\Models\Informe;
 use App\Models\TipoInforme;
 use App\Models\Carrera;
@@ -19,41 +18,29 @@ class InformeController extends Controller
 
     public function index(Request $request)
     {
-        $busqueda = strtolower($request->query('buscador'));
+        $busqueda = strtolower($request->query('buscador', ''));
 
         $informes = Informe::query()
-            ->select('informe.*', 'tipo_informe.nombre as tipo_nombre')
-            ->join('tipo_informe', 'informe.tipo_informe_id', '=', 'tipo_informe.id')
-            ->with('carrera')
+            ->with(['autores', 'carrera', 'tipoInforme'])
             ->when($busqueda, function ($query) use ($busqueda) {
                 $query->where(function ($q) use ($busqueda) {
-                    $q->whereRaw('LOWER(informe.titulo) LIKE ?', ["%{$busqueda}%"])
-                        ->orWhereRaw('CAST(informe.anio AS CHAR) LIKE ?', ["%{$busqueda}%"])
-                        ->orWhereRaw('LOWER(tipo_informe.nombre) LIKE ?', ["%{$busqueda}%"])
-                        ->orWhereExists(function ($sub) use ($busqueda) {
-                            $sub->select(DB::raw(1))
-                                ->from('autor_informe')
-                                ->join('autores', 'autor_informe.autor_dni', '=', 'autores.dni')
-                                ->whereColumn('autor_informe.informe_id', 'informe.id')
-                                ->where(function ($q2) use ($busqueda) {
-                                    $q2->whereRaw('LOWER(autores.nombres) LIKE ?', ["%{$busqueda}%"])
-                                        ->orWhereRaw('LOWER(autores.apellidos) LIKE ?', ["%{$busqueda}%"])
-                                        ->orWhereRaw("LOWER(CONCAT(autores.nombres, ' ', autores.apellidos)) LIKE ?", ["%{$busqueda}%"]);
-                                });
+                    $q->whereRaw('LOWER(titulo) LIKE ?', ["%{$busqueda}%"])
+                        ->orWhereRaw('CAST(anio AS CHAR) LIKE ?', ["%{$busqueda}%"])
+                        ->orWhereHas(
+                            'tipoInforme',
+                            fn($q) =>
+                            $q->whereRaw('LOWER(nombre) LIKE ?', ["%{$busqueda}%"])
+                        )
+                        ->orWhereHas('autores', function ($q) use ($busqueda) {
+                            $q->whereRaw('LOWER(nombres) LIKE ?', ["%{$busqueda}%"])
+                                ->orWhereRaw('LOWER(apellidos) LIKE ?', ["%{$busqueda}%"])
+                                ->orWhereRaw("LOWER(CONCAT(nombres, ' ', apellidos)) LIKE ?", ["%{$busqueda}%"]);
                         });
                 });
             })
-            ->orderByDesc('informe.id')
+            ->orderByDesc('id')
             ->paginate(10)
             ->withQueryString();
-
-        $informes->getCollection()->transform(function ($informe) {
-            $informe->autores = AutorInforme::join('autores', 'autor_informe.autor_dni', '=', 'autores.dni')
-                ->where('autor_informe.informe_id', $informe->id)
-                ->select('autores.*')
-                ->get();
-            return $informe;
-        });
 
         return $this->htmxView('admin.informes.index', [
             'informes'     => $informes,
@@ -80,36 +67,20 @@ class InformeController extends Controller
         try {
             DB::beginTransaction();
 
-            $informe                  = new Informe();
-            $informe->titulo          = $request->titulo;
-            $informe->resumen         = $request->resumen;
-            $informe->anio            = $request->anio;
-            $informe->estado          = 'No Publicado';
-            $informe->acceso          = 'Restringido';
-            $informe->carrera_id      = $request->carrera;
-            $informe->modulo          = $request->modulo;
-            $informe->tipo_informe_id = $request->tipo_informe;
+            $informe = Informe::create([
+                'titulo'          => $request->titulo,
+                'resumen'         => $request->resumen,
+                'anio'            => $request->anio,
+                'estado'          => 'No Publicado',
+                'acceso'          => 'Restringido',
+                'carrera_id'      => $request->carrera,
+                'modulo'          => $request->modulo,
+                'tipo_informe_id' => $request->tipo_informe,
+                'ruta_pdf'        => $this->subirArchivo($request->file('pdf'), 'pdfs'),
+                'ruta_caratula'   => $this->subirArchivo($request->file('caratula'), 'caratulas'),
+            ]);
 
-            $pdf         = $request->file('pdf');
-            $nombrePDF   = time() . '_' . str_replace(' ', '_', $pdf->getClientOriginalName());
-            $pdf->storeAs('pdfs', $nombrePDF, 'public');
-            $informe->ruta_pdf = $nombrePDF;
-
-            $caratula        = $request->file('caratula');
-            $nombreCaratula  = time() . '_' . str_replace(' ', '_', $caratula->getClientOriginalName());
-            $caratula->storeAs('caratulas', $nombreCaratula, 'public');
-            $informe->ruta_caratula = $nombreCaratula;
-
-            $informe->save();
-
-            $dniArray    = array_filter(array_map('trim', explode(',', $request->input('autores'))));
-            $autoresData = [];
-            foreach ($dniArray as $dni) {
-                if (!empty($dni)) {
-                    $autoresData[] = ['autor_dni' => $dni, 'informe_id' => $informe->id];
-                }
-            }
-            AutorInforme::insert($autoresData);
+            $informe->autores()->attach($this->parseDnis($request->input('autores')));
 
             DB::commit();
 
@@ -129,8 +100,8 @@ class InformeController extends Controller
             'resumen'      => 'required|string',
             'autores'      => 'nullable|string',
             'anio'         => 'required|integer',
-            'pdf'          => 'nullable|mimes:pdf',
-            'caratula'     => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'pdf'          => 'nullable|file|mimes:pdf|max:10240',
+            'caratula'     => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'carrera'      => 'nullable|string',
             'modulo'       => 'nullable|string',
             'tipo_informe' => 'required|string',
@@ -140,46 +111,27 @@ class InformeController extends Controller
             DB::beginTransaction();
 
             if ($request->hasFile('caratula')) {
-                if ($informe->ruta_caratula) {
-                    Storage::disk('public')->delete('caratulas/' . $informe->ruta_caratula);
-                }
-                $caratula       = $request->file('caratula');
-                $nombreCaratula = time() . '_' . str_replace(' ', '_', $caratula->getClientOriginalName());
-                $caratula->storeAs('caratulas', $nombreCaratula, 'public');
-                $informe->ruta_caratula = $nombreCaratula;
+                Storage::disk('public')->delete('caratulas/' . $informe->ruta_caratula);
+                $informe->ruta_caratula = $this->subirArchivo($request->file('caratula'), 'caratulas');
             }
 
             if ($request->hasFile('pdf')) {
-                if ($informe->ruta_pdf) {
-                    Storage::disk('public')->delete('pdfs/' . $informe->ruta_pdf);
-                }
-                $pdf       = $request->file('pdf');
-                $nombrePDF = time() . '_' . str_replace(' ', '_', $pdf->getClientOriginalName());
-                $pdf->storeAs('pdfs', $nombrePDF, 'public');
-                $informe->ruta_pdf = $nombrePDF;
+                Storage::disk('public')->delete('pdfs/' . $informe->ruta_pdf);
+                $informe->ruta_pdf = $this->subirArchivo($request->file('pdf'), 'pdfs');
             }
 
-            $informe->titulo          = $request->titulo;
-            $informe->resumen         = $request->resumen;
-            $informe->anio            = $request->anio;
-            $informe->carrera_id      = $request->carrera;
-            $informe->modulo          = $request->modulo;
-            $informe->tipo_informe_id = $request->tipo_informe;
-            $informe->save();
+            $informe->update([
+                'titulo'          => $request->titulo,
+                'resumen'         => $request->resumen,
+                'anio'            => $request->anio,
+                'carrera_id'      => $request->carrera,
+                'modulo'          => $request->modulo,
+                'tipo_informe_id' => $request->tipo_informe,
+                'ruta_pdf'        => $informe->ruta_pdf,
+                'ruta_caratula'   => $informe->ruta_caratula,
+            ]);
 
-            $dniArray     = array_filter(array_map('trim', explode(',', $request->input('autores'))));
-            $existingDnis = AutorInforme::where('informe_id', $informe->id)->pluck('autor_dni')->toArray();
-
-            $dnisToRemove = array_diff($existingDnis, $dniArray);
-            AutorInforme::whereIn('autor_dni', $dnisToRemove)
-                ->where('informe_id', $informe->id)
-                ->delete();
-
-            foreach (array_diff($dniArray, $existingDnis) as $dni) {
-                if (!empty($dni)) {
-                    AutorInforme::create(['autor_dni' => $dni, 'informe_id' => $informe->id]);
-                }
-            }
+            $informe->autores()->sync($this->parseDnis($request->input('autores')));
 
             DB::commit();
 
@@ -195,12 +147,8 @@ class InformeController extends Controller
         try {
             $informe = Informe::findOrFail($id);
 
-            if ($informe->ruta_pdf) {
-                Storage::disk('public')->delete('pdfs/' . $informe->ruta_pdf);
-            }
-            if ($informe->ruta_caratula) {
-                Storage::disk('public')->delete('caratulas/' . $informe->ruta_caratula);
-            }
+            Storage::disk('public')->delete('pdfs/' . $informe->ruta_pdf);
+            Storage::disk('public')->delete('caratulas/' . $informe->ruta_caratula);
 
             $informe->autores()->detach();
             $informe->delete();
@@ -229,5 +177,18 @@ class InformeController extends Controller
             'nombres'   => $autor->nombres,
             'apellidos' => $autor->apellidos,
         ]);
+    }
+
+    private function subirArchivo($file, string $carpeta): string
+    {
+        $nombre = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+        $file->storeAs($carpeta, $nombre, 'public');
+        return $nombre;
+    }
+
+    private function parseDnis(?string $raw): array
+    {
+        if (!$raw) return [];
+        return array_values(array_filter(array_map('trim', explode(',', $raw))));
     }
 }

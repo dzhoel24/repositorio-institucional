@@ -23,7 +23,7 @@ class AdvancedFilter extends Component
 
     public function render(): View|Closure|string
     {
-        return view('components.advanced-filter', [
+        return view('components.public.advanced-filter', [
             'defaultSort' => $this->defaultSort,
             'defaultItemsPerPage' => $this->defaultItemsPerPage,
             'route' => $this->route,

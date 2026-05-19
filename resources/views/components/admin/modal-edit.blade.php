@@ -56,7 +56,8 @@
             {{-- CONTENIDO SCROLLEABLE --}}
             <div class="flex-1 overflow-y-auto custom-scroll">
                 <div class="p-3 sm:p-5">
-                    <form id="{{ $id }}-form" action="{{ $action }}" method="POST">
+                    <form id="{{ $id }}-form" action="{{ $action }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="space-y-4 sm:space-y-5">

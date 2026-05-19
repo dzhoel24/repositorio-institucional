@@ -1,11 +1,11 @@
 <x-public.app-main title="Informes por Autor">
-    <x-breadcrumb name="filtros.autores.informes" :params="[$autor]" />
+    <x-public.breadcrumb name="filtros.autores.informes" :params="[$autor]" />
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
         <aside class="hidden md:block md:col-span-1">
             <div class="sticky top-6">
-                <x-filter></x-filter>
+                <x-public.filter></x-public.filter>
             </div>
         </aside>
 
@@ -13,7 +13,7 @@
 
             {{-- Buscador --}}
             <div class="py-2">
-                <x-search :descrip="'O introduce las primeras letras'" :text="'IR'" :param="'search'" />
+                <x-public.search :descrip="'O introduce las primeras letras'" :text="'IR'" :param="'search'" />
             </div>
 
             {{-- Título del autor --}}
@@ -37,10 +37,10 @@
             {{-- Barra de utilidades con filtro avanzado --}}
             <div class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-2">
                 <div class="text-sm font-medium text-slate-600 dark:text-slate-400">
-                    <x-count :contador="$informes->total()" :paginator="$informes" />
+                    <x-public.count :contador="$informes->total()" :paginator="$informes" />
                 </div>
                 <div class="flex items-center justify-end">
-                    <x-advanced-filter route="filtros.autores.informes" :params="['autor' => $autor->dni]" defaultSort="asc"
+                    <x-public.advanced-filter route="filtros.autores.informes" :params="['autor' => $autor->dni]" defaultSort="asc"
                         defaultItemsPerPage="10" />
                 </div>
             </div>

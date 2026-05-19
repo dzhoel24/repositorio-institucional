@@ -1,12 +1,12 @@
 <x-public.app-main :title="$carreraModel->nombre ?? 'Programa de Estudio'">
 
-    <x-breadcrumb name="filtros.carreras.show" :params="[$carreraModel->id]" />
+    <x-public.breadcrumb name="filtros.carreras.show" :params="[$carreraModel->id]" />
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
         <aside class="hidden md:block md:col-span-1">
             <div class="sticky top-6">
-                <x-filter></x-filter>
+                <x-public.filter></x-public.filter>
             </div>
         </aside>
 
@@ -57,10 +57,10 @@
             <div
                 class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1.5 border-b border-slate-100 dark:border-gray-800/60">
                 <div class="text-sm font-medium text-slate-600 dark:text-slate-400">
-                    <x-count :contador="$informes->total()" :paginator="$informes" />
+                    <x-public.count :contador="$informes->total()" :paginator="$informes" />
                 </div>
                 <div class="flex items-center justify-end">
-                    <x-advanced-filter route="filtros.carreras.show" :params="['carrera' => $carreraModel->id]" defaultSort="asc"
+                    <x-public.advanced-filter route="filtros.carreras.show" :params="['carrera' => $carreraModel->id]" defaultSort="asc"
                         defaultItemsPerPage="10" />
                 </div>
             </div>

@@ -86,7 +86,7 @@
                                 </div>
                                 <span
                                     class="{{ $badgeStyle }} inline-block w-fit rounded-md px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-                                    {{ $info->tipo_nombre }}
+                                    {{ $info->tipoInforme->nombre }}
                                 </span>
                             </div>
                         </td>

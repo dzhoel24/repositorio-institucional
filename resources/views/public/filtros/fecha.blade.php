@@ -1,11 +1,11 @@
 <x-public.app-main title="Fecha de Publicación">
-    <x-breadcrumb name="filtros.fechas.index"></x-breadcrumb>
+    <x-public.breadcrumb name="filtros.fechas.index"></x-public.breadcrumb>
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
         <aside class="hidden md:block md:col-span-1">
             <div class="sticky top-6">
-                <x-filter></x-filter>
+                <x-public.filter></x-public.filter>
             </div>
         </aside>
 
@@ -57,17 +57,17 @@
             </div>
 
             <div class="w-full pt-1">
-                <x-search :parametro="'filtros'" :parametro2="'fecha'" :descrip="'Introduce un año de publicación específico...'" :text="'Buscar'" />
+                <x-public.search :parametro="'filtros'" :parametro2="'fecha'" :descrip="'Introduce un año de publicación específico...'" :text="'Buscar'" />
             </div>
 
             <div
                 class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1.5 border-b border-slate-100 dark:border-gray-800/60">
                 <div class="text-sm font-medium text-slate-600 dark:text-slate-400">
-                    <x-count :contador="$contador" :paginator="$publi_fecha" />
+                    <x-public.count :contador="$contador" :paginator="$publi_fecha" />
                 </div>
 
                 <div class="flex items-center justify-end">
-                    <x-advanced-filter route="filtros.fechas.index" defaultSort="asc" defaultItemsPerPage="10" />
+                    <x-public.advanced-filter route="filtros.fechas.index" defaultSort="asc" defaultItemsPerPage="10" />
                 </div>
             </div>
 

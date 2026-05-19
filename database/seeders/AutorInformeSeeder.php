@@ -3,36 +3,23 @@
 namespace Database\Seeders;
 
 use App\Models\Autor;
-use App\Models\AutorInforme;
 use App\Models\Informe;
 use Illuminate\Database\Seeder;
 
 class AutorInformeSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $autores = Autor::all();
-        if ($autores->isEmpty()) {
-            throw new \Exception("No hay autores disponibles para relacionar.");
-        }
+        $autores  = Autor::all();
         $informes = Informe::all();
-        if ($informes->isEmpty()) {
-            throw new \Exception("No hay informes disponibles para relacionar.");
-        }
+
+        if ($autores->isEmpty()) throw new \Exception("No hay autores.");
+        if ($informes->isEmpty()) throw new \Exception("No hay informes.");
+
         foreach ($informes as $informe) {
-            $randomAutors = $autores->random(rand(1, 3));
-            
-            foreach ($randomAutors as $autor) {
-                if ($autor->dni) {
-                    AutorInforme::create([
-                        'autor_dni' => $autor->dni,
-                        'informe_id' => $informe->id,
-                    ]);
-                }
-            }
+            $informe->autores()->attach(
+                $autores->random(rand(1, 3))->pluck('dni')->toArray()
+            );
         }
     }
 }
-
-
-

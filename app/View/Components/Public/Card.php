@@ -44,8 +44,8 @@ class Card extends Component
 
         // Generar URL según la acción y el origen
         $this->url = match ($action) {
-            'showInformeAutores' => route('filtros.autores.show', ['id' => $codigo]),
-            'showFechaP' => route('filtros.fechas.show', ['id' => $codigo]),
+            'showInformeAutores' => route('public.filtros.autores.show', ['id' => $codigo]),
+            'showFechaP' => route('public.filtros.fechas.show', ['id' => $codigo]),
             default => $this->buildUrl($parametro, $codigo, $origen, $origenId),
         };
     }

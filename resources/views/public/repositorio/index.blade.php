@@ -1,24 +1,24 @@
 <x-public.app-main :title="$config['titulo']">
-    <x-breadcrumb name="repositorio.index" :params="[$tipo]" />
+    <x-public.breadcrumb name="repositorio.index" :params="[$tipo]" />
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
         <div class="container hidden md:block">
-            <x-filter></x-filter>
+            <x-public.filter></x-public.filter>
         </div>
 
         <main class="md:col-span-3 flex flex-col w-full space-y-4">
 
-            <x-search :route="'repositorio.index'" :params="['tipo' => $tipo]" :descrip="'Buscar en todo el repositorio'" />
+            <x-public.search :route="'repositorio.index'" :params="['tipo' => $tipo]" :descrip="'Buscar en todo el repositorio'" />
 
             <div
                 class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-2 border-b border-gray-100 dark:border-gray-850">
                 <div class="text-sm text-gray-600 dark:text-gray-400">
-                    <x-count :contador="$informes->total()" :paginator="$informes" />
+                    <x-public.count :contador="$informes->total()" :paginator="$informes" />
                 </div>
 
                 <div class="flex items-center justify-end">
-                    <x-advanced-filter route="repositorio.index" :params="['tipo' => $tipo]" defaultSort="asc"
+                    <x-public.advanced-filter route="repositorio.index" :params="['tipo' => $tipo]" defaultSort="asc"
                         defaultItemsPerPage="10" />
                 </div>
             </div>
@@ -26,7 +26,7 @@
             {{-- Búsqueda específica para ciertos tipos (opcional) --}}
             @if (in_array($tipo, ['modulo', 'investigacion', 'feria']))
                 <div class="py-2">
-                    <x-search :descrip="'O introduce las primeras letras'" :text="'IR'" :param="'search'" />
+                    <x-public.search :descrip="'O introduce las primeras letras'" :text="'IR'" :param="'search'" />
                 </div>
             @endif
 

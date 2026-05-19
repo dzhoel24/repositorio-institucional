@@ -16,6 +16,6 @@ class HomeController extends Controller
             ->take(10)
             ->get();
 
-        return view('home', compact('recientes'));
+        return view('public.home', compact('recientes'));
     }
 }

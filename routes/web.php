@@ -66,7 +66,6 @@ Route::prefix('filtros')->name('filtros.')->group(function () {
     Route::prefix('carreras')->name('carreras.')->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('index');
         Route::get('/{carrera}', [CategoryController::class, 'carreras'])->name('show');
-        // 👈 Ruta modificada: redirige a repositorio.show con origen
         Route::get('/{carrera}/informe/{id}', [CategoryController::class, 'show'])->name('informe');
     });
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Public;
 
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Illuminate\View\Component;
@@ -21,6 +21,6 @@ class Breadcrumb extends Component
 
     public function render()
     {
-        return view('components.breadcrumb');
+        return view('components.public.breadcrumb');
     }
 }

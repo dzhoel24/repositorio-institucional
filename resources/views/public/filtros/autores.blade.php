@@ -1,11 +1,11 @@
 <x-public.app-main title="Índice de Autores">
-    <x-breadcrumb name="filtros.autores.index" />
+    <x-public.breadcrumb name="filtros.autores.index" />
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
         <aside class="hidden md:block md:col-span-1">
             <div class="sticky top-6">
-                <x-filter></x-filter>
+                <x-public.filter />
             </div>
         </aside>
 
@@ -60,7 +60,7 @@
             </div>
 
             <div class="w-full pt-1">
-                <x-search :parametro="'filtros'" :parametro2="'autores'" :descrip="'Introduce las primeras letras del autor...'" :text="'Buscar'" />
+                <x-public.search :parametro="'filtros'" :parametro2="'autores'" :descrip="'Introduce las primeras letras del autor...'" :text="'Buscar'" />
             </div>
 
             <div class="w-full">
@@ -78,7 +78,28 @@
                     </div>
                 @else
                     <div class="overflow-hidden border border-slate-200 dark:border-gray-800 rounded-lg shadow-sm">
-                        <x-list-autores :autores="$autores" />
+                        <div class="overflow-x-auto ">
+                            <table class="min-w-full bg-white border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                        <th class="py-3 px-6 text-left text-xl">Nombre de los autores</th>
+                                </thead>
+                                <tbody class="text-gray-600 text-sm font-light">
+                                    @foreach ($autores as $autor)
+                                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                            <td class="py-3 px-6 text-left whitespace-nowrap">
+                                                <a href="{{ route('filtros.autores.informes', ['autor' => $autor]) }}"
+                                                    class="hover:underline">
+                                                    {{ $autor->apellidos . ' ' . $autor->nombres }}
+                                                    [{{ $autor->informes_count }}]
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 @endif
             </div>

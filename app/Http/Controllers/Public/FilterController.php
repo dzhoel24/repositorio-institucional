@@ -69,7 +69,7 @@ class FilterController extends Controller
             ->paginate($request->input('items_per_page', 20))
             ->appends($request->query());
 
-        return view('filtros.autores', compact('autores'));
+        return view('public.filtros.autores', compact('autores'));
     }
 
     public function showInformes(Autor $autor): View
@@ -79,7 +79,7 @@ class FilterController extends Controller
             ->where('estado', 'Publicado')
             ->paginate(10);
 
-        return view('filtros.show-informe-autor', compact('autor', 'informes'));
+        return view('public.filtros.show-informe-autor', compact('autor', 'informes'));
     }
 
     public function showInformeAutores(int $id): View
@@ -113,7 +113,7 @@ class FilterController extends Controller
             ->paginate($request->input('items_per_page', 10))
             ->appends($request->query());
 
-        return view('filtros.fecha', [
+        return view('public.filtros.fecha', [
             'publi_fecha' => $publi_fecha,
             'contador'    => $publi_fecha->total(),
             'yearRanges'  => $this->generateYearRanges(),
@@ -130,7 +130,7 @@ class FilterController extends Controller
             ->paginate($request->input('items_per_page', 10))
             ->appends($request->query());
 
-        return view('filtros.fecha', [
+        return view('public.filtros.fecha', [
             'publi_fecha' => $publi_fecha,
             'contador'    => $publi_fecha->total(),
             'yearRanges'  => $this->generateYearRanges(),
@@ -167,7 +167,7 @@ class FilterController extends Controller
             ->paginate($request->input('items_per_page', 10))
             ->appends($request->query());
 
-        return view('filtros.titulo', compact('informes'));
+        return view('public.filtros.titulo', compact('informes'));
     }
 
     public function showtitle(int $id): View

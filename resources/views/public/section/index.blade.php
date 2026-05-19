@@ -1,11 +1,11 @@
 <x-public.app-main title="Programas de Estudio">
-    <x-breadcrumb name="filtros.carreras.index"></x-breadcrumb>
+    <x-public.breadcrumb name="filtros.carreras.index"></x-public.breadcrumb>
 
     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
 
         <aside class="hidden md:block md:col-span-1">
             <div class="sticky top-6">
-                <x-filter></x-filter>
+                <x-public.filter></x-public.filter>
             </div>
         </aside>
 

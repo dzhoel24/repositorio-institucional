@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Public;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -20,6 +20,6 @@ class Count extends Component
 
     public function render(): View|Closure|string
     {
-        return view('components.contador');
+        return view('components.public.count');
     }
 }

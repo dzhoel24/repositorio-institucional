@@ -34,6 +34,7 @@ class Informe extends Model
 
     protected $fillable = [
         'titulo',
+        'resumen',
         'anio',
         'ruta_pdf',
         'ruta_caratula',
@@ -44,8 +45,8 @@ class Informe extends Model
         'carrera_id',
     ];
 
-    // 👈 Accessor para el slug del tipo
-    protected $appends = ['tipo_slug'];  // Agregar al array de appends
+
+    protected $appends = ['tipo_slug'];
 
     public function getTipoSlugAttribute(): string
     {
@@ -76,20 +77,10 @@ class Informe extends Model
 
     public function getAutoresFormattedAttribute()
     {
-        $autores = $this->relationLoaded('autores')
-            ? $this->autores
-            : (is_string($this->autores) ? json_decode(html_entity_decode($this->autores), true) : $this->autores);
+        if (!$this->relationLoaded('autores') || $this->autores->isEmpty()) {
+            return 'Sin autores';
+        }
 
-
-        $autores = collect($autores);
-
-        $nombres = $autores->map(function ($autor) {
-            if (is_object($autor)) {
-                return trim(($autor->nombres ?? '') . ' ' . ($autor->apellidos ?? ''));
-            }
-            return trim(($autor['nombres'] ?? '') . ' ' . ($autor['apellidos'] ?? ''));
-        })->filter();
-
-        return $nombres->isNotEmpty() ? $nombres->implode(', ') : 'Sin autores';
+        return $this->autores->map(fn($autor) => trim("{$autor->nombres} {$autor->apellidos}"))->implode(', ');
     }
 }
