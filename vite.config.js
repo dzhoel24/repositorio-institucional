@@ -9,7 +9,6 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/js/modules/form-add.js",
                 "resources/js/modules/form-edit.js",
-                "resources/js/modules/toggle-password.js",
                 "resources/js/tabs.js",
             ],
             refresh: true,

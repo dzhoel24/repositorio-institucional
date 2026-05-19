@@ -2,7 +2,7 @@
 
     <x-public.breadcrumb name="repositorio.show" :params="[$tipo, $informe->id, $origen ?? null, $origenData ?? null]" />
 
-    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-2 sm:gap-4 mt-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-6 lg:gap-8 mt-4 sm:mt-6">
         <div class="container hidden md:block">
             <x-public.filter></x-public.filter>
         </div>

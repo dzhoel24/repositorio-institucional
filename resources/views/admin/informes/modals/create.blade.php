@@ -1,4 +1,4 @@
-<x-admin.modal-create id='add-informe-modal' title='NUEVO PROYECTO' subtitle='Completa los campos' size="full"
+<x-admin.modal-create id='add-informe-modal' title='NUEVO INFORME' subtitle='Completa los campos' size="full"
     action="{{ route('admin.informes.store') }}">
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-0">
@@ -73,7 +73,7 @@
                     <div>
                         <label for="titulo"
                             class="mb-1.5 block text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
-                            Título del proyecto
+                            Título
                         </label>
                         <input id="titulo" type="text" name="titulo" required
                             placeholder="Ej: Sistema de gestión académica"

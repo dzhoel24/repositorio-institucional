@@ -1,13 +1,14 @@
 <div id="app" data-buscar-url="{{ route('admin.informes.buscar-dni') }}"></div>
 
 <x-admin.alerts />
+
 @include('admin.informes.modals.create')
 @include('admin.informes.modals.edit')
 @include('admin.informes.modals.delete')
 
-<x-admin.title titulo="DIRECTORIO PROYECTOS"
-    subtitulo="Consulta, registra y administra los proyectos almacenados en el sistema." :table="$informes"
-    singular="proyecto" plural="proyectos" badgeColor="blue" />
+<x-admin.title titulo="DIRECTORIO INFORMES"
+    subtitulo="Consulta, registra y administra los informes almacenados en el sistema." :table="$informes"
+    singular="informe" plural="informes" badgeColor="blue" />
 
 <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div class="w-full sm:flex-1">
@@ -17,7 +18,7 @@
                            shadow-sm transition-all duration-200 hover:bg-slate-900 hover:shadow-md active:scale-95
                            dark:bg-indigo-600 dark:hover:bg-indigo-700">
                 <x-heroicon-s-plus class="h-4 w-4" />
-                Nuevo Proyecto
+                Nuevo Informe
             </button>
         </x-admin.search>
     </div>
@@ -31,7 +32,7 @@
                 <tr
                     class="border-b border-slate-200 bg-slate-50/80 text-xs font-semibold uppercase tracking-wide text-slate-500 
                            dark:border-slate-700/50 dark:bg-slate-800/50 dark:text-slate-400">
-                    <th class="w-[30%] px-5 py-4 text-left">Detalles del Proyecto</th>
+                    <th class="w-[30%] px-5 py-4 text-left">Detalles del Informe</th>
                     <th class="w-[35%] px-5 py-4 text-left">Autores y Categoría</th>
                     <th class="w-[15%] px-5 py-4 text-center">Carátula</th>
                     <th class="w-[20%] px-5 py-4 text-center">Acciones</th>

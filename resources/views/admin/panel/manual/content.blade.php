@@ -1,12 +1,12 @@
 @php
     $sections = [
         [
-            'title' => 'Gestión de Proyectos',
+            'title' => 'Gestión de Informes',
             'desc' => 'Administración de informes y expedientes registrados en la plataforma institucional.',
             'icon' => 'heroicon-s-folder-plus',
             'color' => 'indigo',
             'items' => [
-                'Registro de nuevos proyectos y metadatos técnicos.',
+                'Registro de nuevos informes y metadatos técnicos.',
                 'Actualización dinámica de información y estados.',
                 'Depuración de registros y gestión de vigencia.'
             ]

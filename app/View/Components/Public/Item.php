@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Public;
 
 use Illuminate\View\Component;
 
-class item extends Component
+class Item extends Component
 {
     public $codigo;
     public $pdf;

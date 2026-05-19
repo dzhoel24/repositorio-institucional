@@ -18,6 +18,7 @@ Breadcrumbs::for('repositorio.index', function (BreadcrumbTrail $trail, $tipo) {
     $titulos = [
         'institucional' => 'Repositorio Institucional',
         'investigacion' => 'Proyectos de Investigación',
+        'titulacion' => 'Proyectos de Titulación',
         'modulo' => 'Módulos Educativos',
         'feria' => 'Feria de Proyectos',
     ];

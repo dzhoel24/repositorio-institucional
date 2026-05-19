@@ -16,29 +16,6 @@
         body {
             font-family: 'Nunito', sans-serif;
         }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 transparent;
-        }
     </style>
 </head>
 

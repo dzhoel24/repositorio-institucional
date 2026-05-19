@@ -77,6 +77,12 @@
                             ],
                             [
                                 'route' => 'repositorio.index',
+                                'params' => ['tipo' => 'titulacion'],
+                                'title' => 'Proyectos de Titulación',
+                                'icon' => 'user-graduate'
+                            ],
+                            [
+                                'route' => 'repositorio.index',
                                 'params' => ['tipo' => 'feria'],
                                 'title' => 'Ferias Tecnológicas',
                                 'icon' => 'sparkles'
@@ -103,6 +109,8 @@
                                         <x-heroicon-s-beaker class="w-32 h-32" />
                                     @elseif($link['icon'] == 'academic-cap')
                                         <x-heroicon-s-academic-cap class="w-32 h-32" />
+                                    @elseif($link['icon'] == 'user-graduate')
+                                        <x-heroicon-s-user-group class="w-32 h-32" />
                                     @elseif($link['icon'] == 'sparkles')
                                         <x-heroicon-s-sparkles class="w-32 h-32" />
                                     @else
@@ -110,7 +118,6 @@
                                     @endif
                                 </div>
 
-                                {{-- Línea lateral --}}
                                 <div
                                     class="absolute left-0 top-0 bottom-0 w-1.5 bg-sky-600 rounded-full scale-y-75 group-hover:scale-y-100 transition-transform duration-500">
                                 </div>
@@ -141,5 +148,4 @@
             </div>
         </div>
     </div>
-
 </x-public.app-main>

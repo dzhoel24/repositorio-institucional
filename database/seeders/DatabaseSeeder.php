@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,13 +14,12 @@ class DatabaseSeeder extends Seeder
 
         Storage::disk('public')->makeDirectory('pdfs');
         Storage::disk('public')->makeDirectory('caratulas');
-        
+
         $this->call([
             CarreraSeeder::class,
             TipoInformeSeeder::class,
             AutorSeeder::class,
             InformeSeeder::class,
-            AutorInformeSeeder::class,
             UserSeeder::class,
         ]);
     }

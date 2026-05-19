@@ -14,8 +14,9 @@ class RepositorioController extends Controller
 {
     private array $tipos = [
         'institucional' => null,
-        'investigacion' => 3,
         'modulo'        => 1,
+        'titulacion' => 2,
+        'investigacion' => 3,
         'feria'         => 4,
     ];
 
@@ -34,6 +35,11 @@ class RepositorioController extends Controller
             'titulo'      => 'Módulos Educativos',
             'descripcion' => 'Material educativo y módulos de aprendizaje',
             'color'       => 'purple',
+        ],
+        'titulacion' => [
+            'titulo'      => 'Proyectos de Titulación',
+            'descripcion' => 'Trabajos de titulación y tesis',
+            'color'       => 'indigo',
         ],
         'feria' => [
             'titulo'      => 'Feria de Proyectos',

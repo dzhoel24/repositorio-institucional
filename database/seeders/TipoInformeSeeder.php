@@ -12,9 +12,9 @@ class TipoInformeSeeder extends Seeder
     {
         $tipos = [
             ['nombre' => 'Modular'],
-            ['nombre' => 'Proyecto de Titulacion'],
-            ['nombre' => 'Proyecto de Investigacion'],
-            ['nombre' => 'Proyecto de Feria Tecnologica'],
+            ['nombre' => 'Titulacion'],
+            ['nombre' => 'Investigacion'],
+            ['nombre' => 'Feria Tecnologica'],
         ];
 
         foreach ($tipos as $tipo) {

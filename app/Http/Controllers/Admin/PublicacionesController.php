@@ -50,14 +50,14 @@ class PublicacionesController extends Controller
         if ($informe->estado === 'Publicado') {
             $informe->estado = 'No Publicado';
             $informe->acceso = 'Restringido';
-            $message = 'El proyecto ha sido retirado correctamente.';
+            $message = 'El informe ha sido retirado correctamente.';
         } else {
             $request->validate([
                 'acceso' => 'required|in:Publico,Restringido',
             ]);
             $informe->estado = 'Publicado';
             $informe->acceso = $request->acceso;
-            $message = '¡El proyecto ha sido publicado exitosamente!';
+            $message = '¡El informe ha sido publicado exitosamente!';
         }
 
         $informe->save();

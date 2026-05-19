@@ -2,7 +2,7 @@
     $cards = [
         [
             'route' => 'admin.informes.index',
-            'title' => 'Gestión de Proyectos',
+            'title' => 'Gestión de Informes',
             'desc' => 'Administración técnica de informes y proyectos registrados en el sistema.',
             'icon' => 'folder',
             'color' => 'indigo'

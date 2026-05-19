@@ -94,7 +94,7 @@
                         <x-heroicon-s-folder-open
                             class="drop-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500 dark:text-slate-500 dark:group-hover:text-sky-400"
                             aria-hidden="true" />
-                        <span class="drop-text flex-1 whitespace-nowrap text-left text-sm font-medium">Proyectos</span>
+                        <span class="drop-text flex-1 whitespace-nowrap text-left text-sm font-medium">Informes</span>
                         <x-heroicon-s-chevron-right id="arr-proyectos"
                             class="drop-arrow h-3.5 w-3.5 text-slate-400 transition-transform dark:text-slate-600"
                             aria-hidden="true" />
@@ -108,7 +108,7 @@
                             <span
                                 class="h-1 w-1 shrink-0 rounded-full bg-slate-300 transition-colors group-hover:bg-sky-500 dark:bg-slate-600 dark:group-hover:bg-sky-400"
                                 aria-hidden="true"></span>
-                            <span class="sub-text whitespace-nowrap">Ver todos los proyectos</span>
+                            <span class="sub-text whitespace-nowrap">Ver todos los informes</span>
                         </a>
                     </div>
                 </div>

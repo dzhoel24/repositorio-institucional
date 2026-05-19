@@ -16,12 +16,11 @@ Route::get('/buscar', [RepositorioController::class, 'globalSearch'])->name('glo
 Route::prefix('repositorio')->name('repositorio.')->group(function () {
     Route::get('/{tipo}', [RepositorioController::class, 'index'])
         ->name('index')
-        ->where('tipo', 'institucional|investigacion|modulo|feria');
+        ->where('tipo', 'institucional|investigacion|titulacion|modulo|feria');
 
-    // 👈 Ruta modificada: añadido parámetro opcional 'origen'
     Route::get('/{tipo}/{id}/{origen?}', [RepositorioController::class, 'show'])
         ->name('show')
-        ->where('tipo', 'institucional|investigacion|modulo|feria')
+        ->where('tipo', 'institucional|investigacion|titulacion|modulo|feria')
         ->where('id', '[0-9]+')
         ->where('origen', 'autor|fecha|titulo|carrera');
 

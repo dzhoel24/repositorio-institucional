@@ -84,10 +84,10 @@ class InformeController extends Controller
 
             DB::commit();
 
-            return htmxRedirect(route('admin.informes.index'), '¡Proyecto añadido exitosamente!');
+            return htmxRedirect(route('admin.informes.index'), '¡Informe añadido exitosamente!');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Ocurrió un error al guardar el proyecto.')->withInput();
+            return back()->with('error', 'Ocurrió un error al guardar el informe.')->withInput();
         }
     }
 
@@ -135,10 +135,10 @@ class InformeController extends Controller
 
             DB::commit();
 
-            return htmxRedirect(route('admin.informes.index'), '¡Proyecto actualizado exitosamente!');
+            return htmxRedirect(route('admin.informes.index'), 'Informe actualizado exitosamente!');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Ocurrió un error al actualizar el proyecto.')->withInput();
+            return back()->with('error', 'Ocurrió un error al actualizar el informe.')->withInput();
         }
     }
 
@@ -153,9 +153,9 @@ class InformeController extends Controller
             $informe->autores()->detach();
             $informe->delete();
 
-            return htmxRedirect(route('admin.informes.index'), '¡Proyecto eliminado exitosamente!');
+            return htmxRedirect(route('admin.informes.index'), 'Informe eliminado exitosamente!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Ocurrió un error al eliminar el proyecto.');
+            return back()->with('error', 'Ocurrió un error al eliminar el informe.');
         }
     }
 
