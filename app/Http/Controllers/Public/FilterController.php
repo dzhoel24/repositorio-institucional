@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Autor;
+use App\Models\Carrera;
 use App\Models\Informe;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class FilterController extends Controller
 {
@@ -18,20 +20,19 @@ class FilterController extends Controller
     private function publishedAutoresQuery()
     {
         return Autor::withCount([
-            'informes' => fn($q) =>
-            $q->where('estado', 'Publicado')
+            'informes' => fn($q) => $q->where('estado', 'Publicado')
         ]);
     }
 
     private function generateYearRanges(): array
     {
         $currentYear = date('Y');
-        $ranges      = [];
-        $startYear   = 2000;
+        $ranges = [];
+        $startYear = 2000;
 
         while ($startYear <= $currentYear) {
-            $endYear   = min($startYear + 4, $currentYear);
-            $ranges[]  = "{$startYear}-{$endYear}";
+            $endYear = min($startYear + 4, $currentYear);
+            $ranges[] = "{$startYear}-{$endYear}";
             $startYear += 5;
         }
 
@@ -42,6 +43,7 @@ class FilterController extends Controller
     {
         return match ($informe->tipo_informe_id) {
             1 => 'modulo',
+            2 => 'titulacion',
             3 => 'investigacion',
             4 => 'feria',
             default => 'institucional'
@@ -54,30 +56,42 @@ class FilterController extends Controller
             ->having('informes_count', '>', 0)
             ->when(
                 $request->filled('search'),
-                fn($q) =>
-                $q->where(function ($q) use ($request) {
+                fn($q) => $q->where(function ($q) use ($request) {
                     $q->where('nombres', 'LIKE', "%{$request->search}%")
                         ->orWhere('apellidos', 'LIKE', "%{$request->search}%");
                 })
             )
             ->when(
                 $request->filled('starts_with'),
-                fn($q) =>
-                $q->where('apellidos', 'LIKE', "{$request->starts_with}%")
+                fn($q) => $q->where('apellidos', 'LIKE', "{$request->starts_with}%")
             )
             ->orderBy('apellidos')
-            ->paginate($request->input('items_per_page', 20))
+            ->paginate($request->input('items_per_page', 10))
             ->appends($request->query());
 
         return view('public.filtros.autores', compact('autores'));
     }
 
-    public function showInformes(Autor $autor): View
+    public function showInformes(Request $request, Autor $autor): View
     {
-        $informes = $autor->informes()
-            ->with('autores')
-            ->where('estado', 'Publicado')
-            ->paginate(10);
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'desc');
+        $itemsPerPage = $request->input('items_per_page', 10);
+
+        $query = $autor->informes()
+            ->with(['autores', 'carrera', 'tipoInforme'])
+            ->where('estado', 'Publicado');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('titulo', 'LIKE', "%{$search}%")
+                    ->orWhere('resumen', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $informes = $query->orderBy('created_at', $sort === 'desc' ? 'desc' : 'asc')
+            ->paginate($itemsPerPage)
+            ->appends($request->query());
 
         return view('public.filtros.show-informe-autor', compact('autor', 'informes'));
     }
@@ -115,8 +129,8 @@ class FilterController extends Controller
 
         return view('public.filtros.fecha', [
             'publi_fecha' => $publi_fecha,
-            'contador'    => $publi_fecha->total(),
-            'yearRanges'  => $this->generateYearRanges(),
+            'contador' => $publi_fecha->total(),
+            'yearRanges' => $this->generateYearRanges(),
         ]);
     }
 
@@ -132,8 +146,8 @@ class FilterController extends Controller
 
         return view('public.filtros.fecha', [
             'publi_fecha' => $publi_fecha,
-            'contador'    => $publi_fecha->total(),
-            'yearRanges'  => $this->generateYearRanges(),
+            'contador' => $publi_fecha->total(),
+            'yearRanges' => $this->generateYearRanges(),
         ]);
     }
 
@@ -155,13 +169,11 @@ class FilterController extends Controller
         $informes = $this->publishedInformesQuery()
             ->when(
                 $request->filled('search'),
-                fn($q) =>
-                $q->where('titulo', 'LIKE', "%{$request->search}%")
+                fn($q) => $q->where('titulo', 'LIKE', "%{$request->search}%")
             )
             ->when(
                 $request->filled('starts_with'),
-                fn($q) =>
-                $q->where('titulo', 'LIKE', "{$request->starts_with}%")
+                fn($q) => $q->where('titulo', 'LIKE', "{$request->starts_with}%")
             )
             ->orderBy('titulo')
             ->paginate($request->input('items_per_page', 10))
@@ -180,6 +192,49 @@ class FilterController extends Controller
             'tipo' => $tipo,
             'origen' => 'titulo',
             'origenData' => null
+        ]);
+    }
+
+    public function carrerasList(): View
+    {
+        $carreras = Carrera::withCount(['informes' => function ($query) {
+            $query->where('estado', 'Publicado');
+        }])->get();
+
+        return view('public.filtros.carreras', compact('carreras'));
+    }
+
+    public function carrerasShow(Request $request, $carrera): View
+    {
+        $carreraModel = Carrera::findOrFail($carrera);
+
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'desc');
+        $itemsPerPage = $request->input('items_per_page', 10);
+
+        $query = Informe::with(['autores', 'carrera', 'tipoInforme'])
+            ->where('estado', 'Publicado')
+            ->where('carrera_id', $carrera);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('titulo', 'LIKE', "%{$search}%")
+                    ->orWhere('resumen', 'LIKE', "%{$search}%")
+                    ->orWhereHas('autores', function ($q) use ($search) {
+                        $q->where('nombres', 'LIKE', "%{$search}%")
+                            ->orWhere('apellidos', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
+
+        $informes = $query->orderBy('created_at', $sort === 'desc' ? 'desc' : 'asc')
+            ->paginate($itemsPerPage)
+            ->appends($request->query());
+
+        return redirect()->route('repositorio.index', [
+            'tipo' => 'institucional',
+            'origen' => 'carrera',
+            'carrera_id' => $carrera
         ]);
     }
 }

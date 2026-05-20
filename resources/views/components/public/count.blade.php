@@ -4,10 +4,12 @@
             $start = ($paginator->currentPage() - 1) * $paginator->perPage() + 1;
             $end = min($contador, $paginator->currentPage() * $paginator->perPage());
         @endphp
-        <p class="text-black text-sm">
-            Mostrando resultados {{ $start }}-{{ $end }} de {{ $contador }}
+        <p class="text-sm text-gray-600">
+            Mostrando <span class="font-medium ">{{ $start }}</span>
+            al <span class="font-medium ">{{ $end }}</span>
+            de <span class="font-medium ">{{ $contador }}</span> resultados
         </p>
     @else
-        <p class="text-black text-sm">No se encontraron resultados.</p>
+        <p class="text-sm text-gray-400">No hay resultados disponibles</p>
     @endif
 </div>

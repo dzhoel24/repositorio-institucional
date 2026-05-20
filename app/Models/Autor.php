@@ -30,6 +30,10 @@ class Autor extends Model
             'informe_id'
         );
     }
+    public function getNombreCompletoAttribute()
+    {
+        return trim($this->nombres . ' ' . $this->apellidos);
+    }
 
     public function scopeFilter($query, $request)
     {

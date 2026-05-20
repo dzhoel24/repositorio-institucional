@@ -23,7 +23,7 @@ class Filter extends Component
         }])
             ->having('informes_count', '>', 0)
             ->orderByDesc('informes_count')
-            ->take(10)
+            ->limit(10)
             ->get()
             ->map(fn($autor) => [
                 'dni' => $autor->dni,

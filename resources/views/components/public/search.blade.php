@@ -1,4 +1,3 @@
-{{-- resources/views/components/search.blade.php --}}
 @props([
     'route' => null,
     'params' => [],
@@ -8,72 +7,66 @@
 ])
 
 @php
-    $actionUrl = $route ? route($route, $params) : url()->current();
+    $currentParams = request()->except([$param, 'page']);
+    $allParams = array_merge($currentParams, $params);
+    $actionUrl = $route ? route($route, $allParams) : url()->current();
+    $hasValue = request()->filled($param);
 @endphp
 
-<form method="GET" action="{{ $actionUrl }}" id="searchForm" class="max-w-2xl w-full group">
+<form method="GET" action="{{ $actionUrl }}" id="searchForm" class="w-full">
+    @foreach ($allParams as $key => $value)
+        @if (is_array($value))
+            @foreach ($value as $v)
+                <input type="hidden" name="{{ $key }}[]" value="{{ $v }}">
+            @endforeach
+        @elseif($key !== $param)
+            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+        @endif
+    @endforeach
+
     <div class="relative flex items-center">
-        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-            <svg class="w-5 h-5 text-slate-400 dark:text-gray-500 transition-colors group-focus-within:text-indigo-500"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 md:pl-4 pointer-events-none">
+            <x-heroicon-s-magnifying-glass class="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
         </div>
 
-        <input type="text" id="searchInput" name="{{ $param }}" value="{{ request($param) }}"
-            class="w-full p-3.5 pl-12 pr-36 text-sm font-medium bg-white dark:bg-gray-900 text-slate-800 dark:text-slate-100 rounded-lg border border-slate-200 dark:border-gray-800 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all duration-150 shadow-sm"
-            placeholder="{{ $descrip }}" autocomplete="off">
+        <input type="text" name="{{ $param }}" id="searchInput" value="{{ request($param) }}"
+            class="w-full py-2.5 md:py-3 pl-9 md:pl-12 pr-20 md:pr-36 text-sm bg-white border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+            placeholder="{{ $descrip }}" autocomplete="off" aria-label="Búsqueda">
 
         <button type="button" id="clearSearchBtn"
-            class="absolute right-24 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded transition-colors hidden focus:outline-none"
-            title="Limpiar búsqueda">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            class="absolute right-20 p-1 text-gray-400 hover:text-gray-600 rounded transition-colors {{ $hasValue ? '' : 'hidden' }}"
+            aria-label="Limpiar búsqueda">
+            <x-heroicon-s-x-mark class="w-4 h-4" />
         </button>
 
         <button type="submit"
-            class="absolute right-1.5 px-5 py-2 text-xs font-bold uppercase tracking-wider text-white bg-indigo-600 dark:bg-indigo-500 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 active:scale-98 shadow-sm">
+            class="absolute right-1 px-3 md:px-4 py-1.5 text-xs md:text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1">
             {{ $text }}
         </button>
     </div>
 </form>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const input = document.getElementById("searchInput");
-        const clearBtn = document.getElementById("clearSearchBtn");
-        const form = document.getElementById("searchForm");
+    (function() {
+        const input = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearSearchBtn');
+        const form = document.getElementById('searchForm');
 
-        let hasSearchActive = input.value.trim().length > 0;
+        if (!input || !clearBtn || !form) return;
 
-        function toggleClearButton() {
-            if (input.value.trim().length > 0) {
-                clearBtn.classList.remove("hidden");
-            } else {
-                clearBtn.classList.add("hidden");
-            }
-        }
+        const toggleClearButton = () => {
+            const hasValue = input.value.trim().length > 0;
+            clearBtn.classList.toggle('hidden', !hasValue);
+        };
+
+        input.addEventListener('input', toggleClearButton);
+
+        clearBtn.addEventListener('click', () => {
+            input.value = '';
+            toggleClearButton();
+            form.submit();
+        });
 
         toggleClearButton();
-
-        input.addEventListener("input", function() {
-            toggleClearButton();
-            if (input.value.trim().length === 0 && hasSearchActive) {
-                hasSearchActive = false;
-                form.submit();
-            }
-        });
-
-        clearBtn.addEventListener("click", function() {
-            input.value = "";
-            toggleClearButton();
-            if (hasSearchActive) {
-                form.submit();
-            } else {
-                input.focus();
-            }
-        });
-    });
+    })();
 </script>

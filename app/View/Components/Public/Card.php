@@ -29,7 +29,8 @@ class Card extends Component
         $parametro = 'institucional',
         $action = 'show',
         $origen = null,
-        $origenId = null
+        $origenId = null,
+        $url = null
     ) {
         $this->codigo = $codigo;
         $this->image = $image;
@@ -42,12 +43,15 @@ class Card extends Component
         $this->origen = $origen;
         $this->origenId = $origenId;
 
-        // Generar URL según la acción y el origen
-        $this->url = match ($action) {
-            'showInformeAutores' => route('public.filtros.autores.show', ['id' => $codigo]),
-            'showFechaP' => route('public.filtros.fechas.show', ['id' => $codigo]),
-            default => $this->buildUrl($parametro, $codigo, $origen, $origenId),
-        };
+        if ($url) {
+            $this->url = $url;
+        } else {
+            $this->url = match ($action) {
+                'showInformeAutores' => route('public.filtros.autores.show', ['id' => $codigo]),
+                'showFechaP' => route('public.filtros.fechas.show', ['id' => $codigo]),
+                default => $this->buildUrl($parametro, $codigo, $origen, $origenId),
+            };
+        }
     }
 
     private function buildUrl($parametro, $codigo, $origen, $origenId): string
@@ -56,9 +60,8 @@ class Card extends Component
 
         if ($origen && $origenId) {
             $params['origen'] = $origen;
-            $params[$origen . '_id'] = $origenId;
+            $params['origenId'] = $origenId;
         } elseif ($origen) {
-            // 👈 Para orígenes como 'fecha' o 'titulo' que no tienen ID
             $params['origen'] = $origen;
         }
 
