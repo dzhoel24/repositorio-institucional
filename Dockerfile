@@ -11,9 +11,18 @@ ENV REAL_IP_HEADER 1
 ENV APP_ENV production
 ENV APP_DEBUG false
 
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# Instalar Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Hacer ejecutable el script
-RUN chmod +x /var/www/html/start.sh
+# Instalar dependencias
+RUN composer install --no-dev --optimize-autoloader
 
-CMD ["/start.sh"]
+# Cachear Laravel
+RUN php artisan config:cache
+RUN php artisan route:cache
+
+# Permisos
+RUN chown -R www-data:www-data /var/www/html/storage
+RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
+
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
