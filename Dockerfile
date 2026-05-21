@@ -13,13 +13,7 @@ ENV APP_DEBUG false
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Instalar Composer y dependencias
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install --no-dev --optimize-autoloader
+# Hacer ejecutable el script
+RUN chmod +x /var/www/html/start.sh
 
-# Cachear Laravel
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
-
-EXPOSE 80
+CMD ["/start.sh"]
