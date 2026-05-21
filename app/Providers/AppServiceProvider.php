@@ -16,9 +16,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (str_contains(request()->getHost(), 'ngrok')) {
-            URL::forceScheme('https');
+        if (config('app.env') === 'production') {
+            \URL::forceScheme('https');
         }
-        Model::preventLazyLoading(! app()->isProduction());
     }
 }
