@@ -23,6 +23,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Instalar dependencias de PHP
 RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
 
+# ✅ Limpiar configuraciones antiguas
+RUN cd /var/www/html && php artisan config:clear
+RUN cd /var/www/html && php artisan route:clear
+
+# ✅ Generar APP_KEY (importante!)
+RUN cd /var/www/html && php artisan key:generate --force
+
 # Instalar dependencias de Node y compilar assets
 RUN cd /var/www/html && npm install && npm run build
 
@@ -30,9 +37,10 @@ RUN cd /var/www/html && npm install && npm run build
 RUN chmod -R 777 /var/www/html/storage
 RUN chmod -R 777 /var/www/html/bootstrap/cache
 
-# Cachear Laravel
+# ✅ Cachear Laravel (después de generar la key)
 RUN cd /var/www/html && php artisan config:cache
 RUN cd /var/www/html && php artisan route:cache
+RUN cd /var/www/html && php artisan view:cache
 
 EXPOSE 80
 
