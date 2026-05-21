@@ -1,25 +1,40 @@
 FROM richarvey/nginx-php-fpm:latest
 
-COPY . /var/www/html/
+COPY . .
 
-WORKDIR /var/www/html
+ENV SKIP_COMPOSER 0
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
 
-RUN apk add --no-cache nodejs npm
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
 
-RUN npm install && npm run build
-RUN composer install --no-dev --optimize-autoloader
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Permisos de storage
-RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Instalar Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
-ENV SKIP_COMPOSER=1
-ENV WEBROOT=/var/www/html/public
-ENV PHP_ERRORS_STDERR=1
-ENV RUN_SCRIPTS=1
-ENV REAL_IP_HEADER=1
-ENV APP_ENV=production
-ENV APP_DEBUG=false
-ENV COMPOSER_ALLOW_SUPERUSER=1
+# Instalar Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN chmod +x /var/www/html/scripts/00-init.sh
+# Instalar dependencias de PHP
+RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
+
+# Instalar dependencias de Node y compilar assets
+RUN cd /var/www/html && npm install && npm run build
+
+# Permisos
+RUN chmod -R 777 /var/www/html/storage
+RUN chmod -R 777 /var/www/html/bootstrap/cache
+
+# Cachear Laravel
+RUN cd /var/www/html && php artisan config:cache
+RUN cd /var/www/html && php artisan route:cache
+
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
