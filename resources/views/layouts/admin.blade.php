@@ -262,7 +262,7 @@
                                 class="flex items-center gap-3 border-b border-slate-100 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/50">
                                 <div
                                     class="h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-sky-200 dark:ring-sky-500/30">
-                                    <img src="{{ asset('storage/profile/' . $photo) }}" alt=""
+                                    <img src="{{ asset('profile/' . $photo) }}" alt=""
                                         aria-hidden="true" class="h-full w-full object-cover"
                                         onerror="this.src='{{ asset('images/default-avatar.png') }}'" />
                                 </div>

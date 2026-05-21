@@ -13,7 +13,7 @@
                         dark:border-slate-700 dark:bg-slate-800/50 md:border-b-0 md:border-r">
 
                 <div class="group relative">
-                    <img src="{{ $user->profile_photo_url }}" onerror="this.src='{{ asset('images/default.png') }}'"
+                    <img src="{{asset('images/default.png') $user->profile_photo_url }}" onerror="this.src='{{ asset('images/default.png') }}'"
                         alt="Avatar de {{ $user->username }}"
                         class="h-28 w-28 rounded-full border-4 border-white object-cover shadow-md transition-all duration-300 
                                 group-hover:scale-105 group-hover:shadow-lg dark:border-slate-700">
