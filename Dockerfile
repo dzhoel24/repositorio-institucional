@@ -23,10 +23,15 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Instalar dependencias
 RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
 
-# ✅ Generar APP_KEY (sin .env)
+# ✅ Crear archivo .env básico para que key:generate funcione
+RUN echo "APP_ENV=production" > /var/www/html/.env
+RUN echo "APP_DEBUG=false" >> /var/www/html/.env
+RUN echo "LOG_CHANNEL=stderr" >> /var/www/html/.env
+
+# ✅ Generar APP_KEY
 RUN cd /var/www/html && php artisan key:generate --force
 
-# ✅ Cachear Laravel (sin .env, usa las variables de entorno de Render)
+# ✅ Cachear Laravel
 RUN cd /var/www/html && php artisan config:cache
 RUN cd /var/www/html && php artisan route:cache
 RUN cd /var/www/html && php artisan view:cache
