@@ -1,3 +1,4 @@
+@props(['breadcrumbs' => []])
 <nav class="flex px-4 sm:px-5 w-full py-2.5 bg-black/90 backdrop-blur-sm border-b border-white/10 shadow-lg"
     aria-label="Breadcrumb">
     <ol class="inline-flex items-center flex-wrap gap-1 md:gap-2">
