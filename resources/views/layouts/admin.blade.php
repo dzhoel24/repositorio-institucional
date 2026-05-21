@@ -241,7 +241,7 @@
                             @php $photo = Auth::user()->profile_photo ?? 'default.png'; @endphp
                             <div
                                 class="h-8 w-8 shrink-0 overflow-hidden rounded-full ring-2 ring-sky-200 dark:ring-sky-500/30">
-                                <img src="{{ asset('storage/profile/' . $photo) }}"
+                                <img src="{{ asset('profile/' . $photo) }}"
                                     alt="Foto de perfil de {{ Auth::user()->full_name }}"
                                     class="h-full w-full object-cover"
                                     onerror="this.src='{{ asset('images/default-avatar.png') }}'" />

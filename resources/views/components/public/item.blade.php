@@ -5,7 +5,7 @@
 
             <div class="relative group rounded-xl overflow-hidden bg-slate-50 border border-slate-200 shadow-sm">
                 <img class="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-105"
-                    src="{{ asset('storage/caratulas/' . $image) }}" alt="{{ $title }}" loading="lazy"
+                    src="{{ asset('caratulas/' . $image) }}" alt="{{ $title }}" loading="lazy"
                     onerror="this.src='{{ asset('images/default-cover.jpg') }}'">
 
                 <div
@@ -38,7 +38,7 @@
 
             <div class="space-y-2.5 sm:space-y-3">
                 @if ($acceso === 'Publico' && $pdf)
-                    <a href="{{ asset('storage/pdfs/' . $pdf) }}" download
+                    <a href="{{ asset('pdfs/' . $pdf) }}" download
                         class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white rounded-lg font-semibold text-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-sm">
                         <x-heroicon-s-arrow-down-tray class="w-4 h-4" />
                         Descargar PDF

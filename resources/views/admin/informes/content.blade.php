@@ -94,7 +94,7 @@
 
                         {{-- Carátula --}}
                         <td class="px-5 py-4 text-center align-middle">
-                            <img src="{{ asset('storage/caratulas/' . $info->ruta_caratula) }}"
+                            <img src="{{ asset('caratulas/' . $info->ruta_caratula) }}"
                                 alt="Carátula de {{ $info->titulo }}"
                                 class="h-14 w-14 rounded-lg object-cover shadow-sm mx-auto cursor-pointer hover:scale-105 transition-transform duration-200">
                         </td>

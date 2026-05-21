@@ -9,12 +9,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        Storage::disk('public')->deleteDirectory('pdfs');
-        Storage::disk('public')->deleteDirectory('caratulas');
-
-        Storage::disk('public')->makeDirectory('pdfs');
-        Storage::disk('public')->makeDirectory('caratulas');
-
         $this->call([
             CarreraSeeder::class,
             TipoInformeSeeder::class,

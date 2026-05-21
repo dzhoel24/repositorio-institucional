@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Informe;
 use App\Models\Autor;
+use Illuminate\Support\Facades\File;
 
 class InformeFactory extends Factory
 {
@@ -20,15 +21,17 @@ class InformeFactory extends Factory
         $nombrePdf = Str::uuid() . '.pdf';
         $nombreCaratula = Str::uuid() . '.jpg';
 
-        Storage::disk('public')->makeDirectory('pdfs');
-        Storage::disk('public')->makeDirectory('caratulas');
+        $publicPath = public_path();
 
-        if (Storage::disk('public')->exists('default.pdf')) {
-            Storage::disk('public')->copy('default.pdf', 'pdfs/' . $nombrePdf);
+        File::ensureDirectoryExists(storage_path('app/public/pdfs'));
+        File::ensureDirectoryExists(storage_path('app/public/caratulas'));
+
+        if (File::exists($publicPath . '/default.pdf')) {
+            File::copy($publicPath . '/default.pdf', storage_path('app/public/pdfs/' . $nombrePdf));
         }
 
-        if (Storage::disk('public')->exists('default.jpg')) {
-            Storage::disk('public')->copy('default.jpg', 'caratulas/' . $nombreCaratula);
+        if (File::exists($publicPath . '/default.jpg')) {
+            File::copy($publicPath . '/default.jpg', storage_path('app/public/caratulas/' . $nombreCaratula));
         }
 
         $currentYear = Carbon::now()->year;

@@ -207,7 +207,7 @@
                         </p>
                         <div class="flex min-h-[160px] items-center justify-center p-4">
                             <img id="imgPreview{{ $info->id }}"
-                                src="{{ $info->ruta_caratula ? asset('storage/caratulas/' . $info->ruta_caratula) : '' }}"
+                                src="{{ $info->ruta_caratula ? asset('caratulas/' . $info->ruta_caratula) : '' }}"
                                 class="max-h-36 rounded-lg object-cover shadow-md {{ $info->ruta_caratula ? '' : 'hidden' }}">
                             <div id="imgPlaceholder{{ $info->id }}"
                                 class="flex flex-col items-center gap-2 text-slate-300 dark:text-slate-600 {{ $info->ruta_caratula ? 'hidden' : '' }}">

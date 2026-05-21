@@ -3,7 +3,7 @@
 
     <div class="relative overflow-hidden sm:w-44 md:w-52 shrink-0 aspect-video sm:aspect-square bg-gray-100">
         <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            src="{{ asset('storage/caratulas/' . $image) }}" alt="{{ $title }}" loading="lazy"
+            src="{{ asset('caratulas/' . $image) }}" alt="{{ $title }}" loading="lazy"
             onerror="this.src='{{ asset('images/default-cover.jpg') }}'">
 
         <div class="absolute top-2 left-2 sm:top-3 sm:left-3">
