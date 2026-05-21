@@ -22,6 +22,8 @@ class Breadcrumb extends Component
 
     public function render()
     {
-        return view('components.public.breadcrumb');
+        return view('components.public.breadcrumb', [
+            'breadcrumbs' => $this->breadcrumbs,
+        ]);
     }
 }
