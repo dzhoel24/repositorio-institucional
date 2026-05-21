@@ -150,5 +150,4 @@
 
         </main>
     </div>
-
 </x-public.app-main>

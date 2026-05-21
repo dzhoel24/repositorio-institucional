@@ -26,12 +26,10 @@
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
 }
 
-/* ===== SIDEBAR =====
-   El posicionamiento lo maneja el flex del HTML.
-   El CSS solo define ancho, transición y scroll. */
+/* ===== SIDEBAR ===== */
 .sidebar-wrapper {
     width: var(--sidebar-width);
     transition: width var(--transition);
@@ -39,26 +37,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Scrollbar personalizado */
-.sidebar-wrapper::-webkit-scrollbar {
-    width: 4px;
-}
-
-.sidebar-wrapper::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.sidebar-wrapper::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 4px;
-}
-
-/* ===== COLAPSADO ===== */
-.sidebar-collapsed .sidebar-wrapper {
-    width: var(--sidebar-collapsed-width);
-}
-
-/* Ocultar textos con transición suave */
 .sidebar-text,
 .nav-text,
 .drop-text,
@@ -76,7 +54,6 @@ body {
     overflow: hidden;
 }
 
-/* Ocultar elementos sin transición */
 .sidebar-collapsed .section-label,
 .sidebar-collapsed .sub-menu,
 .sidebar-collapsed .drop-arrow {
@@ -88,9 +65,6 @@ body {
     padding: 20px 0;
 }
 
-.sidebar-collapsed .nav-item,
-.sidebar-collapsed .dropdown-trigger {}
-
 .sidebar-collapsed .nav-icon,
 .sidebar-collapsed .drop-icon {
     margin: 0;
@@ -100,7 +74,6 @@ body {
     transform: rotate(180deg);
 }
 
-/* ===== TOOLTIP EN MODO COLAPSADO (CSS puro) ===== */
 .sidebar-collapsed [data-tooltip] {
     position: relative;
 }
@@ -153,7 +126,6 @@ body {
     background: var(--bg-hover);
 }
 
-/* Estado activo con fondo complementario */
 .nav-item.active,
 .dropdown-trigger.parent-active {
     background: var(--bg-hover);
@@ -197,7 +169,9 @@ body {
     text-decoration: none;
     color: var(--text-muted);
     border-radius: 8px;
-    transition: background 0.15s, color 0.15s;
+    transition:
+        background 0.15s,
+        color 0.15s;
     position: relative;
 }
 
@@ -226,7 +200,12 @@ body {
 /* ===== SEPARADOR ===== */
 .sidebar-divider {
     height: 1px;
-    background: linear-gradient(to right, transparent, var(--border), transparent);
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--border),
+        transparent
+    );
     margin: 0 12px;
 }
 
@@ -270,7 +249,10 @@ body {
     opacity: 0;
     visibility: hidden;
     transform: translateY(-8px);
-    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease,
+        transform 0.2s ease;
     pointer-events: none;
 }
 
@@ -352,7 +334,6 @@ body {
         display: none;
     }
 
-    /* En móvil el colapso NO aplica — siempre expandido */
     .sidebar-collapsed .sidebar-wrapper {
         width: var(--sidebar-width) !important;
     }

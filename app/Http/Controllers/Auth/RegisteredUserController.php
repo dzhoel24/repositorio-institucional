@@ -14,46 +14,37 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-   /**
-    * Display the registration view.
-    */
-   public function create(): View
-   {
-      return view('auth.register');
-   }
+    public function create(): View
+    {
+        return view('auth.register');
+    }
 
-   /**
-    * Handle an incoming registration request.
-    *
-    * @throws \Illuminate\Validation\ValidationException
-    */
-   public function store(Request $request): RedirectResponse
-   {
-      $request->validate([
-         'name' => ['required', 'string', 'max:255'],
-         'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
-         'password' => ['required', 'confirmed', Rules\Password::defaults()],
-         'profile_photo' => ['nullable', 'image', 'max:2048'], // Validación para la imagen
-      ]);
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'profile_photo' => ['nullable', 'image', 'max:2048'],
+        ]);
 
-      // Almacenar la foto de perfil en 'storage/app/profile' y obtener el nombre original del archivo
-      $profilePhotoName = null;
-      if ($request->hasFile('profile_photo')) {
-         $profilePhotoName = $request->file('profile_photo')->getClientOriginalName(); // Obtener el nombre original del archivo
-         $request->file('profile_photo')->storeAs('profile', $profilePhotoName); // Mover el archivo al directorio
-      }
+        $profilePhotoName = null;
+        if ($request->hasFile('profile_photo')) {
+            $profilePhotoName = $request->file('profile_photo')->getClientOriginalName();
+            $request->file('profile_photo')->storeAs('profile', $profilePhotoName);
+        }
 
-      $user = User::create([
-         'name' => $request->name,
-         'username' => $request->username,
-         'password' => Hash::make($request->password),
-         'profile_photo' => $profilePhotoName, // Guardar solo el nombre original del archivo
-      ]);
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'profile_photo' => $profilePhotoName,
+        ]);
 
-      event(new Registered($user));
+        event(new Registered($user));
 
-      Auth::login($user);
+        Auth::login($user);
 
-      return redirect(route('home'));
-   }
+        return redirect(route('home'));
+    }
 }

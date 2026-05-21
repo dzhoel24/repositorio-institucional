@@ -1,7 +1,6 @@
 (function () {
     "use strict";
 
-    // Al cargar, si es móvil, forzar sidebar no colapsado
     if (window.innerWidth <= 900) {
         document.documentElement.classList.remove("sidebar-collapsed");
     }

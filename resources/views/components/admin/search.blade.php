@@ -28,7 +28,6 @@
             @endif
         </div>
 
-        {{-- Botón filtrar --}}
         <div class="flex gap-2 sm:gap-3">
             <button type="button" id="btnBuscarAdmin"
                 class="inline-flex items-center justify-center gap-2 
@@ -92,7 +91,6 @@
             }
         });
 
-        // Mejorar experiencia: limpiar error al escribir
         input.addEventListener('input', () => {
             input.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
         });

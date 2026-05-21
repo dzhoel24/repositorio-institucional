@@ -4,9 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   SCROLLBAR MODERNO - VERSIÓN MINIMALISTA
+   ============================================ */
+
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 5px;
+    height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -14,30 +18,29 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(162, 179, 202, 0.61);
-    border-radius: 9999px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-    transition: background-color 0.2s ease;
+    background: #cbd5e1;
+    border-radius: 20px;
+    transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(100, 116, 139, 0.459);
-}
-
-.dark ::-webkit-scrollbar-thumb {
-    background-color: rgba(71, 85, 105, 0.4);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(148, 163, 184, 0.5);
+    background: #94a3b8;
 }
 
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(148, 163, 184, 0.589) transparent;
+    scrollbar-color: #bbc4cf transparent;
+}
+
+/* Dark mode */
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
 }
 
 .dark * {
-    scrollbar-color: rgba(71, 85, 105, 0.5) transparent;
+    scrollbar-color: #334155 transparent;
 }

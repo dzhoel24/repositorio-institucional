@@ -22,7 +22,7 @@
             class="w-full {{ $modalSize }} max-h-[90vh] rounded-2xl bg-white shadow-2xl overflow-hidden modal-animate pointer-events-auto flex flex-col
                     dark:bg-slate-800">
 
-            {{-- HEADER con icono de editar --}}
+            {{-- HEADER --}}
             <div
                 class="flex-shrink-0 flex items-center justify-between border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-4 py-4 sm:px-6 sm:py-5
                         dark:border-slate-700 dark:from-slate-800 dark:to-slate-800">

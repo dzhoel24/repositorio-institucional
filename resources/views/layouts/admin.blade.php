@@ -29,7 +29,7 @@
 <body hx-ext="preload"
     class="bg-slate-50 text-slate-900 transition-colors duration-200 dark:bg-slate-900 dark:text-slate-100">
 
-    {{-- Overlay: solo visible en móvil al abrir sidebar --}}
+    {{-- Overlay --}}
     <div id="overlay" onclick="closeSidebar()" aria-hidden="true" class="sidebar-overlay"></div>
 
     <div class="flex h-screen overflow-hidden">

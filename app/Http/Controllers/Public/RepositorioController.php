@@ -8,7 +8,6 @@ use App\Models\Autor;
 use App\Models\Carrera;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RepositorioController extends Controller
 {
@@ -131,21 +130,5 @@ class RepositorioController extends Controller
             'origen' => $origen,
             'origenData' => $origenData,
         ]);
-    }
-
-    public function download(string $tipo, int $id): BinaryFileResponse
-    {
-        abort_unless(array_key_exists($tipo, $this->tipos), 404);
-
-        $informe = Informe::where('estado', 'Publicado')->findOrFail($id);
-
-        if ($informe->acceso === 'Restringido') {
-            abort(403, 'Este documento es de acceso restringido.');
-        }
-
-        $ruta = storage_path("app/public/pdfs/{$informe->ruta_pdf}");
-        abort_unless(file_exists($ruta), 404);
-
-        return response()->download($ruta, "{$informe->titulo}.pdf");
     }
 }

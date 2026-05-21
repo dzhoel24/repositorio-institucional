@@ -231,7 +231,7 @@ class FilterController extends Controller
             ->paginate($itemsPerPage)
             ->appends($request->query());
 
-        return redirect()->route('repositorio.index', [
+        return view('repositorio.index', [
             'tipo' => 'institucional',
             'origen' => 'carrera',
             'carrera_id' => $carrera
