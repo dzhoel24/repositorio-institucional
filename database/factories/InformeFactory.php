@@ -23,15 +23,15 @@ class InformeFactory extends Factory
 
         $publicPath = public_path();
 
-        File::ensureDirectoryExists(storage_path('app/public/pdfs'));
-        File::ensureDirectoryExists(storage_path('app/public/caratulas'));
+        File::ensureDirectoryExists(public_path('pdfs'));
+        File::ensureDirectoryExists(public_path('caratulas'));
 
         if (File::exists($publicPath . '/default.pdf')) {
-            File::copy($publicPath . '/default.pdf', storage_path('app/public/pdfs/' . $nombrePdf));
+            File::copy($publicPath . '/default.pdf', public_path('pdfs/' . $nombrePdf));
         }
 
         if (File::exists($publicPath . '/default.jpg')) {
-            File::copy($publicPath . '/default.jpg', storage_path('app/public/caratulas/' . $nombreCaratula));
+            File::copy($publicPath . '/default.jpg', public_path('caratulas/' . $nombreCaratula));
         }
 
         $currentYear = Carbon::now()->year;
