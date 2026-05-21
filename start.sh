@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 
-echo "=== INSTALANDO COMPOSER ==="
-curl -sS https://getcomposer.org/installer | php
-php composer.phar install --no-dev --optimize-autoloader
+echo "=== INICIANDO START.SH ==="
 
-echo "=== CACHEANDO LARAVEL ==="
+cd /var/www/html
+
+# Permisos
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+
+# Limpiar y cachear
+php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
-
-echo "=== MIGRACIONES ==="
+php artisan view:cache
 php artisan migrate --force
 
-echo "=== INICIANDO SERVIDOR ==="
-/usr/bin/supervisord -n -c /etc/supervisord.conf
+echo "=== INICIANDO SERVIDOR PHP ==="
+
+# Iniciar servidor PHP (fallback si nginx no funciona)
+php artisan serve --host=0.0.0.0 --port=10000
