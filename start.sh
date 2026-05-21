@@ -8,6 +8,12 @@ cd /var/www/html
 chown -R www-data:www-data storage bootstrap/cache
 chmod -R 775 storage bootstrap/cache
 
+# ✅ Verificar que el archivo de rutas existe
+ls -la routes/web.php
+
+# ✅ Mostrar rutas registradas
+php artisan route:list
+
 # Limpiar y cachear
 php artisan optimize:clear
 php artisan config:cache
@@ -17,5 +23,4 @@ php artisan migrate --force
 
 echo "=== INICIANDO SERVIDOR PHP ==="
 
-# Iniciar servidor PHP (fallback si nginx no funciona)
 php artisan serve --host=0.0.0.0 --port=10000
