@@ -1,0 +1,31 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-Dh-B6Q-6.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DtnkldYI.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/modules/form-add.js": {
+    "file": "assets/form-add-CUpbFfSt.js",
+    "name": "form-add",
+    "src": "resources/js/modules/form-add.js",
+    "isEntry": true
+  },
+  "resources/js/modules/form-edit.js": {
+    "file": "assets/form-edit-xor4zxpP.js",
+    "name": "form-edit",
+    "src": "resources/js/modules/form-edit.js",
+    "isEntry": true
+  },
+  "resources/js/tabs.js": {
+    "file": "assets/tabs-BELut-VV.js",
+    "name": "tabs",
+    "src": "resources/js/tabs.js",
+    "isEntry": true
+  }
+}
