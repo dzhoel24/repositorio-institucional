@@ -13,9 +13,10 @@ class Breadcrumb extends Component
         public string $name = 'home',
         public array $params = []
     ) {
+        $filteredParams = array_filter($this->params, fn($p) => $p !== null);
         $this->breadcrumbs = Breadcrumbs::generate(
             $this->name,
-            ...$this->params
+            ...array_values($filteredParams)
         );
     }
 
