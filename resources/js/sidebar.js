@@ -149,6 +149,21 @@
         });
     };
 
+    document.addEventListener("click", function (e) {
+        const link = e.target.closest("nav a, .pagination a");
+        if (!link) return;
+
+        const url = link.getAttribute("href");
+        if (url && url.includes("page=")) {
+            e.preventDefault();
+            htmx.ajax("GET", url, {
+                target: "#main-content",
+                swap: "innerHTML",
+                pushUrl: true,
+            });
+        }
+    });
+
     // ===== ESTADO ACTIVO =====
     function updateActiveState() {
         const current = window.location.pathname;
@@ -323,19 +338,3 @@
         init();
     }
 })();
-
-// Forzar HTMX en enlaces de paginación
-document.addEventListener("click", function (e) {
-    const link = e.target.closest("nav a, .pagination a");
-    if (!link) return;
-
-    const url = link.getAttribute("href");
-    if (url && url.includes("page=")) {
-        e.preventDefault();
-        htmx.ajax("GET", url, {
-            target: "#main-content",
-            swap: "innerHTML",
-            pushUrl: true,
-        });
-    }
-});
