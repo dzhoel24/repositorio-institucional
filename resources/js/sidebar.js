@@ -148,20 +148,28 @@
                 document.getElementById("logout-form").submit();
         });
     };
-
     document.addEventListener("click", function (e) {
         const link = e.target.closest("nav a, .pagination a");
         if (!link) return;
 
-        const url = link.getAttribute("href");
-        if (url && url.includes("page=")) {
-            e.preventDefault();
-            htmx.ajax("GET", url, {
-                target: "#main-content",
-                swap: "innerHTML",
-                pushUrl: true,
-            });
+        const href = link.getAttribute("href");
+        if (!href || !href.includes("page=")) return;
+
+        e.preventDefault();
+
+        // Convertir URL absoluta a relativa
+        let url;
+        try {
+            url = new URL(href).pathname + new URL(href).search;
+        } catch {
+            url = href; // ya era relativa
         }
+
+        htmx.ajax("GET", url, {
+            target: "#main-content",
+            swap: "innerHTML",
+            pushUrl: true,
+        });
     });
 
     // ===== ESTADO ACTIVO =====
