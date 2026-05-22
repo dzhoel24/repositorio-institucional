@@ -13,10 +13,10 @@
                         dark:border-slate-700 dark:bg-slate-800/50 md:border-b-0 md:border-r">
 
                 <div class="group relative">
-                    <img src="{{asset('images/default.png') $user->profile_photo_url }}" onerror="this.src='{{ asset('images/default.png') }}'"
-                        alt="Avatar de {{ $user->username }}"
+                    <img src="{{ $user->profile_photo_url ?? asset('images/default.png') }}"
+                        onerror="this.src='{{ asset('images/default.png') }}'" alt="Avatar de {{ $user->username }}"
                         class="h-28 w-28 rounded-full border-4 border-white object-cover shadow-md transition-all duration-300 
-                                group-hover:scale-105 group-hover:shadow-lg dark:border-slate-700">
+                group-hover:scale-105 group-hover:shadow-lg dark:border-slate-700">
 
                     <div class="absolute bottom-1 right-1 rounded-full bg-indigo-500 p-1.5 shadow-md">
                         <svg class="h-3 w-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
