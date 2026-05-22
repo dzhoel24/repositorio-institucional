@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Repositorio | Login</title>
+    <title>Repositorio | Acceso Institucional</title>
     <link rel="shortcut icon" href="{{ asset('images/icono-csr.ico') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,6 +21,7 @@
 <body class="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-slate-100 to-slate-200">
     <div class="flex w-full max-w-[900px] rounded-2xl overflow-hidden shadow-2xl flex-col sm:flex-row">
 
+        {{-- Panel izquierdo: Branding --}}
         <div
             class="w-full sm:w-[45%] bg-gradient-to-br from-slate-800 to-slate-900 flex flex-col items-center justify-center px-6 py-8 sm:px-8 sm:py-12 relative overflow-hidden">
 
@@ -57,6 +58,7 @@
             </div>
         </div>
 
+        {{-- Panel derecho: Formulario --}}
         <div class="flex-1 bg-white px-6 py-8 sm:px-10 sm:py-12">
 
             <div
@@ -71,6 +73,7 @@
             <form method="POST" action="{{ route('login') }}" id="login-form">
                 @csrf
 
+                {{-- Campo Usuario --}}
                 <div class="mb-5">
                     <label for="username" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
                         Usuario
@@ -86,6 +89,7 @@
                     </div>
                 </div>
 
+                {{-- Campo Contraseña --}}
                 <div class="mb-6">
                     <label for="login-password"
                         class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
@@ -100,13 +104,14 @@
                                    transition-all duration-200 outline-none" />
                         <button type="button"
                             class="toggle-password absolute right-4 top-1/2 -translate-y-1/2 
-                                   text-slate-400 hover:text-indigo-500 transition-colors"
+                                   text-slate-400 hover:text-indigo-600 transition-colors"
                             data-target="login-password">
                             <i class="fas fa-eye-slash text-sm"></i>
                         </button>
                     </div>
                 </div>
 
+                {{-- Botón Ingresar --}}
                 <button type="submit" id="btn-submit"
                     class="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700
                            text-white text-sm font-semibold
@@ -119,19 +124,21 @@
                     <i class="fas fa-arrow-right text-sm" id="btn-icon-end"></i>
                 </button>
 
+                {{-- Separador --}}
                 <div class="flex items-center gap-3 mb-5">
                     <span class="flex-1 h-px bg-slate-100"></span>
                     <span class="text-xs text-slate-400 font-medium">o</span>
                     <span class="flex-1 h-px bg-slate-100"></span>
                 </div>
 
+                {{-- Botón Explorar --}}
                 <a href="{{ route('home') }}"
-                    class="w-full py-3 rounded-xl border border-slate-300 bg-white
+                    class="w-full py-3 rounded-xl border border-slate-200 bg-white
                           text-slate-600 text-sm font-medium
                           flex items-center justify-center gap-2
                           hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600
                           transition-all duration-200
-                          focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2">
+                          focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:ring-offset-2">
                     <i class="fas fa-globe-americas text-sm"></i>
                     Explorar repositorio público
                 </a>
@@ -145,7 +152,9 @@
         (function() {
             'use strict';
 
-            document.querySelectorAll(".toggle-password").forEach((button) => {
+            // Toggle password visibility
+            const toggleButtons = document.querySelectorAll(".toggle-password");
+            toggleButtons.forEach((button) => {
                 button.addEventListener("click", (e) => {
                     e.preventDefault();
                     const input = document.getElementById(button.dataset.target);
@@ -161,6 +170,7 @@
                 });
             });
 
+            // Form submission with loading state
             const form = document.getElementById('login-form');
             const submitBtn = document.getElementById('btn-submit');
             const btnText = document.getElementById('btn-text');
@@ -169,7 +179,19 @@
 
             if (form) {
                 form.addEventListener('submit', (e) => {
-                    e.preventDefault();
+                    const username = document.getElementById('username')?.value.trim();
+                    const password = document.getElementById('login-password')?.value.trim();
+
+                    if (!username || !password) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Campos vacíos',
+                            text: 'Por favor, completa tu usuario y contraseña',
+                            confirmButtonColor: '#6366f1'
+                        });
+                        return;
+                    }
 
                     submitBtn.disabled = true;
                     btnText.textContent = 'Ingresando';

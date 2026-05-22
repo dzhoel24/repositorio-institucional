@@ -111,14 +111,12 @@ class InformeController extends Controller
             DB::beginTransaction();
 
             if ($request->hasFile('caratula')) {
-                $rutaAnterior = public_path('caratulas/' . $informe->ruta_caratula);
-                if (file_exists($rutaAnterior)) unlink($rutaAnterior);
+                Storage::disk('r2')->delete('caratulas/' . $informe->ruta_caratula);
                 $informe->ruta_caratula = $this->subirArchivo($request->file('caratula'), 'caratulas');
             }
 
             if ($request->hasFile('pdf')) {
-                $rutaAnterior = public_path('pdfs/' . $informe->ruta_pdf);
-                if (file_exists($rutaAnterior)) unlink($rutaAnterior);
+                Storage::disk('r2')->delete('pdfs/' . $informe->ruta_pdf);
                 $informe->ruta_pdf = $this->subirArchivo($request->file('pdf'), 'pdfs');
             }
 
@@ -149,11 +147,8 @@ class InformeController extends Controller
         try {
             $informe = Informe::findOrFail($id);
 
-            $rutaPdf = public_path('pdfs/' . $informe->ruta_pdf);
-            $rutaCaratula = public_path('caratulas/' . $informe->ruta_caratula);
-
-            if (file_exists($rutaPdf)) unlink($rutaPdf);
-            if (file_exists($rutaCaratula)) unlink($rutaCaratula);
+            Storage::disk('r2')->delete('pdfs/' . $informe->ruta_pdf);
+            Storage::disk('r2')->delete('caratulas/' . $informe->ruta_caratula);
 
             $informe->autores()->detach();
             $informe->delete();
@@ -183,11 +178,10 @@ class InformeController extends Controller
             'apellidos' => $autor->apellidos,
         ]);
     }
-
     private function subirArchivo($file, string $carpeta): string
     {
         $nombre = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-        $file->move(public_path($carpeta), $nombre);
+        Storage::disk('r2')->putFileAs($carpeta, $file, $nombre, 'public');
         return $nombre;
     }
 

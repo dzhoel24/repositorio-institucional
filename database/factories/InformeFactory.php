@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Informe;
 use App\Models\Autor;
-use Illuminate\Support\Facades\File;
 
 class InformeFactory extends Factory
 {
@@ -21,17 +20,24 @@ class InformeFactory extends Factory
         $nombrePdf = Str::uuid() . '.pdf';
         $nombreCaratula = Str::uuid() . '.jpg';
 
-        $publicPath = public_path();
+        $disk = Storage::disk('r2');
 
-        File::ensureDirectoryExists(public_path('pdfs'));
-        File::ensureDirectoryExists(public_path('caratulas'));
-
-        if (File::exists($publicPath . '/default.pdf')) {
-            File::copy($publicPath . '/default.pdf', public_path('pdfs/' . $nombrePdf));
+        // Sube los defaults a R2 si no existen aún
+        if (!$disk->exists('default.pdf') && file_exists(public_path('default.pdf'))) {
+            $disk->put('default.pdf', file_get_contents(public_path('default.pdf')));
         }
 
-        if (File::exists($publicPath . '/default.jpg')) {
-            File::copy($publicPath . '/default.jpg', public_path('caratulas/' . $nombreCaratula));
+        if (!$disk->exists('default.jpg') && file_exists(public_path('default.jpg'))) {
+            $disk->put('default.jpg', file_get_contents(public_path('default.jpg')));
+        }
+
+        // Copiar a pdfs/ y caratulas/
+        if ($disk->exists('default.pdf')) {
+            $disk->put('pdfs/' . $nombrePdf, $disk->get('default.pdf'));
+        }
+
+        if ($disk->exists('default.jpg')) {
+            $disk->put('caratulas/' . $nombreCaratula, $disk->get('default.jpg'));
         }
 
         $currentYear = Carbon::now()->year;

@@ -6,7 +6,7 @@
             <li class="inline-flex items-center">
                 @if ($index < count($breadcrumbs) - 1)
                     <a href="{{ $breadcrumb->url }}"
-                        class="group inline-flex items-center text-sm md:text-base font-medium text-gray-300 hover:text-indigo-400 transition-all duration-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+                        class="group inline-flex items-center text-sm md:text-base font-medium text-gray-300 hover:text-indigo-400 transition-all duration-200 rounded-md">
                         @if ($index === 0)
                             <x-heroicon-s-home class="w-4 h-4 mr-1.5 transition-transform group-hover:scale-105" />
                         @endif
