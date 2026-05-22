@@ -1,40 +1,44 @@
-@props(['titulo', 'subtitulo', 'table' => null, 'singular' => null, 'plural' => null, 'badgeColor' => 'indigo'])
+@props(['titulo', 'subtitulo', 'table' => null, 'singular' => null, 'plural' => null])
 
-<div class="mb-3 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+<div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
-    {{-- TEXTO PRINCIPAL --}}
-    <div>
-        <div class="flex items-center gap-3">
-            <div class="h-7 w-1 rounded-full bg-indigo-600"></div>
-            <h1 class="text-2xl font-bold tracking-wide text-slate-800 dark:text-zinc-100">
-                {{ $titulo }}
-            </h1>
+    <div class="flex items-start gap-2 sm:gap-3 min-w-0 flex-1">
+        <div class="mt-1 h-6 w-1 shrink-0 rounded-full bg-gradient-to-b from-indigo-500 to-indigo-700 sm:mt-0 sm:h-7">
         </div>
 
-        <p class="mt-1.5 text-sm text-slate-500 dark:text-zinc-400">
-            {{ $subtitulo }}
-        </p>
+        <div class="min-w-0 flex-1">
+            <h1 class="text-base font-bold text-slate-900 truncate sm:text-lg md:text-xl dark:text-zinc-50">
+                {{ $titulo }}
+            </h1>
+            @if ($subtitulo)
+                <p class="mt-0.5 text-xs text-slate-500 sm:mt-1 sm:text-sm dark:text-zinc-400">
+                    {{ $subtitulo }}
+                </p>
+            @endif
+        </div>
     </div>
 
     @if ($table && $table->total() > 0)
-        <div
-            class="inline-flex items-center gap-2 rounded-full border border-{{ $badgeColor }}-100 bg-{{ $badgeColor }}-50 px-4 py-2 dark:border-{{ $badgeColor }}-500/20 dark:bg-{{ $badgeColor }}-500/10">
+        <div class="shrink-0">
+            <div
+                class="inline-flex items-center rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm font-medium text-slate-600 gap-1.5
+                sm:rounded-xl sm:px-4 sm:py-2 sm:gap-2
+                dark:border-slate-800 dark:bg-slate-900 dark:text-zinc-300">
 
-            <svg class="h-4 w-4 text-{{ $badgeColor }}-500 dark:text-{{ $badgeColor }}-400" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
+                <x-heroicon-o-document-text class="h-4 w-4 text-slate-400 sm:h-5 sm:w-5 dark:text-zinc-500" />
 
-            <span class="text-sm font-medium text-slate-700 dark:text-zinc-300">
-                <span class="font-bold text-{{ $badgeColor }}-600 dark:text-{{ $badgeColor }}-400">
-                    {{ number_format($table->total()) }}
+                <span>
+                    <span class="font-semibold text-slate-900 sm:font-bold dark:text-zinc-100">
+                        {{ number_format($table->total()) }}
+                    </span>
+
+                    @if ($singular && $plural)
+                        <span class="hidden text-slate-600 sm:inline dark:text-zinc-400">
+                            {{ $table->total() === 1 ? $singular : $plural }}
+                        </span>
+                    @endif
                 </span>
-
-                @if ($singular && $plural)
-                    {{ $table->total() === 1 ? $singular : $plural }}
-                @endif
-            </span>
+            </div>
         </div>
     @endif
 </div>
