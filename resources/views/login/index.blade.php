@@ -204,9 +204,6 @@
                         </svg>
                     `;
 
-                    setTimeout(() => {
-                        form.submit();
-                    }, 200);
                 });
             }
         })();
