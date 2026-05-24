@@ -89,7 +89,6 @@
     class="fixed top-0 right-0 z-[1000] w-[85%] max-w-sm h-full bg-white shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
 
     <div class="flex items-center justify-between border-b border-slate-200 p-4">
-        <h3 class="font-semibold text-slate-800">Filtros</h3>
         <button type="button" onclick="toggleMobileFilter()" class="text-slate-400 hover:text-slate-600">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
