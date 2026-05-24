@@ -4,7 +4,6 @@
             'title' => 'Gestión de Informes',
             'desc' => 'Administración de informes y expedientes registrados en la plataforma institucional.',
             'icon' => 'heroicon-s-folder-plus',
-            'color' => 'indigo',
             'items' => [
                 'Registro de nuevos informes y metadatos técnicos.',
                 'Actualización dinámica de información y estados.',
@@ -15,7 +14,6 @@
             'title' => 'Centro de Publicaciones',
             'desc' => 'Control del ciclo de vida de los documentos dentro del repositorio digital.',
             'icon' => 'heroicon-s-cloud-arrow-up',
-            'color' => 'blue',
             'items' => [
                 'Carga de documentos en formatos estandarizados.',
                 'Gestión de estados: Pendiente, Revisión y Publicado.',
@@ -26,7 +24,6 @@
             'title' => 'Directorio de Autores',
             'desc' => 'Base de datos consolidada de perfiles académicos y colaboradores.',
             'icon' => 'heroicon-s-academic-cap',
-            'color' => 'emerald',
             'items' => [
                 'Vinculación de autores con datos académicos oficiales.',
                 'Edición de perfiles y actualización de roles.',
@@ -37,7 +34,6 @@
             'title' => 'Buenas Prácticas',
             'desc' => 'Protocolos para garantizar la integridad y calidad del repositorio.',
             'icon' => 'heroicon-s-shield-check',
-            'color' => 'amber',
             'items' => [
                 'Validación técnica de datos previa al guardado.',
                 'Estandarización de nomenclatura de archivos.',
@@ -45,91 +41,113 @@
             ]
         ]
     ];
-
-    $colorMap = [
-        'indigo' => [
-            'bg' => 'bg-indigo-50 dark:bg-indigo-500/10',
-            'ico' => 'text-indigo-600 dark:text-indigo-400',
-            'dot' => 'bg-indigo-500',
-            'border' => 'hover:border-indigo-200 dark:hover:border-indigo-500/30',
-            'ring' => 'ring-indigo-200 dark:ring-indigo-500/30'
-        ],
-        'blue' => [
-            'bg' => 'bg-blue-50 dark:bg-blue-500/10',
-            'ico' => 'text-blue-600 dark:text-blue-400',
-            'dot' => 'bg-blue-500',
-            'border' => 'hover:border-blue-200 dark:hover:border-blue-500/30',
-            'ring' => 'ring-blue-200 dark:ring-blue-500/30'
-        ],
-        'emerald' => [
-            'bg' => 'bg-emerald-50 dark:bg-emerald-500/10',
-            'ico' => 'text-emerald-600 dark:text-emerald-400',
-            'dot' => 'bg-emerald-500',
-            'border' => 'hover:border-emerald-200 dark:hover:border-emerald-500/30',
-            'ring' => 'ring-emerald-200 dark:ring-emerald-500/30'
-        ],
-        'amber' => [
-            'bg' => 'bg-amber-50 dark:bg-amber-500/10',
-            'ico' => 'text-amber-600 dark:text-amber-400',
-            'dot' => 'bg-amber-500',
-            'border' => 'hover:border-amber-200 dark:hover:border-amber-500/30',
-            'ring' => 'ring-amber-200 dark:ring-amber-500/30'
-        ]
-    ];
 @endphp
 
 <x-admin.title titulo="MANUAL DE PROCEDIMIENTOS"
-    subtitulo="Guía técnica para la administración del repositorio institucional." badgeColor="indigo" />
+    subtitulo="Guía técnica para la administración del repositorio institucional." :table="null" />
 
 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-    @foreach ($sections as $section)
-        @php $c = $colorMap[$section['color']]; @endphp
+    @foreach ($sections as $index => $section)
+        @php
+            $colors = [
+                'from-indigo-500 to-indigo-600',
+                'from-blue-500 to-blue-600',
+                'from-emerald-500 to-emerald-600',
+                'from-amber-500 to-amber-600'
+            ];
+            $gradient = $colors[$index % count($colors)];
+        @endphp
 
         <div
-            class="group flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md 
-                    dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-600 {{ $c['border'] }}">
+            class="group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-md 
+                    transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl 
+                    dark:border-slate-700 dark:bg-slate-800/90 
+                    hover:border-transparent">
+
+            {{-- Gradiente de fondo sutil en hover --}}
+            <div
+                class="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-50 to-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-slate-800/50 dark:to-slate-800">
+            </div>
+
+            {{-- Barra superior decorativa --}}
+            <div
+                class="absolute top-0 left-4 right-4 h-1 rounded-t-2xl bg-gradient-to-r {{ $gradient }} opacity-0 transition-all duration-300 group-hover:opacity-100">
+            </div>
 
             {{-- Encabezado con ícono --}}
-            <div class="mb-4 flex items-center gap-3">
+            <div class="relative mb-4 flex items-center gap-3">
                 <div
-                    class="{{ $c['bg'] }} {{ $c['ico'] }} flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-105">
-                    <x-dynamic-component :component="$section['icon']" class="h-5 w-5" />
+                    class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br {{ $gradient }} 
+                            shadow-md shadow-{{ explode(' ', $gradient)[1] }}/20
+                            transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg">
+                    <x-dynamic-component :component="$section['icon']" class="h-6 w-6 text-white" />
                 </div>
-                <h2 class="text-base font-bold tracking-tight text-slate-800 dark:text-white">
+                <h2
+                    class="text-lg font-bold tracking-tight text-slate-800 transition-colors duration-300 
+                           group-hover:text-{{ explode(' ', $gradient)[1] }}
+                           dark:text-white">
                     {{ $section['title'] }}
                 </h2>
             </div>
 
             {{-- Descripción --}}
-            <p class="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            <p
+                class="relative mb-4 text-sm leading-relaxed text-slate-500 transition-colors duration-300 
+                      group-hover:text-slate-600 dark:text-slate-400">
                 {{ $section['desc'] }}
             </p>
 
-            {{-- Separador --}}
+            {{-- Separador animado --}}
             <div
-                class="mb-4 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-slate-700">
+                class="relative mb-5 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent 
+                        transition-all duration-300 group-hover:via-{{ explode(' ', $gradient)[1] }}/50 
+                        dark:via-slate-700">
             </div>
 
-            {{-- Lista de items --}}
-            <ul class="space-y-2.5">
+            {{-- Lista de items con check animado --}}
+            <ul class="relative space-y-3">
                 @foreach ($section['items'] as $item)
-                    <li class="flex items-start gap-3 transition-all duration-200 hover:translate-x-1">
+                    <li class="flex items-start gap-3 transition-all duration-300 hover:translate-x-1.5">
+                        <div
+                            class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full 
+                                    bg-{{ explode(' ', $gradient)[1] }}/10 text-{{ explode(' ', $gradient)[1] }}
+                                    transition-all duration-300 group-hover:bg-{{ explode(' ', $gradient)[1] }}/20
+                                    dark:bg-{{ explode(' ', $gradient)[1] }}/20">
+                            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
                         <span
-                            class="{{ $c['dot'] }} mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ring-1 {{ $c['ring'] }}"></span>
-                        <span
-                            class="text-sm leading-relaxed text-slate-600 transition-colors group-hover:text-slate-800 
-                                     dark:text-slate-300 dark:group-hover:text-white">
+                            class="text-sm leading-relaxed text-slate-600 transition-colors duration-300 
+                                     group-hover:text-slate-800 dark:text-slate-300 dark:group-hover:text-white">
                             {{ $item }}
                         </span>
                     </li>
                 @endforeach
             </ul>
 
-            {{-- Footer sutil --}}
-            <div class="mt-5 pt-2 text-right">
-                <span class="text-[10px] font-medium uppercase tracking-wider text-slate-300 dark:text-slate-600">
-                    {{ $section['title'] }}
+            {{-- Footer con flecha animada --}}
+            <div
+                class="relative mt-6 flex items-center justify-between pt-3 border-t border-slate-100 
+                        transition-all duration-300 group-hover:border-{{ explode(' ', $gradient)[1] }}/20
+                        dark:border-slate-700">
+                <span
+                    class="text-xs font-medium uppercase tracking-wider text-slate-400 transition-colors 
+                             group-hover:text-{{ explode(' ', $gradient)[1] }}
+                             dark:text-slate-500">
+                    Documentación oficial
                 </span>
+                <div
+                    class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-400 
+                            transition-all duration-300 group-hover:bg-{{ explode(' ', $gradient)[1] }} 
+                            group-hover:text-white group-hover:shadow-md
+                            dark:bg-slate-700">
+                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
             </div>
         </div>
     @endforeach

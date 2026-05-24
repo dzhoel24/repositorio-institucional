@@ -29,14 +29,13 @@
 <body hx-ext="preload"
     class="bg-slate-50 text-slate-900 transition-colors duration-200 dark:bg-slate-900 dark:text-slate-100">
 
-    {{-- Overlay --}}
     <div id="overlay" onclick="closeSidebar()" aria-hidden="true" class="sidebar-overlay"></div>
 
     <div class="flex h-screen overflow-hidden">
 
-        <!-- ===================== SIDEBAR ===================== -->
+        <!-- SIDEBAR -->
         <aside id="sidebar" role="navigation" aria-label="Menú principal"
-            class="sidebar-wrapper flex h-screen flex-col border-r border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900">
+            class="sidebar-wrapper flex h-screen flex-col border-r border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
 
             <!-- Logo -->
             <div
@@ -48,81 +47,81 @@
                 <div class="sidebar-text flex flex-col overflow-hidden">
                     <span
                         class="whitespace-nowrap text-sm tracking-wide font-bold text-slate-900 dark:text-slate-100">REPOSITORIO</span>
-                    <span class="whitespace-nowrap text-xs font-medium text-sky-600 dark:text-sky-400">
+                    <span class="whitespace-nowrap text-xs font-medium text-indigo-600 dark:text-indigo-400">
                         Carlos Salazar Romero</span>
                 </div>
             </div>
 
-            <!-- ===== PRINCIPAL ===== -->
+            <!-- PRINCIPAL -->
             <div class="mt-4 px-3">
                 <p
                     class="section-label mb-2 px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                     Principal
                 </p>
 
-                <!-- Inicio -->
                 <div class="nav-group">
                     <a href="{{ route('admin.index') }}" data-route="{{ route('admin.index') }}" data-title="Inicio"
                         data-tooltip="Inicio" hx-get="{{ route('admin.index') }}" hx-target="#main-content"
                         hx-swap="innerHTML" hx-push-url="true" preload="mouseover"
-                        class="nav-item group relative mb-1 flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:bg-sky-50 [&.active]:text-sky-700 dark:[&.active]:bg-sky-500/10 dark:[&.active]:text-sky-400">
+                        class="nav-item group relative mb-1 flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:bg-indigo-50 [&.active]:text-indigo-700 dark:[&.active]:bg-indigo-500/10 dark:[&.active]:text-indigo-400">
                         <span
-                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-sky-500 opacity-0 dark:bg-sky-400"></span>
+                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-indigo-500 opacity-0 dark:bg-indigo-400"></span>
                         <x-heroicon-s-home
-                            class="nav-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500 dark:text-slate-500 dark:group-hover:text-sky-400"
+                            class="nav-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-500 dark:text-slate-500 dark:group-hover:text-indigo-400"
                             aria-hidden="true" />
                         <span class="nav-text flex-1 whitespace-nowrap text-sm font-medium">Inicio</span>
                     </a>
                 </div>
             </div>
 
-            <!-- ===== GESTIÓN ===== -->
+            <!-- GESTIÓN -->
             <div class="mt-4 px-3">
                 <p
                     class="section-label mb-2 px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                     Gestión
                 </p>
 
-                <!-- Proyectos -->
+                <!-- Informes -->
                 <div class="nav-group">
-                    <button type="button" onclick="toggleDropdown('sub-proyectos', 'arr-proyectos', this)"
-                        aria-expanded="false" aria-controls="sub-proyectos"
-                        data-parent-for="{{ route('admin.informes.index') }}" data-tooltip="Proyectos"
-                        class="dropdown-trigger group relative mb-1 flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.parent-active]:bg-sky-50 [&.parent-active]:text-sky-700 dark:[&.parent-active]:bg-sky-500/10 dark:[&.parent-active]:text-sky-400">
+                    <button type="button" onclick="toggleDropdown('sub-informes', 'arr-informes')"
+                        aria-expanded="false" aria-controls="sub-informes" data-tooltip="Informes"
+                        class="dropdown-trigger group relative mb-1 flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.parent-active]:bg-indigo-50 [&.parent-active]:text-indigo-700 dark:[&.parent-active]:bg-indigo-500/10 dark:[&.parent-active]:text-indigo-400">
                         <span
-                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-sky-500 opacity-0 dark:bg-sky-400"></span>
+                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-indigo-500 opacity-0 dark:bg-indigo-400"></span>
                         <x-heroicon-s-folder-open
-                            class="drop-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500 dark:text-slate-500 dark:group-hover:text-sky-400"
+                            class="drop-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-500 dark:text-slate-500 dark:group-hover:text-indigo-400"
                             aria-hidden="true" />
                         <span class="drop-text flex-1 whitespace-nowrap text-left text-sm font-medium">Informes</span>
-                        <x-heroicon-s-chevron-right id="arr-proyectos"
+                        <x-heroicon-s-chevron-right id="arr-informes"
                             class="drop-arrow h-3.5 w-3.5 text-slate-400 transition-transform dark:text-slate-600"
                             aria-hidden="true" />
                     </button>
 
-                    <div class="sub-menu" id="sub-proyectos" role="region">
-                        <a href="{{ route('admin.informes.index') }}" data-route="{{ route('admin.informes.index') }}"
-                            data-title="Gestión de Proyectos" hx-get="{{ route('admin.informes.index') }}"
-                            hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true" preload="mouseover"
-                            class="sub-item group mb-1 flex cursor-pointer items-center gap-2.5 rounded-lg py-2 pl-10 pr-3 text-sm text-slate-500 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:font-medium [&.active]:text-sky-600 dark:[&.active]:text-sky-400">
-                            <span
-                                class="h-1 w-1 shrink-0 rounded-full bg-slate-300 transition-colors group-hover:bg-sky-500 dark:bg-slate-600 dark:group-hover:bg-sky-400"
-                                aria-hidden="true"></span>
-                            <span class="sub-text whitespace-nowrap">Ver todos los informes</span>
-                        </a>
+                    <div class="sub-menu" id="sub-informes" role="region">
+                        <div>
+                            <a href="{{ route('admin.informes.index') }}"
+                                data-route="{{ route('admin.informes.index') }}" data-title="Gestión de Informes"
+                                hx-get="{{ route('admin.informes.index') }}" hx-target="#main-content"
+                                hx-swap="innerHTML" hx-push-url="true" preload="mouseover"
+                                class="sub-item group mb-1 flex cursor-pointer items-center gap-2.5 rounded-lg py-2 pl-10 pr-3 text-sm text-slate-500 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:font-medium [&.active]:text-indigo-600 dark:[&.active]:text-indigo-400">
+                                <span
+                                    class="h-1 w-1 shrink-0 rounded-full bg-slate-300 transition-colors group-hover:bg-indigo-500 dark:bg-slate-600 dark:group-hover:bg-indigo-400"
+                                    aria-hidden="true"></span>
+                                <span class="sub-text whitespace-nowrap">Ver todos los informes</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Publicaciones -->
                 <div class="nav-group">
-                    <button type="button" onclick="toggleDropdown('sub-publicaciones', 'arr-publicaciones', this)"
-                        aria-expanded="false" aria-controls="sub-publicaciones"
-                        data-parent-for="{{ route('admin.publicaciones.index') }}" data-tooltip="Publicaciones"
-                        class="dropdown-trigger group relative mb-1 flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.parent-active]:bg-sky-50 [&.parent-active]:text-sky-700 dark:[&.parent-active]:bg-sky-500/10 dark:[&.parent-active]:text-sky-400">
+                    <button type="button" onclick="toggleDropdown('sub-publicaciones', 'arr-publicaciones')"
+                        aria-expanded="false" aria-controls="sub-publicaciones" data-tooltip="Publicaciones"
+                        class="dropdown-trigger group relative mb-1 flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.parent-active]:bg-indigo-50 [&.parent-active]:text-indigo-700 dark:[&.parent-active]:bg-indigo-500/10 dark:[&.parent-active]:text-indigo-400">
                         <span
-                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-sky-500 opacity-0 dark:bg-sky-400"></span>
+                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-indigo-500 opacity-0 dark:bg-indigo-400"></span>
                         <x-heroicon-s-document-text
-                            class="drop-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500 dark:text-slate-500 dark:group-hover:text-sky-400"
+                            class="drop-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-500 dark:text-slate-500 dark:group-hover:text-indigo-400"
                             aria-hidden="true" />
                         <span
                             class="drop-text flex-1 whitespace-nowrap text-left text-sm font-medium">Publicaciones</span>
@@ -132,16 +131,19 @@
                     </button>
 
                     <div class="sub-menu" id="sub-publicaciones" role="region">
-                        <a href="{{ route('admin.publicaciones.index') }}"
-                            data-route="{{ route('admin.publicaciones.index') }}"
-                            data-title="Gestión de Publicaciones" hx-get="{{ route('admin.publicaciones.index') }}"
-                            hx-target="#main-content" hx-swap="innerHTML" hx-push-url="true" preload="mouseover"
-                            class="sub-item group mb-1 flex cursor-pointer items-center gap-2.5 rounded-lg py-2 pl-10 pr-3 text-sm text-slate-500 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:font-medium [&.active]:text-sky-600 dark:[&.active]:text-sky-400">
-                            <span
-                                class="h-1 w-1 shrink-0 rounded-full bg-slate-300 transition-colors group-hover:bg-sky-500 dark:bg-slate-600 dark:group-hover:bg-sky-400"
-                                aria-hidden="true"></span>
-                            <span class="sub-text whitespace-nowrap">Ver todas las publicaciones</span>
-                        </a>
+                        <div>
+                            <a href="{{ route('admin.publicaciones.index') }}"
+                                data-route="{{ route('admin.publicaciones.index') }}"
+                                data-title="Gestión de Publicaciones"
+                                hx-get="{{ route('admin.publicaciones.index') }}" hx-target="#main-content"
+                                hx-swap="innerHTML" hx-push-url="true" preload="mouseover"
+                                class="sub-item group mb-1 flex cursor-pointer items-center gap-2.5 rounded-lg py-2 pl-10 pr-3 text-sm text-slate-500 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:font-medium [&.active]:text-indigo-600 dark:[&.active]:text-indigo-400">
+                                <span
+                                    class="h-1 w-1 shrink-0 rounded-full bg-slate-300 transition-colors group-hover:bg-indigo-500 dark:bg-slate-600 dark:group-hover:bg-indigo-400"
+                                    aria-hidden="true"></span>
+                                <span class="sub-text whitespace-nowrap">Ver todas las publicaciones</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -151,18 +153,18 @@
                         data-title="Directorio de Autores" data-tooltip="Autores"
                         hx-get="{{ route('admin.autores.index') }}" hx-target="#main-content" hx-swap="innerHTML"
                         hx-push-url="true" preload="mouseover"
-                        class="nav-item group relative mb-1 flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:bg-sky-50 [&.active]:text-sky-700 dark:[&.active]:bg-sky-500/10 dark:[&.active]:text-sky-400">
+                        class="nav-item group relative mb-1 flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:bg-indigo-50 [&.active]:text-indigo-700 dark:[&.active]:bg-indigo-500/10 dark:[&.active]:text-indigo-400">
                         <span
-                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-sky-500 opacity-0 dark:bg-sky-400"></span>
+                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-indigo-500 opacity-0 dark:bg-indigo-400"></span>
                         <x-heroicon-s-users
-                            class="nav-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500 dark:text-slate-500 dark:group-hover:text-sky-400"
+                            class="nav-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-500 dark:text-slate-500 dark:group-hover:text-indigo-400"
                             aria-hidden="true" />
                         <span class="nav-text flex-1 whitespace-nowrap text-sm font-medium">Autores</span>
                     </a>
                 </div>
             </div>
 
-            <!-- ===== SOPORTE ===== -->
+            <!-- SOPORTE -->
             <div class="mt-4 px-3">
                 <div class="sidebar-divider mb-3"></div>
                 <p
@@ -170,17 +172,16 @@
                     Soporte
                 </p>
 
-                <!-- Manual de uso -->
                 <div class="nav-group">
                     <a href="{{ route('admin.manual') }}" data-route="{{ route('admin.manual') }}"
                         data-title="Manual de Usuario" data-tooltip="Manual de uso"
                         hx-get="{{ route('admin.manual') }}" hx-target="#main-content" hx-swap="innerHTML"
                         hx-push-url="true" preload="mouseover"
-                        class="nav-item group relative flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:bg-sky-50 [&.active]:text-sky-700 dark:[&.active]:bg-sky-500/10 dark:[&.active]:text-sky-400">
+                        class="nav-item group relative flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 [&.active]:bg-indigo-50 [&.active]:text-indigo-700 dark:[&.active]:bg-indigo-500/10 dark:[&.active]:text-indigo-400">
                         <span
-                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-sky-500 opacity-0 dark:bg-sky-400"></span>
+                            class="active-indicator absolute left-0 h-6 w-1 rounded-r-full bg-indigo-500 opacity-0 dark:bg-indigo-400"></span>
                         <x-heroicon-s-book-open
-                            class="nav-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500 dark:text-slate-500 dark:group-hover:text-sky-400"
+                            class="nav-icon h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-500 dark:text-slate-500 dark:group-hover:text-indigo-400"
                             aria-hidden="true" />
                         <span class="nav-text flex-1 whitespace-nowrap text-sm font-medium">Manual de uso</span>
                     </a>
@@ -189,7 +190,7 @@
 
             <!-- Footer -->
             <div class="sidebar-footer mt-auto border-t border-slate-200 px-3 py-3 dark:border-slate-700">
-                <button type="button" id="collapseBtn" onclick="toggleCollapse()" aria-label="Colapsar menú"
+                <button type="button" id="collapseBtn" onclick="toggleCollapseMobile()" aria-label="Colapsar menú"
                     class="collapse-btn group flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-slate-500 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200">
                     <div class="collapse-icon-wrapper flex h-5 w-5 shrink-0 items-center justify-center">
                         <x-heroicon-s-chevron-double-left class="collapse-icon h-4 w-4" aria-hidden="true" />
@@ -199,7 +200,7 @@
             </div>
         </aside>
 
-        <!-- ===================== MAIN WRAPPER ===================== -->
+        <!-- MAIN WRAPPER -->
         <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
 
             <!-- TOPBAR -->
@@ -240,7 +241,7 @@
                             class="flex cursor-pointer items-center gap-2 rounded-lg border border-transparent px-2 py-1.5 transition-colors duration-150 hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-600 dark:hover:bg-slate-700">
                             @php $photo = Auth::user()->profile_photo ?? 'default.png'; @endphp
                             <div
-                                class="h-8 w-8 shrink-0 overflow-hidden rounded-full ring-2 ring-sky-200 dark:ring-sky-500/30">
+                                class="h-8 w-8 shrink-0 overflow-hidden rounded-full ring-2 ring-indigo-200 dark:ring-indigo-500/30">
                                 <img src="{{ asset('profile/' . $photo) }}"
                                     alt="Foto de perfil de {{ Auth::user()->full_name }}"
                                     class="h-full w-full object-cover"
@@ -261,7 +262,7 @@
                             <div
                                 class="flex items-center gap-3 border-b border-slate-100 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/50">
                                 <div
-                                    class="h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-sky-200 dark:ring-sky-500/30">
+                                    class="h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-indigo-200 dark:ring-indigo-500/30">
                                     <img src="{{ asset('profile/' . $photo) }}" alt="" aria-hidden="true"
                                         class="h-full w-full object-cover"
                                         onerror="this.src='{{ asset('images/default-avatar.png') }}'" />
@@ -280,7 +281,7 @@
                                     onclick="closeProfile()"
                                     class="group flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 transition-colors duration-150 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-100">
                                     <x-heroicon-s-user-circle
-                                        class="h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-sky-500 dark:text-slate-500 dark:group-hover:text-sky-400"
+                                        class="h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-500 dark:text-slate-500 dark:group-hover:text-indigo-400"
                                         aria-hidden="true" />
                                     Mi perfil
                                 </a>
@@ -304,8 +305,7 @@
 
             <!-- MAIN CONTENT -->
             <main id="main-content"
-                class="main-content flex-1 overflow-y-auto bg-white dark:bg-slate-800
-             p-4 sm:p-6 md:p-8 lg:p-10">
+                class="main-content flex-1 overflow-y-auto bg-white dark:bg-slate-800 p-4 sm:p-6 md:p-8 lg:p-10">
                 @yield('content')
             </main>
         </div>
@@ -313,8 +313,6 @@
 
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
         @csrf
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
     </form>
 
     @stack('scripts')

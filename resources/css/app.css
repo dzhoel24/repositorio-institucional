@@ -5,42 +5,135 @@
 @tailwind utilities;
 
 /* ============================================
-   SCROLLBAR MODERNO - VERSIÓN MINIMALISTA
+   SCROLLBAR MODERNO - VERSIÓN ELEGANTE
    ============================================ */
 
+/* WebKit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: #f1f5f9;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
     background: #cbd5e1;
-    border-radius: 20px;
-    transition: background 0.2s ease;
+    border-radius: 10px;
+    transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #a0aec0;
+    transition: background 0.2s ease;
 }
 
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: #bbc4cf transparent;
+    scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
-/* Dark mode */
+/* ===== DARK MODE ===== */
+.dark ::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
 .dark ::-webkit-scrollbar-thumb {
-    background: #334155;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
     background: #475569;
 }
 
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #5a6a85;
+}
+
 .dark * {
-    scrollbar-color: #334155 transparent;
+    scrollbar-color: #475569 #1e293b;
+}
+
+/* ===== SCROLLBAR PARA SIDEBAR ===== */
+.sidebar-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-wrapper::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+}
+
+.sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+}
+
+.dark .sidebar-wrapper::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+.dark .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #4a5a75;
+}
+
+/* ===== SCROLLBAR PARA MODALES ===== */
+.modal .custom-scroll::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.modal .custom-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.dark .modal .custom-scroll::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+.dark .modal .custom-scroll::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+/* ===== SCROLLBAR PARA TABLAS ===== */
+.overflow-x-auto::-webkit-scrollbar {
+    height: 5px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.dark .overflow-x-auto::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+.dark .overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+/* ===== SCROLL SUAVE ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Scroll más grueso en desktop */
+@media (min-width: 1024px) {
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* ===== PREVENIR SCROLL DEL BODY CUANDO FILTRO MÓVIL ESTÁ ABIERTO ===== */
+body.filter-mobile-open {
+    overflow: hidden;
 }

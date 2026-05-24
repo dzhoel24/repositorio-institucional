@@ -1,23 +1,23 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-C9g7ZQKN.css",
+    "file": "assets/app-rqKSZmkq.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-DafLHvbc.js",
+    "file": "assets/app-C-5CtMkh.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
   },
   "resources/js/modules/form-add.js": {
-    "file": "assets/form-add-CUpbFfSt.js",
+    "file": "assets/form-add-B6f_V0fy.js",
     "name": "form-add",
     "src": "resources/js/modules/form-add.js",
     "isEntry": true
   },
   "resources/js/modules/form-edit.js": {
-    "file": "assets/form-edit-xor4zxpP.js",
+    "file": "assets/form-edit-yc5fiUqu.js",
     "name": "form-edit",
     "src": "resources/js/modules/form-edit.js",
     "isEntry": true

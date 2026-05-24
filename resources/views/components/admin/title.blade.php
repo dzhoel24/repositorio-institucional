@@ -1,6 +1,6 @@
 @props(['titulo', 'subtitulo', 'table' => null, 'singular' => null, 'plural' => null])
 
-<div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+<div class="mb-4 flex gap-3 flex-row items-center sm:justify-between">
 
     <div class="flex items-start gap-2 sm:gap-3 min-w-0 flex-1">
         <div class="mt-1 h-6 w-1 shrink-0 rounded-full bg-gradient-to-b from-indigo-500 to-indigo-700 sm:mt-0 sm:h-7">

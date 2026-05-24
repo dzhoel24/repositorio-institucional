@@ -30,7 +30,6 @@
             document.documentElement.classList.toggle("sidebar-collapsed");
         localStorage.setItem("sidebar-collapsed", isCollapsed);
 
-        // Al colapsar, cerrar todos los submenús abiertos
         if (isCollapsed) {
             document.querySelectorAll(".sub-menu.open").forEach((menu) => {
                 menu.classList.remove("open");
@@ -46,9 +45,17 @@
         }
     };
 
+    // ===== COLAPSO PARA MÓVIL (cierra el sidebar) =====
+    window.toggleCollapseMobile = function () {
+        if (window.innerWidth <= 900) {
+            window.closeSidebar();
+        } else {
+            window.toggleCollapse();
+        }
+    };
+
     // ===== DROPDOWN =====
-    window.toggleDropdown = function (menuId, arrowId, triggerEl) {
-        // Si está colapsado: navegar directo al primer subitem
+    window.toggleDropdown = function (menuId, arrowId) {
         if (document.documentElement.classList.contains("sidebar-collapsed")) {
             const firstSubItem = document.querySelector(
                 `#${menuId} [data-route]`,
@@ -59,23 +66,15 @@
 
         const menu = document.getElementById(menuId);
         const arrow = document.getElementById(arrowId);
+        const trigger = document.querySelector(`[aria-controls="${menuId}"]`);
 
-        if (!menu) {
-            console.error("Menu no encontrado:", menuId);
-            return;
-        }
+        if (!menu) return;
 
         const isOpen = menu.classList.contains("open");
 
-        if (isOpen) {
-            menu.classList.remove("open");
-            if (arrow) arrow.classList.remove("open");
-            if (triggerEl) triggerEl.setAttribute("aria-expanded", "false");
-        } else {
-            menu.classList.add("open");
-            if (arrow) arrow.classList.add("open");
-            if (triggerEl) triggerEl.setAttribute("aria-expanded", "true");
-        }
+        menu.classList.toggle("open", !isOpen);
+        if (arrow) arrow.classList.toggle("open", !isOpen);
+        if (trigger) trigger.setAttribute("aria-expanded", String(!isOpen));
     };
 
     // ===== SIDEBAR MÓVIL =====
@@ -95,6 +94,14 @@
             hamburger.setAttribute("aria-expanded", String(isOpen));
         }
         if (overlay) overlay.classList.toggle("visible", isOpen);
+
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+            document.body.classList.add("sidebar-open-mobile");
+        } else {
+            document.body.style.overflow = "";
+            document.body.classList.remove("sidebar-open-mobile");
+        }
     };
 
     window.closeSidebar = function () {
@@ -108,6 +115,9 @@
             hamburger.classList.remove("open");
             hamburger.setAttribute("aria-expanded", "false");
         }
+
+        document.body.style.overflow = "";
+        document.body.classList.remove("sidebar-open-mobile");
     };
 
     // ===== PERFIL =====
@@ -140,7 +150,7 @@
             text: "Se cerrará tu sesión actual.",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#0ea5e9",
+            confirmButtonColor: "#4f46e5",
             confirmButtonText: "Sí, salir",
             cancelButtonText: "Cancelar",
         }).then((result) => {
@@ -148,6 +158,10 @@
                 document.getElementById("logout-form").submit();
         });
     };
+
+    // ===== MANEJO DE PAGINACIÓN HTMX =====
+    let navClickPending = false;
+
     document.addEventListener("click", function (e) {
         const link = e.target.closest("nav a, .pagination a");
         if (!link) return;
@@ -155,14 +169,22 @@
         const href = link.getAttribute("href");
         if (!href || !href.includes("page=")) return;
 
-        e.preventDefault();
+        if (navClickPending) {
+            e.preventDefault();
+            return;
+        }
 
-        // Convertir URL absoluta a relativa
+        e.preventDefault();
+        navClickPending = true;
+        setTimeout(() => {
+            navClickPending = false;
+        }, 500);
+
         let url;
         try {
             url = new URL(href).pathname + new URL(href).search;
         } catch {
-            url = href; // ya era relativa
+            url = href;
         }
 
         htmx.ajax("GET", url, {
@@ -183,9 +205,10 @@
             });
 
         document.querySelectorAll("[data-route]").forEach((el) => {
-            const route = el
-                .getAttribute("data-route")
-                .replace(window.location.origin, "");
+            let route = el.getAttribute("data-route");
+            if (route && route.startsWith(window.location.origin)) {
+                route = route.replace(window.location.origin, "");
+            }
 
             const isActive =
                 current === route ||
@@ -195,7 +218,13 @@
                 el.classList.add("active");
 
                 const submenu = el.closest(".sub-menu");
-                if (submenu) {
+                if (
+                    submenu &&
+                    window.innerWidth > 900 &&
+                    !document.documentElement.classList.contains(
+                        "sidebar-collapsed",
+                    )
+                ) {
                     submenu.classList.add("open");
 
                     const trigger = document.querySelector(
@@ -224,7 +253,7 @@
         left: 0;
         height: 3px;
         width: 0%;
-        background: #0ea5e9;
+        background: #4f46e5;
         z-index: 9999;
         transition: width 0.2s ease, opacity 0.3s ease;
         opacity: 0;
@@ -237,7 +266,7 @@
     function startProgress() {
         clearTimeout(progressTimer);
         progressBar.style.opacity = "1";
-        progressBar.style.background = "#0ea5e9";
+        progressBar.style.background = "#4f46e5";
         progressBar.style.width = "0%";
         requestAnimationFrame(() => {
             progressBar.style.width = "70%";
@@ -260,15 +289,29 @@
         progressTimer = setTimeout(() => {
             progressBar.style.opacity = "0";
             progressBar.style.width = "0%";
-            progressBar.style.background = "#0ea5e9";
+            progressBar.style.background = "#4f46e5";
         }, 600);
     }
 
-    // ===== INIT =====
+    // ===== ACCESO RÁPIDO CON TECLA '/' =====
+    document.addEventListener("keydown", function (e) {
+        if (
+            e.key === "/" &&
+            document.activeElement.tagName !== "INPUT" &&
+            document.activeElement.tagName !== "TEXTAREA"
+        ) {
+            e.preventDefault();
+            const searchInput = document.querySelector(
+                'input[type="search"], input[placeholder*="buscar"], input[placeholder*="Buscar"]',
+            );
+            if (searchInput) searchInput.focus();
+        }
+    });
+
+    // ===== EVENTOS GLOBALES =====
     function init() {
         updateActiveState();
 
-        // Actualizar título y breadcrumb desde cada content.blade.php
         document.addEventListener("page:title", function (e) {
             const title = e.detail;
             const breadcrumb = document.getElementById("breadcrumb-title");
@@ -276,7 +319,6 @@
             document.title = "Repositorio | " + title;
         });
 
-        // Cerrar perfil al hacer clic fuera
         document.addEventListener("click", function (e) {
             const profileArea = document.getElementById("profileArea");
             if (profileArea && !profileArea.contains(e.target)) {
@@ -284,7 +326,6 @@
             }
         });
 
-        // Cerrar con Escape
         document.addEventListener("keydown", function (e) {
             if (e.key === "Escape") {
                 window.closeSidebar();
@@ -292,27 +333,41 @@
             }
         });
 
-        // Resize
+        let resizeTimer;
         window.addEventListener("resize", function () {
-            if (window.innerWidth > 900) {
-                window.closeSidebar();
-            }
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (window.innerWidth > 900) {
+                    window.closeSidebar();
+                    document.body.style.overflow = "";
+                } else {
+                    const isCollapsed =
+                        localStorage.getItem("sidebar-collapsed");
+                    if (isCollapsed === "true") {
+                        document.documentElement.classList.remove(
+                            "sidebar-collapsed",
+                        );
+                    }
+                }
+            }, 150);
         });
 
-        // ===== HTMX: antes de la petición =====
+        window.addEventListener(
+            "scroll",
+            function () {
+                if (window.innerWidth > 900) {
+                    window.closeProfile();
+                }
+            },
+            { passive: true },
+        );
+
         document.addEventListener("htmx:beforeRequest", function () {
-            // Cerrar sidebar en móvil
-            if (window.innerWidth <= 900) {
-                window.closeSidebar();
-            }
-            // Iniciar barra de progreso
+            if (window.innerWidth <= 900) window.closeSidebar();
             startProgress();
         });
 
-        // ===== HTMX: swap completado =====
         document.addEventListener("htmx:afterSwap", function (e) {
-            // Re-ejecutar scripts del contenido swapeado
-            // Necesario para que page:title y app:init funcionen tras la navegación
             e.detail.target
                 .querySelectorAll("script")
                 .forEach(function (oldScript) {
@@ -328,13 +383,10 @@
             document.dispatchEvent(new Event("app:init"));
         });
 
-        // ===== HTMX: petición terminada (con o sin swap) =====
-        // Cubre errores, redirecciones y respuestas sin swap
         document.addEventListener("htmx:afterRequest", function () {
             finishProgress();
         });
 
-        // ===== HTMX: error de respuesta =====
         document.addEventListener("htmx:responseError", function () {
             errorProgress();
         });
