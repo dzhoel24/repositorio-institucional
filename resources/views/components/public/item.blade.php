@@ -40,7 +40,7 @@
 
             <div class="space-y-2.5">
                 @if ($acceso === 'Publico' && $pdf)
-                    <a href="{{ asset('pdfs/' . $pdf) }}" download
+                    <a href="{{ Storage::disk('r2')->url('pdfs/' . $pdf) }}" target="_blank"
                         class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white rounded-lg font-semibold text-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shadow-sm">
                         <x-heroicon-s-arrow-down-tray class="w-4 h-4" />
                         Descargar PDF

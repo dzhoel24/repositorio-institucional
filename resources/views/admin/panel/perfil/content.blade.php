@@ -8,7 +8,6 @@
             class="grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm 
                     dark:border-slate-700 dark:bg-slate-800 md:grid-cols-[280px_1fr]">
 
-            {{-- Sidebar del perfil --}}
             <div
                 class="flex flex-col items-center justify-center gap-4 border-b border-slate-200 bg-slate-50/50 
                         px-6 py-8 text-center dark:border-slate-700 dark:bg-slate-800/50 

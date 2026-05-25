@@ -8,7 +8,6 @@ use App\Models\Carrera;
 use App\Models\Informe;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class FilterController extends Controller
 {

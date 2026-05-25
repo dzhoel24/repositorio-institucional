@@ -2,7 +2,6 @@
     <x-admin.modal-edit id="edit-modal{{ $autor->dni }}" action="{{ route('admin.autores.update', $autor->dni) }}"
         title="EDITAR AUTOR" subtitle="Modifica los datos del autor" size="sm">
 
-        {{-- DNI --}}
         <div class="space-y-1.5">
             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 DNI
@@ -20,7 +19,6 @@
             </p>
         </div>
 
-        {{-- Nombres --}}
         <div class="space-y-1.5">
             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Nombres
@@ -38,7 +36,6 @@
             </div>
         </div>
 
-        {{-- Apellidos --}}
         <div class="space-y-1.5">
             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Apellidos

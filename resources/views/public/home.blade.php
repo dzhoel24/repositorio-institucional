@@ -1,4 +1,4 @@
-<x-public.app-main>
+<x-public.app-main title="Inicio" :showFilter="false">
 
     <x-public.breadcrumb name="home" />
 
@@ -18,7 +18,8 @@
         {{-- Banner institucional --}}
         <div
             class="w-full text-center mb-12 bg-gradient-to-br from-slate-900 to-slate-800 p-10 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none">
+            <div
+                class="absolute -right-10 -top-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none">
             </div>
             <div class="relative z-10">
                 <div class="flex justify-center mb-4">
@@ -97,7 +98,6 @@
                                 'icon' => 'book-open'
                             ]
                         ];
-
                         $iconos = [
                             'building-library' => 'heroicon-s-building-library',
                             'beaker' => 'heroicon-s-beaker',
@@ -112,16 +112,13 @@
                         <a href="{{ route($categoria['route'], $categoria['params']) }}" class="group block rounded-xl">
                             <div
                                 class="h-40 relative flex flex-col justify-center p-8 bg-white border border-slate-100 rounded-xl shadow-md transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:border-indigo-200 overflow-hidden">
-
                                 <div
                                     class="absolute -right-6 -bottom-8 text-indigo-900 opacity-10 group-hover:opacity-20 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-700 pointer-events-none">
                                     <x-dynamic-component :component="$iconos[$categoria['icon']]" class="w-32 h-32" />
                                 </div>
-
                                 <div
                                     class="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-600 rounded-full scale-y-75 group-hover:scale-y-100 transition-transform duration-500">
                                 </div>
-
                                 <div class="relative pl-3 z-10">
                                     <h3
                                         class="text-xl font-black text-slate-800 group-hover:text-indigo-600 transition-colors duration-300 leading-tight uppercase">
@@ -154,4 +151,5 @@
             </div>
         </div>
     </div>
+
 </x-public.app-main>

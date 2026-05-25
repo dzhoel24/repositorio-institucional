@@ -1,7 +1,6 @@
 <x-admin.modal-create id='add-modal' title='AÑADIR AUTOR' subtitle='Registra un nuevo autor en el sistema' size="sm"
     action="{{ route('admin.autores.store') }}">
 
-    {{-- DNI --}}
     <div class="space-y-1.5">
         <label for="dni"
             class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -19,7 +18,6 @@
         </div>
     </div>
 
-    {{-- NOMBRES --}}
     <div class="space-y-1.5">
         <label for="nombres"
             class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -37,7 +35,6 @@
         </div>
     </div>
 
-    {{-- APELLIDOS --}}
     <div class="space-y-1.5">
         <label for="apellidos"
             class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">

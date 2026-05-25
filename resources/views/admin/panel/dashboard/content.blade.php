@@ -76,7 +76,6 @@
                 {{ $card['desc'] }}
             </p>
 
-            {{-- Footer con flecha --}}
             <div
                 class="mt-5 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-slate-400 
                         transition-all duration-300 group-hover:text-indigo-600 group-hover:gap-3

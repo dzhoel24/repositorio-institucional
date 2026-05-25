@@ -72,7 +72,6 @@ class AutorController extends Controller
     {
         try {
             Autor::where('dni', $dni)->firstOrFail()->delete();
-
             return htmxRedirect(route('admin.autores.index'), 'Autor eliminado correctamente.');
         } catch (ModelNotFoundException $e) {
             return back()->with('error', 'El autor no existe o ya fue eliminado.');

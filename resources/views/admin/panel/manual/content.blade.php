@@ -64,17 +64,14 @@
                     dark:border-slate-700 dark:bg-slate-800/90 
                     hover:border-transparent">
 
-            {{-- Gradiente de fondo sutil en hover --}}
             <div
                 class="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-50 to-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-slate-800/50 dark:to-slate-800">
             </div>
 
-            {{-- Barra superior decorativa --}}
             <div
                 class="absolute top-0 left-4 right-4 h-1 rounded-t-2xl bg-gradient-to-r {{ $gradient }} opacity-0 transition-all duration-300 group-hover:opacity-100">
             </div>
 
-            {{-- Encabezado con ícono --}}
             <div class="relative mb-4 flex items-center gap-3">
                 <div
                     class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br {{ $gradient }} 
@@ -90,21 +87,18 @@
                 </h2>
             </div>
 
-            {{-- Descripción --}}
             <p
                 class="relative mb-4 text-sm leading-relaxed text-slate-500 transition-colors duration-300 
                       group-hover:text-slate-600 dark:text-slate-400">
                 {{ $section['desc'] }}
             </p>
 
-            {{-- Separador animado --}}
             <div
                 class="relative mb-5 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent 
                         transition-all duration-300 group-hover:via-{{ explode(' ', $gradient)[1] }}/50 
                         dark:via-slate-700">
             </div>
 
-            {{-- Lista de items con check animado --}}
             <ul class="relative space-y-3">
                 @foreach ($section['items'] as $item)
                     <li class="flex items-start gap-3 transition-all duration-300 hover:translate-x-1.5">

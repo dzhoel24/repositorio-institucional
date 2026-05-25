@@ -57,7 +57,6 @@
             </div>
         </div>
 
-        {{-- Mostrar por página --}}
         <div class="p-3">
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mostrar por página</h4>
             <div class="grid grid-cols-4 gap-1">
