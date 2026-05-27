@@ -9,6 +9,6 @@ class AutorSeeder extends Seeder
 {
     public function run()
     {
-        Autor::factory()->count(50)->create();
+        Autor::factory()->count(100)->create();
     }
 }

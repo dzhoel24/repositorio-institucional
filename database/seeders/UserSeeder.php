@@ -11,10 +11,10 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'full_name' => 'Joel Flores Barahona',
+            'full_name' => 'Joel Eduardo Flores Barahona',
             'username' => 'Joel',
             'password' => bcrypt('123456'),
-            'profile_photo' => 'foto1.jpg',
+            'profile_photo' => 'foto-profile.jpg',
         ]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\PanelController;
 use App\Http\Controllers\Admin\AutorController;
 use App\Http\Controllers\Admin\InformeController;
@@ -27,7 +28,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/perfil', [PanelController::class, 'perfil'])->name('perfil');
     Route::get('/manual', [PanelController::class, 'manual'])->name('manual');
 });
-Route::put('/perfil/password', [PanelController::class, 'updatePassword'])
-    ->name('profile.password.update');
+Route::put('/perfil/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
 require __DIR__ . '/auth.php';

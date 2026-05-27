@@ -22,9 +22,12 @@
         applyTheme(!document.documentElement.classList.contains("dark"));
     };
 
-    // ===== COLAPSO (solo escritorio) =====
+    // ===== COLAPSO =====
     window.toggleCollapse = function () {
-        if (window.innerWidth <= 900) return;
+        if (window.innerWidth <= 900) {
+            window.closeSidebar();
+            return;
+        }
 
         const isCollapsed =
             document.documentElement.classList.toggle("sidebar-collapsed");
@@ -45,15 +48,6 @@
         }
     };
 
-    // ===== COLAPSO PARA MÓVIL (cierra el sidebar) =====
-    window.toggleCollapseMobile = function () {
-        if (window.innerWidth <= 900) {
-            window.closeSidebar();
-        } else {
-            window.toggleCollapse();
-        }
-    };
-
     // ===== DROPDOWN =====
     window.toggleDropdown = function (menuId, arrowId) {
         if (document.documentElement.classList.contains("sidebar-collapsed")) {
@@ -71,7 +65,6 @@
         if (!menu) return;
 
         const isOpen = menu.classList.contains("open");
-
         menu.classList.toggle("open", !isOpen);
         if (arrow) arrow.classList.toggle("open", !isOpen);
         if (trigger) trigger.setAttribute("aria-expanded", String(!isOpen));
@@ -95,13 +88,7 @@
         }
         if (overlay) overlay.classList.toggle("visible", isOpen);
 
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-            document.body.classList.add("sidebar-open-mobile");
-        } else {
-            document.body.style.overflow = "";
-            document.body.classList.remove("sidebar-open-mobile");
-        }
+        document.body.classList.toggle("sidebar-open-mobile", isOpen);
     };
 
     window.closeSidebar = function () {
@@ -116,7 +103,6 @@
             hamburger.setAttribute("aria-expanded", "false");
         }
 
-        document.body.style.overflow = "";
         document.body.classList.remove("sidebar-open-mobile");
     };
 
@@ -127,11 +113,6 @@
         if (!dropdown) return;
 
         const isOpen = dropdown.classList.contains("open");
-
-        document.querySelectorAll(".profile-dropdown.open").forEach((el) => {
-            if (el !== dropdown) el.classList.remove("open");
-        });
-
         dropdown.classList.toggle("open", !isOpen);
         if (btn) btn.setAttribute("aria-expanded", String(!isOpen));
     };
@@ -159,26 +140,15 @@
         });
     };
 
-    // ===== MANEJO DE PAGINACIÓN HTMX =====
-    let navClickPending = false;
-
+    // ===== PAGINACIÓN HTMX =====
     document.addEventListener("click", function (e) {
-        const link = e.target.closest("nav a, .pagination a");
+        const link = e.target.closest(".pagination a");
         if (!link) return;
 
         const href = link.getAttribute("href");
         if (!href || !href.includes("page=")) return;
 
-        if (navClickPending) {
-            e.preventDefault();
-            return;
-        }
-
         e.preventDefault();
-        navClickPending = true;
-        setTimeout(() => {
-            navClickPending = false;
-        }, 500);
 
         let url;
         try {
@@ -205,8 +175,8 @@
             });
 
         document.querySelectorAll("[data-route]").forEach((el) => {
-            let route = el.getAttribute("data-route");
-            if (route && route.startsWith(window.location.origin)) {
+            let route = el.getAttribute("data-route") || "";
+            if (route.startsWith(window.location.origin)) {
                 route = route.replace(window.location.origin, "");
             }
 
@@ -226,7 +196,6 @@
                     )
                 ) {
                     submenu.classList.add("open");
-
                     const trigger = document.querySelector(
                         `[aria-controls="${submenu.id}"]`,
                     );
@@ -234,7 +203,6 @@
                         trigger.classList.add("parent-active");
                         trigger.setAttribute("aria-expanded", "true");
                     }
-
                     const arrow = document.getElementById(
                         submenu.id.replace("sub-", "arr-"),
                     );
@@ -248,16 +216,12 @@
     const progressBar = document.createElement("div");
     progressBar.id = "htmx-progress";
     progressBar.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 3px;
-        width: 0%;
+        position: fixed; top: 0; left: 0;
+        height: 2px; width: 0%;
         background: #4f46e5;
         z-index: 9999;
         transition: width 0.2s ease, opacity 0.3s ease;
-        opacity: 0;
-        pointer-events: none;
+        opacity: 0; pointer-events: none;
     `;
     document.body.appendChild(progressBar);
 
@@ -293,75 +257,59 @@
         }, 600);
     }
 
-    // ===== ACCESO RÁPIDO CON TECLA '/' =====
-    document.addEventListener("keydown", function (e) {
-        if (
-            e.key === "/" &&
-            document.activeElement.tagName !== "INPUT" &&
-            document.activeElement.tagName !== "TEXTAREA"
-        ) {
-            e.preventDefault();
-            const searchInput = document.querySelector(
-                'input[type="search"], input[placeholder*="buscar"], input[placeholder*="Buscar"]',
-            );
-            if (searchInput) searchInput.focus();
-        }
-    });
-
-    // ===== EVENTOS GLOBALES =====
+    // ===== INIT =====
     function init() {
         updateActiveState();
 
+        // Breadcrumb y título
         document.addEventListener("page:title", function (e) {
-            const title = e.detail;
             const breadcrumb = document.getElementById("breadcrumb-title");
-            if (breadcrumb) breadcrumb.textContent = title;
-            document.title = "Repositorio | " + title;
+            if (breadcrumb) breadcrumb.textContent = e.detail;
+            document.title = "Repositorio | " + e.detail;
         });
 
+        // Cerrar perfil al hacer clic fuera
         document.addEventListener("click", function (e) {
             const profileArea = document.getElementById("profileArea");
-            if (profileArea && !profileArea.contains(e.target)) {
+            if (profileArea && !profileArea.contains(e.target))
                 window.closeProfile();
-            }
         });
 
+        // Teclado
         document.addEventListener("keydown", function (e) {
             if (e.key === "Escape") {
                 window.closeSidebar();
                 window.closeProfile();
             }
+            if (
+                e.key === "/" &&
+                document.activeElement.tagName !== "INPUT" &&
+                document.activeElement.tagName !== "TEXTAREA"
+            ) {
+                e.preventDefault();
+                const searchInput = document.querySelector(
+                    'input[type="search"], input[placeholder*="buscar"], input[placeholder*="Buscar"]',
+                );
+                if (searchInput) searchInput.focus();
+            }
         });
 
+        // Resize
         let resizeTimer;
         window.addEventListener("resize", function () {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
                 if (window.innerWidth > 900) {
                     window.closeSidebar();
-                    document.body.style.overflow = "";
                 } else {
-                    const isCollapsed =
-                        localStorage.getItem("sidebar-collapsed");
-                    if (isCollapsed === "true") {
-                        document.documentElement.classList.remove(
-                            "sidebar-collapsed",
-                        );
-                    }
+                    document.documentElement.classList.remove(
+                        "sidebar-collapsed",
+                    );
                 }
             }, 150);
         });
 
-        window.addEventListener(
-            "scroll",
-            function () {
-                if (window.innerWidth > 900) {
-                    window.closeProfile();
-                }
-            },
-            { passive: true },
-        );
-
+        // HTMX
         document.addEventListener("htmx:beforeRequest", function () {
             if (window.innerWidth <= 900) window.closeSidebar();
             startProgress();
@@ -383,13 +331,8 @@
             document.dispatchEvent(new Event("app:init"));
         });
 
-        document.addEventListener("htmx:afterRequest", function () {
-            finishProgress();
-        });
-
-        document.addEventListener("htmx:responseError", function () {
-            errorProgress();
-        });
+        document.addEventListener("htmx:afterRequest", finishProgress);
+        document.addEventListener("htmx:responseError", errorProgress);
     }
 
     if (document.readyState === "loading") {

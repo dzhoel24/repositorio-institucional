@@ -1,6 +1,8 @@
 <div class="flex w-full flex-col items-center justify-center mt-3">
-    <div class="w-full max-w-[900px]">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    <div class="w-full max-w-[900px]">
+        <x-admin.alerts />
         <x-admin.title titulo="CONFIGURACIÓN DE PERFIL" subtitulo="Información y seguridad de tu cuenta de usuario."
             :table="null" />
 
@@ -57,7 +59,7 @@
 
                 <form method="POST" action="{{ route('profile.password.update') }}">
                     @csrf
-
+                    @method('PUT')
                     <div class="space-y-4">
                         <div>
                             <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">

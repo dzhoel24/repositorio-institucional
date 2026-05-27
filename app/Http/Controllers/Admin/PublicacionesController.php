@@ -45,6 +45,8 @@ class PublicacionesController extends Controller
 
     public function toggleEstado(Request $request, $id)
     {
+        \Log::info('Datos recibidos:', $request->all());
+
         $informe = Informe::findOrFail($id);
 
         if ($informe->estado === 'Publicado') {

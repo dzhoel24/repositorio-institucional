@@ -134,6 +134,12 @@ document.addEventListener("click", (e) => {
 document.addEventListener("click", (e) => {
     const modal = e.target.closest(".modal");
     if (!modal) return;
+
+    // Si el clic fue en un radio button o en su label, no cerrar
+    if (e.target.closest('input[type="radio"]') || e.target.closest("label")) {
+        return;
+    }
+
     const content = e.target.closest(".modal-animate");
     if (!content) closeModal(modal);
 });

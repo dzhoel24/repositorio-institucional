@@ -1,6 +1,7 @@
 @foreach ($informes as $info)
-    <x-admin.modal-edit id="edit-modal{{ $info->id }}" title="EDITAR INFORME" subtitle="{{ $info->titulo }}"
-        action="{{ route('admin.informes.update', $info->id) }}" size="full">
+    <x-admin.modal-crud id="edit-modal{{ $info->id }}" title="EDITAR INFORME" subtitle="{{ $info->titulo }}"
+        action="{{ route('admin.informes.update', $info->id) }}" size="full" method="PUT"
+        icon="heroicon-o-pencil-square" text_button="Guardar Cambios" icon_button="heroicon-o-check-circle">
 
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-0">
 
@@ -222,5 +223,5 @@
                 </div>
             </div>
         </div>
-    </x-admin.modal-edit>
+    </x-admin.modal-crud>
 @endforeach

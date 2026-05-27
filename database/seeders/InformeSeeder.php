@@ -9,6 +9,6 @@ class InformeSeeder extends Seeder
 {
     public function run(): void
     {
-        Informe::factory()->count(50)->create();
+        Informe::factory()->count(100)->create();
     }
 }

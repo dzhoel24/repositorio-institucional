@@ -1,5 +1,6 @@
-<x-admin.modal-create id='add-informe-modal' title='NUEVO INFORME' subtitle='Completa los campos' size="full"
-    action="{{ route('admin.informes.store') }}">
+<x-admin.modal-crud id='add-informe-modal' title='NUEVO INFORME' subtitle='Completa los campos' size="full"
+    action="{{ route('admin.informes.store') }}" icon="heroicon-o-document-plus" text_button="Guardar"
+    icon_button="heroicon-o-check-circle">
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-0">
 
@@ -205,4 +206,4 @@
         </div>
     </div>
 
-</x-admin.modal-create>
+</x-admin.modal-crud>
